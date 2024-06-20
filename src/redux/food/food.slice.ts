@@ -10,7 +10,7 @@ const initialState: FoodState = {
 };
 
 const foodSlice = createSlice({
-  namne: "food",
+  name: "food",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -53,19 +53,19 @@ const foodSlice = createSlice({
     builder.addCase(fetchSingleFood.rejected, (state, action) => {
       state.allFoods = [];
       state.singleFood = <Food>{};
-      state.error = action.payload || "Could not load food";
+      state.error = action.error.message || "Could not load food";
       state.loading = false;
     });
     builder.addCase(newFood.fulfilled, (state) => {
-      state.error = false;
-      state.loading = true;
+      state.error = "";
+      state.loading = false;
     });
     builder.addCase(newFood.pending, (state) => {
-      state.error = false;
+      state.error = "";
       state.loading = true;
     });
     builder.addCase(newFood.rejected, (state, action) => {
-      state.error = action.payload || "Could not create food";
+      state.error = action.error.message || "Could not create food";
       state.loading = false;
     });
   },

@@ -3,7 +3,7 @@ import { User } from "../user/user.type";
 
 export interface Workout extends baseMongooseType {
   title: string;
-  duration: string;
+  duration: number;
   calories: number;
   user: User;
 }
