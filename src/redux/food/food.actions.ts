@@ -1,0 +1,37 @@
+import { createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import { Food } from "./food.type";
+
+type GenericState = {
+  auth: {
+    loggedInUser: {
+      user: string;
+    };
+  };
+};
+
+export const fetchSingleFood = createAsyncThunk(
+  "foods/fetchSingleFood",
+  async (id: string) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/foods/${id}`);
+    return res.data;
+  }
+);
+
+export const fetchFoods = createAsyncThunk("foods/fetchAllFoods", async () => {
+  const res = await axios.get(`${import.meta.env.VITE_API_URL}/foods`);
+  return res.data;
+});
+
+export const newFood = createAsyncThunk(
+  "foods/newFood",
+  async ({ title, calories }: Food, thunkApi) => {
+    const state = thunkApi.getState() as GenericState;
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/foods`, {
+      title,
+      calories,
+      user: state.auth.loggedInUser,
+    });
+    return res;
+  }
+);
