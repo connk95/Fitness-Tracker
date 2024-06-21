@@ -21,3 +21,8 @@ export const fetchUser = createAsyncThunk(
     return res.data;
   }
 );
+
+export const fetchUsers = createAsyncThunk("users/getUsers", async () => {
+  const res = await axios.get(`${import.meta.env.VITE_API_URL}/users`);
+  return res.data;
+});

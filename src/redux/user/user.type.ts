@@ -12,5 +12,6 @@ export interface User {
 }
 
 export interface UserState extends baseState {
+  allUsers: User[];
   user: User;
 }
