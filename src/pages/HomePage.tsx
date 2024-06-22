@@ -20,19 +20,33 @@ import {
 import { User } from "../redux/user/user.type";
 import { Workout } from "../redux/workout/workout.type";
 import { Food } from "../redux/food/food.type";
+import { Activity } from "../components/Activity";
+import { ActivityType } from "../redux/types";
 
 export const HomePage = (): JSX.Element => {
-  const users = useSelector((state: RootState) => state.users);
+  const users = useSelector((state: RootState) => state.users.data);
   const auth = useSelector((state: RootState) => state.auth);
   // const workouts = useSelector((state: RootState) => state.workouts); ** not needed? **
   // const foods = useSelector((state: RootState) => state.foods); ** not needed? **
   const dispatch = useAppDispatch();
 
-  const allWorkouts: Workout[] = [];
-  users.forEach((user) => allWorkouts.push(user.workouts));
-  const allFoods: Food[] = [];
-  users.forEach((user) => allFoods.push(user.foods));
-  const allActivity: Object[] = allWorkouts.concat(allFoods);
+  //   const allWorkouts: Workout[] = [];
+  //   users.forEach((user: { workouts: Workout }) =>
+  //     allWorkouts.push(user.workouts)
+  //   );
+  //   const allFoods: Food[] = [];
+  //   users.forEach((user: { foods: Food }) => allFoods.push(user.foods));
+  //   const allActivity: ActivityType[] = [...allWorkouts, ...allFoods];
+
+  const allWorkouts: ActivityType[] = users.flatMap((user: User) =>
+    (user.workouts ?? []).map((workout) => ({ ...workout, type: "Workout" }))
+  );
+
+  const allFoods: ActivityType[] = users.flatMap((user: User) =>
+    (user.foods ?? []).map((food) => ({ ...food, type: "Food" }))
+  );
+
+  const allActivity: ActivityType[] = [...allWorkouts, ...allFoods];
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -61,15 +75,17 @@ export const HomePage = (): JSX.Element => {
                 </Button>
               </>
             ) : (
-              <></>
+              <>
+                <Typography>All Activity</Typography>
+              </>
             )}
             <>
               {Array.isArray(allActivity) &&
                 allActivity
                   .slice()
                   .reverse()
-                  .map((activity) => {
-                    <Activity></Activity>; // Activity component for foods and workouts
+                  .map((activity: ActivityType) => {
+                    <Activity key={activity._id} activity={activity} />; // Activity component for foods and workouts
                   })}
             </>
           </Grid>
