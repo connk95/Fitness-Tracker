@@ -4,7 +4,7 @@
 // Users will be able to track friends' progress on their fitness journey.
 // Users can interact with friends' activity, view workouts and foods, and add friends to their network.
 
-import { RootState } from "@reduxjs/toolkit/query";
+import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../redux/hooks";
 import { useEffect } from "react";
@@ -24,19 +24,11 @@ import { Activity } from "../components/Activity";
 import { ActivityType } from "../redux/types";
 
 export const HomePage = (): JSX.Element => {
-  const users = useSelector((state: RootState) => state.users.data);
+  const users = useSelector((state: RootState) => state.users.allUsers);
   const auth = useSelector((state: RootState) => state.auth);
   // const workouts = useSelector((state: RootState) => state.workouts); ** not needed? **
   // const foods = useSelector((state: RootState) => state.foods); ** not needed? **
   const dispatch = useAppDispatch();
-
-  //   const allWorkouts: Workout[] = [];
-  //   users.forEach((user: { workouts: Workout }) =>
-  //     allWorkouts.push(user.workouts)
-  //   );
-  //   const allFoods: Food[] = [];
-  //   users.forEach((user: { foods: Food }) => allFoods.push(user.foods));
-  //   const allActivity: ActivityType[] = [...allWorkouts, ...allFoods];
 
   const allWorkouts: ActivityType[] = users.flatMap((user: User) =>
     (user.workouts ?? []).map((workout) => ({ ...workout, type: "Workout" }))
@@ -65,7 +57,7 @@ export const HomePage = (): JSX.Element => {
       >
         <Grid container spacing={2} maxWidth="md">
           <Grid item xs={12}>
-            {auth.loggedInUser.access_token ? (
+            {auth.loggedInUser?.access_token ? (
               <>
                 <Button variant="contained" sx={{ width: 120, mt: 2 }}>
                   All Activity
