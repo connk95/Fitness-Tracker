@@ -6,7 +6,11 @@ import { UserLoginData } from "./auth.type";
 export const userLogin = createAsyncThunk(
   "auth/userLogin",
   async ({ username, password }: UserLoginData) => {
+    console.log(username, password);
+    console.log(`${import.meta.env.VITE_API_URL}/auth/login`);
     try {
+      console.log("test post");
+      // res is undefined?
       const res = await axios.post(
         `${import.meta.env.VITE_API_URL}/auth/login`,
         {
@@ -14,7 +18,10 @@ export const userLogin = createAsyncThunk(
           password,
         }
       );
+      console.log("res:", res);
+
       if (res.data) {
+        console.log("success:", res.data);
         localStorage.setItem("loggedInUser", JSON.stringify(res.data));
         return res.data;
       }

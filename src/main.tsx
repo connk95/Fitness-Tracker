@@ -12,3 +12,5 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     </Provider>
   </React.StrictMode>
 );
+
+console.log(import.meta.env.NODE_ENV);

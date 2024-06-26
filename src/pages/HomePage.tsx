@@ -16,6 +16,11 @@ import {
   Button,
   Box,
   Grid,
+  FormControl,
+  FormLabel,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
 import { User } from "../redux/user/user.type";
 import { Workout } from "../redux/workout/workout.type";
@@ -29,6 +34,8 @@ export const HomePage = (): JSX.Element => {
   // const workouts = useSelector((state: RootState) => state.workouts); ** not needed? **
   // const foods = useSelector((state: RootState) => state.foods); ** not needed? **
   const dispatch = useAppDispatch();
+
+  console.log(auth);
 
   const allWorkouts: ActivityType[] = users.flatMap((user: User) =>
     (user.workouts ?? []).map((workout) => ({ ...workout, type: "Workout" }))
@@ -59,11 +66,36 @@ export const HomePage = (): JSX.Element => {
           <Grid item xs={12}>
             {auth.loggedInUser?.access_token ? (
               <>
+                <FormControl>
+                  <FormLabel id="radio">Activity Log</FormLabel>
+                  <RadioGroup
+                    row
+                    aria-labelledby="radio"
+                    defaultValue="all"
+                    name="radio-buttons-group"
+                  >
+                    <FormControlLabel
+                      value="all"
+                      control={<Radio />}
+                      label="All Activity"
+                    />
+                    <FormControlLabel
+                      value="friend"
+                      control={<Radio />}
+                      label="Friend Activity"
+                    />
+                    {/* <FormControlLabel
+                      value="food"
+                      control={<Radio />}
+                      label="Food"
+                    /> */}
+                  </RadioGroup>
+                </FormControl>
                 <Button variant="contained" sx={{ width: 120, mt: 2 }}>
-                  All Activity
+                  Record Meal
                 </Button>
                 <Button variant="contained" sx={{ width: 120, mt: 2 }}>
-                  Friend Activity
+                  Record Workout
                 </Button>
               </>
             ) : (

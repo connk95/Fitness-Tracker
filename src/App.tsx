@@ -3,6 +3,8 @@ import { Provider } from "react-redux";
 import { store } from "./redux/store";
 import ButtonAppBar from "./components/Header";
 import { Login } from "./pages/LoginPage";
+import { HomePage } from "./pages/HomePage";
+import { SignUp } from "./pages/SignUpPage";
 
 const App = () => {
   return (
@@ -11,7 +13,15 @@ const App = () => {
         <Provider store={store}>
           <ButtonAppBar />
           <Routes>
+            {/* <Route path="/" element={<SplashPage />} /> */}
+            <Route path="/home" element={<HomePage />} />
+            {/* <Route path="/workouts/:id" element={<PostPage />} /> */}
+            {/* <Route path="/workouts/new" element={<NewPost />} /> */}
+            {/* <Route path="/foods/:id" element={<PostPage />} /> */}
+            {/* <Route path="/foods/new" element={<NewPost />} /> */}
+            <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
+            {/* <Route path="/profile" element={<UserPage />} /> */}
           </Routes>
         </Provider>
       </Router>
