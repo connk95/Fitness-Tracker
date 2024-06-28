@@ -5,7 +5,6 @@ import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useAppDispatch } from "../redux/hooks";
@@ -17,6 +16,7 @@ import { RootState } from "../redux/store";
 import { UserLoginData } from "../redux/auth/auth.type";
 import { userLogin } from "../redux/auth/auth.actions";
 import { useEffect, useState } from "react";
+import LockOpenSharpIcon from "@mui/icons-material/LockOpenSharp";
 
 export const Login = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -65,7 +65,7 @@ export const Login = (): JSX.Element => {
           {auth.error && !errorMessage && <Typography>{auth.error}</Typography>}
           {auth.loading && <CircularProgress />}
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-            <LockOutlinedIcon />
+            <LockOpenSharpIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Sign in
@@ -91,6 +91,8 @@ export const Login = (): JSX.Element => {
                   name="username"
                   autoComplete="username"
                   autoFocus
+                  sx={{ borderRadius: 0 }}
+                  InputProps={{ sx: { borderRadius: 0 } }}
                 />
                 {errors.username && (
                   <Typography variant="caption" color="error">
@@ -109,6 +111,8 @@ export const Login = (): JSX.Element => {
                   type="password"
                   id="password"
                   autoComplete="current-password"
+                  sx={{ borderRadius: 0 }}
+                  InputProps={{ sx: { borderRadius: 0 } }}
                 />
                 {errors.password && (
                   <Typography variant="caption" color="error">
@@ -122,7 +126,7 @@ export const Login = (): JSX.Element => {
               fullWidth
               variant="contained"
               name="submit"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, borderRadius: 0 }}
               data-testid="signInButton"
               aria-hidden="false"
             >

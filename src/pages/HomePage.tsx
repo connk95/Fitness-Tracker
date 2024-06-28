@@ -27,6 +27,9 @@ import { Workout } from "../redux/workout/workout.type";
 import { Food } from "../redux/food/food.type";
 import { Activity } from "../components/Activity";
 import { ActivityType } from "../redux/types";
+import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
+import FitnessCenterSharpIcon from "@mui/icons-material/FitnessCenterSharp";
+import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
 
 export const HomePage = (): JSX.Element => {
   const users = useSelector((state: RootState) => state.users.allUsers);
@@ -60,14 +63,29 @@ export const HomePage = (): JSX.Element => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          paddingLeft: 0,
         }}
       >
         <Grid container spacing={2} maxWidth="md">
-          <Grid item xs={12}>
+          <Grid
+            item
+            xs={12}
+            sx={{
+              paddingLeft: 0,
+              paddingTop: 0,
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+          >
             {auth.loggedInUser?.access_token ? (
-              <>
+              <Box>
                 <FormControl>
-                  <FormLabel id="radio">Activity Log</FormLabel>
+                  <FormLabel
+                    id="radio"
+                    sx={{ fontSize: 20, fontWeight: "bold" }}
+                  >
+                    Activity Log
+                  </FormLabel>
                   <RadioGroup
                     row
                     aria-labelledby="radio"
@@ -84,20 +102,35 @@ export const HomePage = (): JSX.Element => {
                       control={<Radio />}
                       label="Friend Activity"
                     />
-                    {/* <FormControlLabel
+                    <FormControlLabel
                       value="food"
                       control={<Radio />}
-                      label="Food"
-                    /> */}
+                      label="Meals Only"
+                    />
+                    <FormControlLabel
+                      value="workout"
+                      control={<Radio />}
+                      label="Workouts Only"
+                    />
                   </RadioGroup>
                 </FormControl>
-                <Button variant="contained" sx={{ width: 120, mt: 2 }}>
-                  Record Meal
-                </Button>
-                <Button variant="contained" sx={{ width: 120, mt: 2 }}>
-                  Record Workout
-                </Button>
-              </>
+                <Box>
+                  <Button
+                    variant="contained"
+                    sx={{ width: 180, mt: 0, borderRadius: 0 }}
+                  >
+                    <RestaurantSharpIcon sx={{ mr: 1 }} />
+                    New Meal
+                  </Button>
+                  <Button
+                    variant="contained"
+                    sx={{ width: 180, mt: 0, borderRadius: 0 }}
+                  >
+                    <SportsGymnasticsSharpIcon sx={{ mr: 1 }} />
+                    New Workout
+                  </Button>
+                </Box>
+              </Box>
             ) : (
               <>
                 <Typography>All Activity</Typography>

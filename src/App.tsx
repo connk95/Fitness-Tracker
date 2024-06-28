@@ -5,10 +5,14 @@ import ButtonAppBar from "./components/Header";
 import { Login } from "./pages/LoginPage";
 import { HomePage } from "./pages/HomePage";
 import { SignUp } from "./pages/SignUpPage";
+import { theme } from "./styles/theme";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
+const defaultTheme = createTheme(theme);
 
 const App = () => {
   return (
-    <>
+    <ThemeProvider theme={defaultTheme}>
       <Router>
         <Provider store={store}>
           <ButtonAppBar />
@@ -25,7 +29,7 @@ const App = () => {
           </Routes>
         </Provider>
       </Router>
-    </>
+    </ThemeProvider>
   );
 };
 

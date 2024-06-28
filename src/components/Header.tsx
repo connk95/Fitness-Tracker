@@ -13,6 +13,10 @@ import { useAppDispatch } from "../redux/hooks";
 import { userLogout } from "../redux/auth/auth.actions";
 // import { createTheme, ThemeProvider } from "@mui/material/styles";
 // import { theme } from "../styles/theme";
+import DirectionsRunSharpIcon from "@mui/icons-material/DirectionsRunSharp";
+import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
+import LoginSharpIcon from "@mui/icons-material/LoginSharp";
+import AddBoxSharpIcon from "@mui/icons-material/AddBoxSharp";
 
 export const ButtonAppBar = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -31,16 +35,21 @@ export const ButtonAppBar = (): JSX.Element => {
   return (
     // <ThemeProvider theme={defaultTheme}>
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" elevation={0}>
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, mr: 2 }}>
-            <Link to={"/home"} style={{ color: "white" }}>
-              Fitted
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, mr: 2, ml: 2 }}
+          >
+            <Link to={"/home"} style={{ color: "#e43d12", fontSize: 24 }}>
+              <DirectionsRunSharpIcon />
+              FITTED
             </Link>
           </Typography>
           {auth.loggedInUser.access_token ? (
             <>
-              <Typography sx={{ mr: 3 }}>
+              <Typography sx={{ mr: 3, color: "#e43d12" }}>
                 Welcome {auth.loggedInUser.user.username}!
               </Typography>
               <IconButton
@@ -53,16 +62,24 @@ export const ButtonAppBar = (): JSX.Element => {
               >
                 {/* <AccountCircleOutlinedIcon /> */}
               </IconButton>
-              <Button color="inherit" href="/" onClick={onClick}>
+              <Button
+                color="inherit"
+                href="/"
+                onClick={onClick}
+                sx={{ color: "#e43d12" }}
+              >
+                <LogoutSharpIcon sx={{ mr: 1 }} />
                 Logout
               </Button>
             </>
           ) : window.location.pathname !== "/" ? (
             <>
-              <Button color="inherit" href="/login">
+              <Button color="inherit" href="/login" sx={{ color: "#e43d12" }}>
+                <LoginSharpIcon sx={{ mr: 1 }} />
                 Login
               </Button>
-              <Button color="inherit" href="/signup">
+              <Button color="inherit" href="/signup" sx={{ color: "#e43d12" }}>
+                <AddBoxSharpIcon sx={{ mr: 1 }} />
                 Create Account
               </Button>
             </>
