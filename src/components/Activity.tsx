@@ -1,23 +1,18 @@
 import { CardContent, Card, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { Workout } from "../redux/workout/workout.type";
-import { Food } from "../redux/food/food.type";
 import { ActivityProps } from "../redux/types";
 
 export const Activity: React.FC<ActivityProps> = ({
   activity,
 }: ActivityProps): JSX.Element => {
-  const isWorkout = (activity: Workout | Food): activity is Workout => {
-    return activity.type === "Workout";
-  };
-
+  console.log(activity);
   return (
-    <Link to={`/activity/${activity._id}`}>
+    <Link to={`/${activity.type}/${activity._id}`}>
       <Card>
         <CardContent>
-          {isWorkout(activity) ? (
+          {activity.type == "Workout" ? (
             <>
-              <Typography>Workout</Typography>
+              <Typography>{activity.type}</Typography>
               <Typography variant="h5">{activity.title}</Typography>
               <Typography>By: {activity.user.username}</Typography>
               <Typography>Duration: {activity.duration}</Typography>
@@ -28,7 +23,7 @@ export const Activity: React.FC<ActivityProps> = ({
             </>
           ) : (
             <>
-              <Typography>Food</Typography>
+              <Typography>{activity.type}</Typography>
               <Typography variant="h5">{activity.title}</Typography>
               <Typography>By: {activity.user.username}</Typography>
               <Typography>Calories: {activity.calories}</Typography>

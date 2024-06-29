@@ -28,9 +28,10 @@ export const newFood = createAsyncThunk(
   async ({ title, calories }: Food, thunkApi) => {
     const state = thunkApi.getState() as GenericState;
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/foods`, {
+      // type: "Food",
       title,
       calories,
-      user: state.auth.loggedInUser,
+      user: state.auth.loggedInUser.user,
     });
     return res;
   }

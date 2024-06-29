@@ -33,10 +33,11 @@ export const newWorkout = createAsyncThunk(
   async ({ title, duration, calories }: Workout, thunkApi) => {
     const state = thunkApi.getState() as GenericState;
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/workouts`, {
+      type: "Workout",
       title,
       duration,
       calories,
-      user: state.auth.loggedInUser,
+      user: state.auth.loggedInUser.user,
     });
     return res;
   }

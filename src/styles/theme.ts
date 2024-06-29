@@ -33,9 +33,9 @@ export const theme: ThemeOptions = {
       marginRight: "1rem",
       borderRadius: 0,
     },
-    textField: {
-      borderRadius: 0,
-    },
+    // textField: {
+    //   borderRadius: 0,
+    // },
   },
   components: {
     MuiAppBar: {

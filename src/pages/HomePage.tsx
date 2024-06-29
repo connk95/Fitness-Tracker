@@ -22,36 +22,29 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { User } from "../redux/user/user.type";
-import { Workout } from "../redux/workout/workout.type";
-import { Food } from "../redux/food/food.type";
 import { Activity } from "../components/Activity";
 import { ActivityType } from "../redux/types";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
-import FitnessCenterSharpIcon from "@mui/icons-material/FitnessCenterSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
+import { fetchFoods } from "../redux/food/food.actions";
+import { fetchWorkouts } from "../redux/workout/workout.actions";
 
 export const HomePage = (): JSX.Element => {
-  const users = useSelector((state: RootState) => state.users.allUsers);
+  // const users = useSelector((state: RootState) => state.users.allUsers);
   const auth = useSelector((state: RootState) => state.auth);
-  // const workouts = useSelector((state: RootState) => state.workouts); ** not needed? **
-  // const foods = useSelector((state: RootState) => state.foods); ** not needed? **
+  const workouts = useSelector((state: RootState) => state.workouts);
+  const foods = useSelector((state: RootState) => state.foods);
   const dispatch = useAppDispatch();
 
-  console.log(auth);
-
-  const allWorkouts: ActivityType[] = users.flatMap((user: User) =>
-    (user.workouts ?? []).map((workout) => ({ ...workout, type: "Workout" }))
-  );
-
-  const allFoods: ActivityType[] = users.flatMap((user: User) =>
-    (user.foods ?? []).map((food) => ({ ...food, type: "Food" }))
-  );
-
-  const allActivity: ActivityType[] = [...allWorkouts, ...allFoods];
+  const allActivity: ActivityType[] = [
+    ...foods.allFoods,
+    ...workouts.allWorkouts,
+  ];
 
   useEffect(() => {
     dispatch(fetchUsers());
+    dispatch(fetchFoods());
+    dispatch(fetchWorkouts());
   }, [dispatch]);
 
   return (
@@ -117,6 +110,7 @@ export const HomePage = (): JSX.Element => {
                 <Box>
                   <Button
                     variant="contained"
+                    href="/foods/new"
                     sx={{ width: 180, mt: 0, borderRadius: 0 }}
                   >
                     <RestaurantSharpIcon sx={{ mr: 1 }} />
@@ -124,6 +118,7 @@ export const HomePage = (): JSX.Element => {
                   </Button>
                   <Button
                     variant="contained"
+                    href="/workouts/new"
                     sx={{ width: 180, mt: 0, borderRadius: 0 }}
                   >
                     <SportsGymnasticsSharpIcon sx={{ mr: 1 }} />
@@ -141,9 +136,9 @@ export const HomePage = (): JSX.Element => {
                 allActivity
                   .slice()
                   .reverse()
-                  .map((activity: ActivityType) => {
-                    <Activity key={activity._id} activity={activity} />; // Activity component for foods and workouts
-                  })}
+                  .map((activity: ActivityType) => (
+                    <Activity key={activity._id} activity={activity} /> // Activity component for foods and workouts
+                  ))}
             </>
           </Grid>
         </Grid>
