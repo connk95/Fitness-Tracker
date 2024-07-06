@@ -1,6 +1,8 @@
 import { CardContent, Card, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ActivityProps } from "../redux/types";
+import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
+import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
 
 export const Activity: React.FC<ActivityProps> = ({
   activity,
@@ -8,14 +10,28 @@ export const Activity: React.FC<ActivityProps> = ({
   console.log(activity);
   return (
     <Link to={`/${activity.type}/${activity._id}`}>
-      <Card>
+      <Card
+        // variant="outlined"
+        sx={{
+          backgroundColor: "#ebe9e1",
+          border: 0,
+          // mt: 2,
+          borderRadius: 0,
+          height: "10rem",
+        }}
+        elevation={2}
+      >
         <CardContent>
-          {activity.type == "Workout" ? (
+          {activity.type == "workouts" ? (
             <>
-              <Typography>{activity.type}</Typography>
-              <Typography variant="h5">{activity.title}</Typography>
-              <Typography>By: {activity.user.username}</Typography>
-              <Typography>Duration: {activity.duration}</Typography>
+              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                <SportsGymnasticsSharpIcon sx={{ mr: 1 }} />
+                {activity.title}
+              </Typography>
+              <Typography>
+                {activity.user.username} logged a workout!
+              </Typography>
+              <Typography>Duration: {activity.duration} minutes</Typography>
               <Typography>Calories burned: {activity.calories}</Typography>
               <Typography>
                 {new Date(activity.createdAt).toLocaleDateString()}
@@ -23,9 +39,11 @@ export const Activity: React.FC<ActivityProps> = ({
             </>
           ) : (
             <>
-              <Typography>{activity.type}</Typography>
-              <Typography variant="h5">{activity.title}</Typography>
-              <Typography>By: {activity.user.username}</Typography>
+              <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+                <RestaurantSharpIcon sx={{ mr: 1 }} />
+                {activity.title}
+              </Typography>
+              <Typography>{activity.user.username} logged a meal!</Typography>
               <Typography>Calories: {activity.calories}</Typography>
               <Typography>
                 {new Date(activity.createdAt).toLocaleDateString()}

@@ -2,7 +2,7 @@ import { baseMongooseType, baseState } from "../types";
 import { User } from "../user/user.type";
 
 export interface Workout extends baseMongooseType {
-  // type: string;
+  type: "workouts";
   title: string;
   duration: number;
   calories: number;

@@ -17,6 +17,7 @@ import DirectionsRunSharpIcon from "@mui/icons-material/DirectionsRunSharp";
 import LogoutSharpIcon from "@mui/icons-material/LogoutSharp";
 import LoginSharpIcon from "@mui/icons-material/LoginSharp";
 import AddBoxSharpIcon from "@mui/icons-material/AddBoxSharp";
+import AccountBoxSharpIcon from "@mui/icons-material/AccountBoxSharp";
 
 export const ButtonAppBar = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -55,12 +56,11 @@ export const ButtonAppBar = (): JSX.Element => {
               <IconButton
                 size="large"
                 edge="start"
-                color="inherit"
                 aria-label="menu"
-                sx={{ mr: 2 }}
+                sx={{ mr: 2, color: "#e43d12" }}
                 href="/profile"
               >
-                {/* <AccountCircleOutlinedIcon /> */}
+                <AccountBoxSharpIcon></AccountBoxSharpIcon>
               </IconButton>
               <Button
                 color="inherit"

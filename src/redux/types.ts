@@ -12,9 +12,7 @@ export interface baseState {
   error: string;
 }
 
-export type ActivityType =
-  | (Workout & { type: "Workout" })
-  | (Food & { type: "Food" });
+export type ActivityType = Workout | Food;
 
 export interface ActivityProps {
   activity: ActivityType;

@@ -1,14 +1,8 @@
-// The home page will include an activity feed, which will display recent activity by other members.
-// Recent activity includes new account signups, completed exercises, or recently added foods.
-
-// Users will be able to track friends' progress on their fitness journey.
-// Users can interact with friends' activity, view workouts and foods, and add friends to their network.
-
+import React, { useState, useEffect } from "react";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../redux/hooks";
-import { useEffect } from "react";
-import { fetchUsers, fetchUser } from "../redux/user/user.actions";
+import { fetchUsers } from "../redux/user/user.actions";
 import {
   Container,
   CssBaseline,
@@ -30,22 +24,55 @@ import { fetchFoods } from "../redux/food/food.actions";
 import { fetchWorkouts } from "../redux/workout/workout.actions";
 
 export const HomePage = (): JSX.Element => {
-  // const users = useSelector((state: RootState) => state.users.allUsers);
   const auth = useSelector((state: RootState) => state.auth);
   const workouts = useSelector((state: RootState) => state.workouts);
   const foods = useSelector((state: RootState) => state.foods);
   const dispatch = useAppDispatch();
 
-  const allActivity: ActivityType[] = [
-    ...foods.allFoods,
-    ...workouts.allWorkouts,
-  ];
+  const [filter, setFilter] = useState<string>("all");
+  const [page, setPage] = useState<number>(1);
+  const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
+    []
+  );
 
   useEffect(() => {
     dispatch(fetchUsers());
     dispatch(fetchFoods());
     dispatch(fetchWorkouts());
   }, [dispatch]);
+
+  useEffect(() => {
+    const allActivity: ActivityType[] = [
+      ...foods.allFoods,
+      ...workouts.allWorkouts,
+    ];
+
+    const sortedActivities = allActivity.sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
+    setSortedByCreatedAt(sortedActivities);
+  }, [foods.allFoods, workouts.allWorkouts]);
+
+  const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setFilter((event.target as HTMLInputElement).value);
+    setPage(1); // Reset page to 1 when filter changes
+  };
+
+  const filteredActivity: ActivityType[] = sortedByCreatedAt.filter(
+    (activity) => {
+      if (filter === "all") {
+        return true;
+      }
+      return activity.type === filter;
+    }
+  );
+
+  const handlePageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(Number((event.target as HTMLInputElement).value));
+  };
+
+  const pageSize = 12; // Number of items per page
 
   return (
     <Container component="main" maxWidth="md" sx={{ mt: 12 }}>
@@ -59,19 +86,26 @@ export const HomePage = (): JSX.Element => {
           paddingLeft: 0,
         }}
       >
-        <Grid container spacing={2} maxWidth="md">
+        <Grid container spacing={2} maxWidth="md" sx={{ paddingLeft: 0 }}>
           <Grid
             item
             xs={12}
             sx={{
+              display: "flex",
               paddingLeft: 0,
               paddingTop: 0,
               flexDirection: "column",
-              alignItems: "center",
+              alignItems: "flex-start",
             }}
           >
             {auth.loggedInUser?.access_token ? (
-              <Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  paddingLeft: 0,
+                }}
+              >
                 <FormControl>
                   <FormLabel
                     id="radio"
@@ -84,6 +118,7 @@ export const HomePage = (): JSX.Element => {
                     aria-labelledby="radio"
                     defaultValue="all"
                     name="radio-buttons-group"
+                    onChange={handleFilterChange}
                   >
                     <FormControlLabel
                       value="all"
@@ -91,17 +126,17 @@ export const HomePage = (): JSX.Element => {
                       label="All Activity"
                     />
                     <FormControlLabel
-                      value="friend"
+                      value="friends"
                       control={<Radio />}
                       label="Friend Activity"
                     />
                     <FormControlLabel
-                      value="food"
+                      value="foods"
                       control={<Radio />}
                       label="Meals Only"
                     />
                     <FormControlLabel
-                      value="workout"
+                      value="workouts"
                       control={<Radio />}
                       label="Workouts Only"
                     />
@@ -127,19 +162,43 @@ export const HomePage = (): JSX.Element => {
                 </Box>
               </Box>
             ) : (
-              <>
-                <Typography>All Activity</Typography>
-              </>
+              <Typography>All Activity</Typography>
             )}
-            <>
-              {Array.isArray(allActivity) &&
-                allActivity
-                  .slice()
-                  .reverse()
+            <Grid container spacing={2} sx={{ mt: 2 }}>
+              {Array.isArray(filteredActivity) &&
+              filteredActivity.length > 0 ? (
+                filteredActivity
+                  .slice((page - 1) * pageSize, page * pageSize)
                   .map((activity: ActivityType) => (
-                    <Activity key={activity._id} activity={activity} /> // Activity component for foods and workouts
-                  ))}
-            </>
+                    <Grid item xs={12} sm={6} key={activity._id}>
+                      <Activity activity={activity} />
+                    </Grid>
+                  ))
+              ) : (
+                <Typography>No activities found.</Typography>
+              )}
+            </Grid>
+            <Typography sx={{ mt: 5 }}>Page No.</Typography>
+            <RadioGroup
+              row
+              aria-labelledby="page"
+              defaultValue="1"
+              name="page-buttons-group"
+              onChange={handlePageChange}
+              sx={{ mb: 5 }}
+            >
+              {Array.from(
+                { length: Math.ceil(filteredActivity.length / pageSize) },
+                (_, index) => (
+                  <FormControlLabel
+                    key={index + 1}
+                    value={`${index + 1}`}
+                    control={<Radio />}
+                    label={`${index + 1}`}
+                  />
+                )
+              )}
+            </RadioGroup>
           </Grid>
         </Grid>
       </Box>
