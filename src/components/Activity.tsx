@@ -7,7 +7,6 @@ import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp
 export const Activity: React.FC<ActivityProps> = ({
   activity,
 }: ActivityProps): JSX.Element => {
-  console.log(activity);
   return (
     <Link to={`/${activity.type}/${activity._id}`}>
       <Card

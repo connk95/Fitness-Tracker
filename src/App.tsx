@@ -13,6 +13,7 @@ import { useEffect } from "react";
 import { useAppDispatch } from "./redux/hooks";
 import { setLoggedInUser } from "./redux/auth/auth.actions";
 import { FoodPage } from "./pages/FoodPage";
+import { WorkoutPage } from "./pages/WorkoutPage";
 
 const defaultTheme = createTheme(theme);
 
@@ -31,7 +32,7 @@ const App = () => {
           <Routes>
             {/* <Route path="/" element={<SplashPage />} /> */}
             <Route path="/home" element={<HomePage />} />
-            {/* <Route path="/workouts/:id" element={<PostPage />} /> */}
+            <Route path="/workouts/:id" element={<WorkoutPage />} />
             <Route path="/workouts/new" element={<NewWorkout />} />
             <Route path="/foods/:id" element={<FoodPage />} />
             <Route path="/foods/new" element={<NewFood />} />

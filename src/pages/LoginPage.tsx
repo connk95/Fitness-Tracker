@@ -30,7 +30,6 @@ export const Login = (): JSX.Element => {
   } = useForm<UserLoginData>();
 
   const onSubmit: SubmitHandler<UserLoginData> = async (data) => {
-    console.log(data);
     try {
       await dispatch(userLogin(data));
     } catch (error) {

@@ -66,7 +66,7 @@ export const FoodPage = (): JSX.Element => {
                     {food.singleFood.title}
                   </Typography>
                   <Typography>
-                    {food.singleFood.user.username} logged a workout!
+                    {food.singleFood.user.username} logged a meal!
                   </Typography>
                   <Typography>Calories: {food.singleFood.calories}</Typography>
                   <Typography>
