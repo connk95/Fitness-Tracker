@@ -175,7 +175,7 @@ export const HomePage = (): JSX.Element => {
                     </Grid>
                   ))
               ) : (
-                <Typography>No activities found.</Typography>
+                <Typography sx={{ ml: 2 }}>No activities found.</Typography>
               )}
             </Grid>
             <Typography sx={{ mt: 5 }}>Page No.</Typography>

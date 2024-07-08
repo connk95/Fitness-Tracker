@@ -12,6 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useAppDispatch } from "./redux/hooks";
 import { setLoggedInUser } from "./redux/auth/auth.actions";
+import { FoodPage } from "./pages/FoodPage";
 
 const defaultTheme = createTheme(theme);
 
@@ -32,7 +33,7 @@ const App = () => {
             <Route path="/home" element={<HomePage />} />
             {/* <Route path="/workouts/:id" element={<PostPage />} /> */}
             <Route path="/workouts/new" element={<NewWorkout />} />
-            {/* <Route path="/foods/:id" element={<PostPage />} /> */}
+            <Route path="/foods/:id" element={<FoodPage />} />
             <Route path="/foods/new" element={<NewFood />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
