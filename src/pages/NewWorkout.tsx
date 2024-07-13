@@ -68,6 +68,7 @@ export const NewWorkout = (): JSX.Element => {
                 required
                 fullWidth
                 autoFocus
+                InputProps={{ sx: { borderRadius: 0 } }}
               />
               {errors.title && (
                 <Typography variant="caption" color="error">
@@ -88,6 +89,7 @@ export const NewWorkout = (): JSX.Element => {
                 name="duration"
                 variant="outlined"
                 fullWidth
+                InputProps={{ sx: { borderRadius: 0 } }}
               />
               {errors.duration && (
                 <Typography variant="caption" color="error">
@@ -107,6 +109,7 @@ export const NewWorkout = (): JSX.Element => {
                 label="Calories"
                 name="calories"
                 fullWidth
+                InputProps={{ sx: { borderRadius: 0 } }}
               />
               {errors.calories && (
                 <Typography variant="caption" color="error">

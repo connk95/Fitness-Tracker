@@ -68,6 +68,7 @@ export const NewFood = (): JSX.Element => {
                 required
                 fullWidth
                 autoFocus
+                InputProps={{ sx: { borderRadius: 0 } }}
               />
               {errors.title && (
                 <Typography variant="caption" color="error">
@@ -87,6 +88,7 @@ export const NewFood = (): JSX.Element => {
                 label="Calories"
                 name="calories"
                 fullWidth
+                InputProps={{ sx: { borderRadius: 0 } }}
               />
               {errors.calories && (
                 <Typography variant="caption" color="error">

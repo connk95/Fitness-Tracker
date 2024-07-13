@@ -9,6 +9,8 @@ import {
   Card,
   CardContent,
   Typography,
+  Button,
+  TextField,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../redux/hooks";
@@ -18,12 +20,31 @@ import { useEffect } from "react";
 import { fetchSingleFood } from "../redux/food/food.actions";
 import { CssBaseline } from "@mui/material";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { newComment } from "../redux/comment/comment.actions";
+import { Linkify } from "../utilities/utilities";
 
 export const FoodPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const food = useSelector((state: RootState) => state.foods);
-  //   const auth = useSelector((state: RootState) => state.auth);
+  const auth = useSelector((state: RootState) => state.auth);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Comment>();
+
+  const onSubmit: SubmitHandler<Comment> = async (data) => {
+    const commentData = {
+      text: data.comment,
+      activityId: id,
+      type: food.singleFood.type,
+    };
+    await dispatch(newComment(commentData, food.singleFood.type));
+    window.location.reload();
+  };
 
   useEffect(() => {
     if (id) {
@@ -46,6 +67,9 @@ export const FoodPage = (): JSX.Element => {
             flexDirection: "column",
             alignItems: "center",
           }}
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
         >
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12}>
@@ -75,6 +99,74 @@ export const FoodPage = (): JSX.Element => {
                 </CardContent>
               </Card>
             </Grid>
+            {food.singleFood.comments.length > 0 ? (
+              <Grid item xs={12}>
+                <Typography sx={{ ml: 1, mb: 2 }}>
+                  Comments: {`${food.singleFood.comments.length}`}
+                </Typography>
+                {food.singleFood.comments
+                  .slice()
+                  .reverse()
+                  .map((comment) => (
+                    <Card key={comment._id} sx={{ my: 1 }}>
+                      <CardContent key={comment.id}>
+                        <Linkify sx={{ mb: 1 }}>{comment.text}</Linkify>
+                        <Typography sx={{ fontSize: 14 }}>
+                          posted at {comment.createdAt.slice(11, 16)} on{" "}
+                          {comment.createdAt.slice(0, 10)}
+                        </Typography>
+                        <Typography sx={{ fontSize: 14 }}>
+                          by {comment.user.username}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </Grid>
+            ) : (
+              <Typography sx={{ m: 2, ml: 3 }}>
+                Be the first to leave a comment!
+              </Typography>
+            )}
+            {auth.loggedInUser.access_token ? (
+              <Grid item xs={12}>
+                <TextField
+                  {...register("comment", {
+                    required: "Please add a comment and try again",
+                    maxLength: {
+                      value: 240,
+                      message:
+                        "Comments cannot exceed 240 characters in length",
+                    },
+                  })}
+                  id="comment"
+                  label="Comment"
+                  variant="outlined"
+                  fullWidth
+                  InputProps={{ sx: { borderRadius: 0 } }}
+                />
+                {errors.comment && (
+                  <Typography variant="caption" color="error">
+                    {errors.comment.message}
+                  </Typography>
+                )}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Submit
+                </Button>
+                <Button
+                  href="/home"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, ml: 2, borderRadius: 0 }}
+                >
+                  Back
+                </Button>
+              </Grid>
+            ) : (
+              <></>
+            )}
           </Grid>
         </Box>
       ) : (

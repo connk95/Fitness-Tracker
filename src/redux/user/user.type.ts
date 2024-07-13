@@ -1,6 +1,7 @@
 import { baseState } from "../types";
 import { Food } from "../food/food.type";
 import { Workout } from "../workout/workout.type";
+import { Comment } from "../comment/comment.type";
 
 export interface User {
   username: string;
@@ -8,6 +9,8 @@ export interface User {
   email: string;
   foods?: Food[];
   workouts?: Workout[];
+  likes?: [];
+  comments?: Comment[];
   _id?: string;
 }
 

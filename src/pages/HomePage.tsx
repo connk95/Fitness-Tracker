@@ -75,7 +75,7 @@ export const HomePage = (): JSX.Element => {
   const pageSize = 12; // Number of items per page
 
   return (
-    <Container component="main" maxWidth="md" sx={{ mt: 12 }}>
+    <Container component="main" maxWidth="md">
       <CssBaseline />
       <Box
         sx={{
