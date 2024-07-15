@@ -22,6 +22,7 @@ import { CssBaseline } from "@mui/material";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { newComment } from "../redux/comment/comment.actions";
+import { Comment } from "../redux/comment/comment.type";
 import { Linkify } from "../utilities/utilities";
 
 export const FoodPage = (): JSX.Element => {
@@ -29,7 +30,6 @@ export const FoodPage = (): JSX.Element => {
   const { id } = useParams();
   const food = useSelector((state: RootState) => state.foods);
   const auth = useSelector((state: RootState) => state.auth);
-
   const {
     register,
     handleSubmit,
@@ -37,12 +37,13 @@ export const FoodPage = (): JSX.Element => {
   } = useForm<Comment>();
 
   const onSubmit: SubmitHandler<Comment> = async (data) => {
+    console.log("test onSubmit");
     const commentData = {
-      text: data.comment,
+      text: data.text,
       activityId: id,
       type: food.singleFood.type,
     };
-    await dispatch(newComment(commentData, food.singleFood.type));
+    await dispatch(newComment(commentData));
     window.location.reload();
   };
 
@@ -130,7 +131,7 @@ export const FoodPage = (): JSX.Element => {
             {auth.loggedInUser.access_token ? (
               <Grid item xs={12}>
                 <TextField
-                  {...register("comment", {
+                  {...register("text", {
                     required: "Please add a comment and try again",
                     maxLength: {
                       value: 240,
@@ -138,15 +139,15 @@ export const FoodPage = (): JSX.Element => {
                         "Comments cannot exceed 240 characters in length",
                     },
                   })}
-                  id="comment"
+                  id="text"
                   label="Comment"
                   variant="outlined"
                   fullWidth
                   InputProps={{ sx: { borderRadius: 0 } }}
                 />
-                {errors.comment && (
+                {errors.text && (
                   <Typography variant="caption" color="error">
-                    {errors.comment.message}
+                    {errors.text.message}
                   </Typography>
                 )}
                 <Button
@@ -159,7 +160,7 @@ export const FoodPage = (): JSX.Element => {
                 <Button
                   href="/home"
                   variant="contained"
-                  sx={{ width: 90, mt: 2, mb: 10, ml: 2, borderRadius: 0 }}
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
                 >
                   Back
                 </Button>

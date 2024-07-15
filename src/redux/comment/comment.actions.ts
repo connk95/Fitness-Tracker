@@ -11,7 +11,7 @@ type GenericState = {
 };
 
 export const newComment = createAsyncThunk(
-  //   `${type}/newComment`,
+  `comments/newComment`,
   async (
     {
       text,
@@ -20,8 +20,9 @@ export const newComment = createAsyncThunk(
     }: { text: string; activityId: string; type: string },
     thunkApi
   ) => {
+    console.log("test action");
     const state = thunkApi.getState() as GenericState;
-    const res = await axios.patch(
+    const res = await axios.post(
       `${import.meta.env.VITE_API_URL}/${type}/${activityId}`,
       {
         activityId,
