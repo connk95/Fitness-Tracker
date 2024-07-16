@@ -22,6 +22,7 @@ import { CssBaseline } from "@mui/material";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { newComment } from "../redux/comment/comment.actions";
+// import { foodComment } from "../redux/food/food.actions";
 import { Comment } from "../redux/comment/comment.type";
 import { Linkify } from "../utilities/utilities";
 
@@ -37,15 +38,28 @@ export const FoodPage = (): JSX.Element => {
   } = useForm<Comment>();
 
   const onSubmit: SubmitHandler<Comment> = async (data) => {
-    console.log("test onSubmit");
+    console.log("test submit");
+    if (!id) {
+      console.error("No activity ID found");
+      return;
+    }
     const commentData = {
       text: data.text,
       activityId: id,
-      type: food.singleFood.type,
+      type: "foods",
     };
     await dispatch(newComment(commentData));
     window.location.reload();
   };
+
+  // const onSubmit: SubmitHandler<Comment> = async (data) => {
+  //   const commentData = {
+  //     text: data.text,
+  //     postId: id,
+  //   };
+  //   await dispatch(foodComment(commentData));
+  //   window.location.reload();
+  // };
 
   useEffect(() => {
     if (id) {
@@ -81,7 +95,6 @@ export const FoodPage = (): JSX.Element => {
                   border: 0,
                   // mt: 2,
                   borderRadius: 0,
-                  height: "10rem",
                 }}
                 elevation={2}
               >
@@ -91,16 +104,17 @@ export const FoodPage = (): JSX.Element => {
                     {food.singleFood.title}
                   </Typography>
                   <Typography>
-                    {food.singleFood.user.username} logged a meal!
+                    {food.singleFood.user.username} logged a food!
                   </Typography>
                   <Typography>Calories: {food.singleFood.calories}</Typography>
                   <Typography>
+                    {food.singleFood.createdAt.slice(11, 16)} on{" "}
                     {new Date(food.singleFood.createdAt).toLocaleDateString()}
                   </Typography>
                 </CardContent>
               </Card>
             </Grid>
-            {food.singleFood.comments.length > 0 ? (
+            {food.singleFood.comments && food.singleFood.comments.length > 0 ? (
               <Grid item xs={12}>
                 <Typography sx={{ ml: 1, mb: 2 }}>
                   Comments: {`${food.singleFood.comments.length}`}
@@ -109,12 +123,20 @@ export const FoodPage = (): JSX.Element => {
                   .slice()
                   .reverse()
                   .map((comment) => (
-                    <Card key={comment._id} sx={{ my: 1 }}>
-                      <CardContent key={comment.id}>
+                    <Card
+                      key={comment._id}
+                      sx={{
+                        my: 1,
+                        backgroundColor: "#ebe9e1",
+                        borderRadius: 0,
+                        border: 0,
+                      }}
+                    >
+                      <CardContent>
                         <Linkify sx={{ mb: 1 }}>{comment.text}</Linkify>
                         <Typography sx={{ fontSize: 14 }}>
-                          posted at {comment.createdAt.slice(11, 16)} on{" "}
-                          {comment.createdAt.slice(0, 10)}
+                          {comment.createdAt.slice(11, 16)} on{" "}
+                          {new Date(comment.createdAt).toLocaleDateString()}{" "}
                         </Typography>
                         <Typography sx={{ fontSize: 14 }}>
                           by {comment.user.username}

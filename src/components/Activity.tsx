@@ -33,6 +33,7 @@ export const Activity: React.FC<ActivityProps> = ({
               <Typography>Duration: {activity.duration} minutes</Typography>
               <Typography>Calories burned: {activity.calories}</Typography>
               <Typography>
+                {activity.createdAt.slice(11, 16)} on{" "}
                 {new Date(activity.createdAt).toLocaleDateString()}
               </Typography>
             </>
@@ -42,9 +43,10 @@ export const Activity: React.FC<ActivityProps> = ({
                 <RestaurantSharpIcon sx={{ mr: 1 }} />
                 {activity.title}
               </Typography>
-              <Typography>{activity.user.username} logged a meal!</Typography>
+              <Typography>{activity.user.username} logged a food!</Typography>
               <Typography>Calories: {activity.calories}</Typography>
               <Typography>
+                {activity.createdAt.slice(11, 16)} on{" "}
                 {new Date(activity.createdAt).toLocaleDateString()}
               </Typography>
             </>

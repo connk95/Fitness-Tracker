@@ -1,6 +1,5 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-// import { Comment } from "./comment.type";
 
 type GenericState = {
   auth: {
@@ -11,7 +10,7 @@ type GenericState = {
 };
 
 export const newComment = createAsyncThunk(
-  `comments/newComment`,
+  "comments/newComment",
   async (
     {
       text,
@@ -20,9 +19,9 @@ export const newComment = createAsyncThunk(
     }: { text: string; activityId: string; type: string },
     thunkApi
   ) => {
-    console.log("test action");
+    console.log("test action: ", { text, activityId, type });
     const state = thunkApi.getState() as GenericState;
-    const res = await axios.post(
+    const res = await axios.patch(
       `${import.meta.env.VITE_API_URL}/${type}/${activityId}`,
       {
         activityId,
@@ -30,6 +29,7 @@ export const newComment = createAsyncThunk(
         user: state.auth.loggedInUser.user,
       }
     );
+
     return res.data;
   }
 );
