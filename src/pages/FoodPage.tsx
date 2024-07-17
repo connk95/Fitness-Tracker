@@ -1,13 +1,8 @@
-// Users can add meals to their timeline.
-// Users will have the option to create new meals, or add previously created meals by searching a database.
-
 import {
   Box,
   CircularProgress,
   Container,
   Grid,
-  Card,
-  CardContent,
   Typography,
   Button,
   TextField,
@@ -19,12 +14,11 @@ import { RootState } from "../redux/store";
 import { useEffect } from "react";
 import { fetchSingleFood } from "../redux/food/food.actions";
 import { CssBaseline } from "@mui/material";
-import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { newComment } from "../redux/comment/comment.actions";
-// import { foodComment } from "../redux/food/food.actions";
 import { Comment } from "../redux/comment/comment.type";
-import { Linkify } from "../utilities/utilities";
+import { CommentCard } from "../components/Comment";
+import { Activity } from "../components/Activity";
 
 export const FoodPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -38,7 +32,6 @@ export const FoodPage = (): JSX.Element => {
   } = useForm<Comment>();
 
   const onSubmit: SubmitHandler<Comment> = async (data) => {
-    console.log("test submit");
     if (!id) {
       console.error("No activity ID found");
       return;
@@ -51,15 +44,6 @@ export const FoodPage = (): JSX.Element => {
     await dispatch(newComment(commentData));
     window.location.reload();
   };
-
-  // const onSubmit: SubmitHandler<Comment> = async (data) => {
-  //   const commentData = {
-  //     text: data.text,
-  //     postId: id,
-  //   };
-  //   await dispatch(foodComment(commentData));
-  //   window.location.reload();
-  // };
 
   useEffect(() => {
     if (id) {
@@ -88,31 +72,7 @@ export const FoodPage = (): JSX.Element => {
         >
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12}>
-              <Card
-                // variant="outlined"
-                sx={{
-                  backgroundColor: "#ebe9e1",
-                  border: 0,
-                  // mt: 2,
-                  borderRadius: 0,
-                }}
-                elevation={2}
-              >
-                <CardContent>
-                  <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                    <RestaurantSharpIcon sx={{ mr: 1 }} />
-                    {food.singleFood.title}
-                  </Typography>
-                  <Typography>
-                    {food.singleFood.user.username} logged a food!
-                  </Typography>
-                  <Typography>Calories: {food.singleFood.calories}</Typography>
-                  <Typography>
-                    {food.singleFood.createdAt.slice(11, 16)} on{" "}
-                    {new Date(food.singleFood.createdAt).toLocaleDateString()}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <Activity activity={food.singleFood} />
             </Grid>
             {food.singleFood.comments && food.singleFood.comments.length > 0 ? (
               <Grid item xs={12}>
@@ -123,26 +83,7 @@ export const FoodPage = (): JSX.Element => {
                   .slice()
                   .reverse()
                   .map((comment) => (
-                    <Card
-                      key={comment._id}
-                      sx={{
-                        my: 1,
-                        backgroundColor: "#ebe9e1",
-                        borderRadius: 0,
-                        border: 0,
-                      }}
-                    >
-                      <CardContent>
-                        <Linkify sx={{ mb: 1 }}>{comment.text}</Linkify>
-                        <Typography sx={{ fontSize: 14 }}>
-                          {comment.createdAt.slice(11, 16)} on{" "}
-                          {new Date(comment.createdAt).toLocaleDateString()}{" "}
-                        </Typography>
-                        <Typography sx={{ fontSize: 14 }}>
-                          by {comment.user.username}
-                        </Typography>
-                      </CardContent>
-                    </Card>
+                    <CommentCard key={comment._id} comment={comment} />
                   ))}
               </Grid>
             ) : (

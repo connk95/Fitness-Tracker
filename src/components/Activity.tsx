@@ -46,8 +46,8 @@ export const Activity: React.FC<ActivityProps> = ({
               <Typography>{activity.user.username} logged a food!</Typography>
               <Typography>Calories: {activity.calories}</Typography>
               <Typography>
-                {activity.createdAt.slice(11, 16)} on{" "}
-                {new Date(activity.createdAt).toLocaleDateString()}
+                {new Date(activity.createdAt).toLocaleDateString()} at {""}
+                {activity.createdAt.slice(11, 16)}
               </Typography>
             </>
           )}

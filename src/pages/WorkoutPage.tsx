@@ -1,17 +1,11 @@
-// Users can add workouts to their timeline.
-// Users will have the option to create new workouts, or add previously created workouts by searching a database.
-
-// Users can add meals to their timeline.
-// Users will have the option to create new meals, or add previously created meals by searching a database.
-
 import {
   Box,
   CircularProgress,
   Container,
   Grid,
-  Card,
-  CardContent,
   Typography,
+  Button,
+  TextField,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useAppDispatch } from "../redux/hooks";
@@ -20,13 +14,36 @@ import { RootState } from "../redux/store";
 import { useEffect } from "react";
 import { fetchSingleWorkout } from "../redux/workout/workout.actions";
 import { CssBaseline } from "@mui/material";
-import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { newComment } from "../redux/comment/comment.actions";
+import { Comment } from "../redux/comment/comment.type";
+import { CommentCard } from "../components/Comment";
+import { Activity } from "../components/Activity";
 
 export const WorkoutPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const workout = useSelector((state: RootState) => state.workouts);
-  //   const auth = useSelector((state: RootState) => state.auth);
+  const auth = useSelector((state: RootState) => state.auth);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Comment>();
+
+  const onSubmit: SubmitHandler<Comment> = async (data) => {
+    if (!id) {
+      console.error("No activity ID found");
+      return;
+    }
+    const commentData = {
+      text: data.text,
+      activityId: id,
+      type: "workouts",
+    };
+    await dispatch(newComment(commentData));
+    window.location.reload();
+  };
 
   useEffect(() => {
     if (id) {
@@ -49,42 +66,72 @@ export const WorkoutPage = (): JSX.Element => {
             flexDirection: "column",
             alignItems: "center",
           }}
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
         >
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12}>
-              <Card
-                // variant="outlined"
-                sx={{
-                  backgroundColor: "#ebe9e1",
-                  border: 0,
-                  // mt: 2,
-                  borderRadius: 0,
-                  height: "10rem",
-                }}
-                elevation={2}
-              >
-                <CardContent>
-                  <Typography variant="h5" sx={{ fontWeight: "bold" }}>
-                    <RestaurantSharpIcon sx={{ mr: 1 }} />
-                    {workout.singleWorkout.title}
-                  </Typography>
-                  <Typography>
-                    {workout.singleWorkout.user.username} logged a workout!
-                  </Typography>
-                  <Typography>
-                    Duration: {workout.singleWorkout.duration} minutes
-                  </Typography>
-                  <Typography>
-                    Calories burned: {workout.singleWorkout.calories}
-                  </Typography>
-                  <Typography>
-                    {new Date(
-                      workout.singleWorkout.createdAt
-                    ).toLocaleDateString()}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <Activity activity={workout.singleWorkout} />
             </Grid>
+            {workout.singleWorkout.comments &&
+            workout.singleWorkout.comments.length > 0 ? (
+              <Grid item xs={12}>
+                <Typography sx={{ ml: 1, mb: 2 }}>
+                  Comments: {`${workout.singleWorkout.comments.length}`}
+                </Typography>
+                {workout.singleWorkout.comments
+                  .slice()
+                  .reverse()
+                  .map((comment) => (
+                    <CommentCard key={comment._id} comment={comment} />
+                  ))}
+              </Grid>
+            ) : (
+              <Typography sx={{ m: 2, ml: 3 }}>
+                Be the first to leave a comment!
+              </Typography>
+            )}
+            {auth.loggedInUser.access_token ? (
+              <Grid item xs={12}>
+                <TextField
+                  {...register("text", {
+                    required: "Please add a comment and try again",
+                    maxLength: {
+                      value: 240,
+                      message:
+                        "Comments cannot exceed 240 characters in length",
+                    },
+                  })}
+                  id="text"
+                  label="Comment"
+                  variant="outlined"
+                  fullWidth
+                  InputProps={{ sx: { borderRadius: 0 } }}
+                />
+                {errors.text && (
+                  <Typography variant="caption" color="error">
+                    {errors.text.message}
+                  </Typography>
+                )}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Submit
+                </Button>
+                <Button
+                  href="/home"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Back
+                </Button>
+              </Grid>
+            ) : (
+              <></>
+            )}
           </Grid>
         </Box>
       ) : (
