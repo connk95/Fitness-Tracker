@@ -36,10 +36,8 @@ export const UserPage = (): JSX.Element => {
   );
 
   useEffect(() => {
-    /* istanbul ignore else -- @preserve */
     if (auth.loggedInUser.access_token) {
       const userId = auth.loggedInUser.user._id;
-      /* istanbul ignore else -- @preserve */
       if (userId) {
         dispatch(fetchUser(userId));
       }
@@ -48,8 +46,8 @@ export const UserPage = (): JSX.Element => {
 
   useEffect(() => {
     const allActivity: ActivityType[] = [
-      ...user.user.foods,
-      ...user.user.workouts,
+      ...(user.user.foods || []),
+      ...(user.user.workouts || []),
     ];
 
     const sortedActivities = allActivity.sort((a, b) => {
@@ -73,11 +71,15 @@ export const UserPage = (): JSX.Element => {
     }
   );
 
-  //   const handlePageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     setPage(Number((event.target as HTMLInputElement).value));
-  //   };
+  const handleActivityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(Number((event.target as HTMLInputElement).value));
+  };
 
-  const pageSize = 12; // Number of items per page
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(Number((event.target as HTMLInputElement).value));
+  };
+
+  const pageSize = 6; // Number of items per page
 
   return (
     <Container component="main" sx={{ mt: 12 }}>
@@ -97,7 +99,15 @@ export const UserPage = (): JSX.Element => {
         >
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12}>
-              <Card>
+              <Card
+                sx={{
+                  backgroundColor: "#ebe9e1",
+                  border: 0,
+                  // mt: 2,
+                  borderRadius: 0,
+                }}
+                elevation={2}
+              >
                 <CardContent>
                   <Typography sx={{ fontWeight: "bold", fontSize: 20 }}>
                     Username
@@ -108,11 +118,6 @@ export const UserPage = (): JSX.Element => {
             </Grid>
             {user.user.workouts || user.user.foods ? (
               <Grid item xs={12}>
-                <Typography
-                  sx={{ fontWeight: "bold", fontSize: 20, ml: 2, mt: 2 }}
-                >
-                  Acitivty
-                </Typography>
                 <Box
                   sx={{
                     display: "flex",
@@ -157,18 +162,42 @@ export const UserPage = (): JSX.Element => {
                     </RadioGroup>
                   </FormControl>
                 </Box>
-                {Array.isArray(filteredActivity) &&
-                filteredActivity.length > 0 ? (
-                  filteredActivity
-                    .slice((page - 1) * pageSize, page * pageSize)
-                    .map((activity: ActivityType) => (
-                      <Grid item xs={12} sm={6} key={activity._id}>
-                        <Activity activity={activity} />
-                      </Grid>
-                    ))
-                ) : (
-                  <Typography sx={{ ml: 2 }}>No activities found.</Typography>
-                )}
+                <Grid container spacing={2} sx={{ mt: 2 }}>
+                  {Array.isArray(filteredActivity) &&
+                  filteredActivity.length > 0 ? (
+                    filteredActivity
+                      .slice((page - 1) * pageSize, page * pageSize)
+                      .map((activity: ActivityType) => (
+                        <Grid item xs={12} sm={6} key={activity._id}>
+                          <Activity activity={activity} />
+                        </Grid>
+                      ))
+                  ) : (
+                    <Typography sx={{ ml: 2 }}>No activities found.</Typography>
+                  )}
+                </Grid>
+                <Typography sx={{ mt: 2 }}>Page No.</Typography>
+
+                <RadioGroup
+                  row
+                  aria-labelledby="page"
+                  defaultValue="1"
+                  name="page-buttons-group"
+                  onChange={handleActivityChange}
+                  sx={{ mb: 1 }}
+                >
+                  {Array.from(
+                    { length: Math.ceil(filteredActivity.length / pageSize) },
+                    (_, index) => (
+                      <FormControlLabel
+                        key={index + 1}
+                        value={`${index + 1}`}
+                        control={<Radio />}
+                        label={`${index + 1}`}
+                      />
+                    )
+                  )}
+                </RadioGroup>
               </Grid>
             ) : (
               <></>
@@ -176,7 +205,12 @@ export const UserPage = (): JSX.Element => {
             {user.user.comments && (
               <Grid item xs={12} sx={{ mb: 8 }}>
                 <Typography
-                  sx={{ fontWeight: "bold", fontSize: 20, ml: 2, mt: 2 }}
+                  sx={{
+                    fontWeight: "bold",
+                    fontSize: 20,
+                    mt: 2,
+                    color: "#505050",
+                  }}
                 >
                   Comments
                 </Typography>
@@ -184,8 +218,32 @@ export const UserPage = (): JSX.Element => {
                   .slice()
                   .reverse()
                   .map((comment) => (
-                    <CommentCard key={comment._id} comment={comment} />
+                    <Link to={`/${comment.type}/${comment.activityId}`}>
+                      <CommentCard key={comment._id} comment={comment} />
+                    </Link>
                   ))}
+                <Typography sx={{ mt: 2 }}>Page No.</Typography>
+
+                <RadioGroup
+                  row
+                  aria-labelledby="page"
+                  defaultValue="1"
+                  name="page-buttons-group"
+                  onChange={handleCommentChange}
+                  sx={{ mb: 5 }}
+                >
+                  {Array.from(
+                    { length: Math.ceil(user.user.comments.length / pageSize) },
+                    (_, index) => (
+                      <FormControlLabel
+                        key={index + 1}
+                        value={`${index + 1}`}
+                        control={<Radio />}
+                        label={`${index + 1}`}
+                      />
+                    )
+                  )}
+                </RadioGroup>
               </Grid>
             )}
           </Grid>

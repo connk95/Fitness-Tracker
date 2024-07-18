@@ -15,6 +15,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
         borderRadius: 0,
         border: 0,
       }}
+      elevation={2}
     >
       <CardContent>
         <Linkify sx={{ mb: 1 }}>{comment.text}</Linkify>

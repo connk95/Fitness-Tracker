@@ -19,7 +19,6 @@ export const newComment = createAsyncThunk(
     }: { text: string; activityId: string; type: string },
     thunkApi
   ) => {
-    console.log("test action: ", { text, activityId, type });
     const state = thunkApi.getState() as GenericState;
     const res = await axios.patch(
       `${import.meta.env.VITE_API_URL}/${type}/${activityId}`,
@@ -27,6 +26,7 @@ export const newComment = createAsyncThunk(
         activityId,
         text,
         user: state.auth.loggedInUser.user,
+        type,
       }
     );
 

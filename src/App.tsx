@@ -14,6 +14,7 @@ import { useAppDispatch } from "./redux/hooks";
 import { setLoggedInUser } from "./redux/auth/auth.actions";
 import { FoodPage } from "./pages/FoodPage";
 import { WorkoutPage } from "./pages/WorkoutPage";
+import { UserPage } from "./pages/UserPage";
 
 const defaultTheme = createTheme(theme);
 
@@ -38,7 +39,7 @@ const App = () => {
             <Route path="/foods/new" element={<NewFood />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/login" element={<Login />} />
-            {/* <Route path="/profile" element={<UserPage />} /> */}
+            <Route path="/profile" element={<UserPage />} />
           </Routes>
         </Provider>
       </Router>

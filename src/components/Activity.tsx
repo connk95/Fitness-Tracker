@@ -28,7 +28,7 @@ export const Activity: React.FC<ActivityProps> = ({
                 {activity.title}
               </Typography>
               <Typography>
-                {activity.user.username} logged a workout!
+                {activity.user.username || "I"} logged a workout!
               </Typography>
               <Typography>Duration: {activity.duration} minutes</Typography>
               <Typography>Calories burned: {activity.calories}</Typography>
@@ -43,7 +43,9 @@ export const Activity: React.FC<ActivityProps> = ({
                 <RestaurantSharpIcon sx={{ mr: 1 }} />
                 {activity.title}
               </Typography>
-              <Typography>{activity.user.username} logged a food!</Typography>
+              <Typography>
+                {activity.user.username || "I"} logged a food!
+              </Typography>
               <Typography>Calories: {activity.calories}</Typography>
               <Typography>
                 {new Date(activity.createdAt).toLocaleDateString()} at {""}
