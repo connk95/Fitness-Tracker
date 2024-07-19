@@ -128,7 +128,11 @@ export const UserPage = (): JSX.Element => {
                   <FormControl>
                     <FormLabel
                       id="radio"
-                      sx={{ fontSize: 20, fontWeight: "bold" }}
+                      sx={{
+                        fontSize: 20,
+                        fontWeight: "bold",
+                        color: "#505050",
+                      }}
                     >
                       Activity Log
                     </FormLabel>

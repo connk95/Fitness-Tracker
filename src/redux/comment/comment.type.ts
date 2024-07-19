@@ -5,5 +5,6 @@ export interface Comment extends baseMongooseType {
   text: string;
   activityId: string;
   user: User;
+  type: string;
   likes?: User[];
 }
