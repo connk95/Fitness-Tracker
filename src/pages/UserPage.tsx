@@ -9,20 +9,16 @@ import {
   CircularProgress,
   Container,
   Box,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Link } from "react-router-dom";
 import { fetchUser } from "../redux/user/user.actions";
 import { useAppDispatch } from "../redux/hooks";
-import { Linkify } from "../utilities/utilities";
 import { ActivityType } from "../redux/types";
 import { Activity } from "../components/Activity";
 import { CommentCard } from "../components/Comment";
+import { PageSelector } from "../components/PageSelector";
+import { ActivitySelector } from "../components/ActivitySelector";
 
 export const UserPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -34,6 +30,7 @@ export const UserPage = (): JSX.Element => {
   const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
     []
   );
+  const pageSize = 6; // Number of items per page
 
   useEffect(() => {
     if (auth.loggedInUser.access_token) {
@@ -79,10 +76,8 @@ export const UserPage = (): JSX.Element => {
     setPage(Number((event.target as HTMLInputElement).value));
   };
 
-  const pageSize = 6; // Number of items per page
-
   return (
-    <Container component="main" sx={{ mt: 12 }}>
+    <Container component="main" sx={{ mt: 12 }} maxWidth="md">
       <CssBaseline />
       {!user.user._id ? (
         <Box sx={{ mt: "19%", ml: "47%" }}>
@@ -95,6 +90,7 @@ export const UserPage = (): JSX.Element => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            paddingLeft: 0,
           }}
         >
           <Grid container spacing={2} maxWidth="md">
@@ -103,7 +99,6 @@ export const UserPage = (): JSX.Element => {
                 sx={{
                   backgroundColor: "#ebe9e1",
                   border: 0,
-                  // mt: 2,
                   borderRadius: 0,
                 }}
                 elevation={2}
@@ -117,137 +112,82 @@ export const UserPage = (): JSX.Element => {
               </Card>
             </Grid>
             {user.user.workouts || user.user.foods ? (
-              <Grid item xs={12}>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    paddingLeft: 0,
-                  }}
-                >
-                  <FormControl>
-                    <FormLabel
-                      id="radio"
-                      sx={{
-                        fontSize: 20,
-                        fontWeight: "bold",
-                        color: "#505050",
-                      }}
-                    >
-                      Activity Log
-                    </FormLabel>
-                    <RadioGroup
-                      row
-                      aria-labelledby="radio"
-                      defaultValue="all"
-                      name="radio-buttons-group"
-                      onChange={handleFilterChange}
-                    >
-                      <FormControlLabel
-                        value="all"
-                        control={<Radio />}
-                        label="All Activity"
-                      />
-                      <FormControlLabel
-                        value="friends"
-                        control={<Radio />}
-                        label="Friend Activity"
-                      />
-                      <FormControlLabel
-                        value="foods"
-                        control={<Radio />}
-                        label="Meals Only"
-                      />
-                      <FormControlLabel
-                        value="workouts"
-                        control={<Radio />}
-                        label="Workouts Only"
-                      />
-                    </RadioGroup>
-                  </FormControl>
-                </Box>
-                <Grid container spacing={2} sx={{ mt: 2 }}>
+              <Grid
+                item
+                xs={12}
+                sx={{
+                  display: "flex",
+                  paddingLeft: 0,
+                  paddingTop: 0,
+                  flexDirection: "column",
+                  alignItems: "flex-start",
+                }}
+              >
+                <ActivitySelector
+                  filter={filter}
+                  handleFilterChange={handleFilterChange}
+                />
+                <Grid container spacing={2} sx={{ mt: 0 }}>
                   {Array.isArray(filteredActivity) &&
                   filteredActivity.length > 0 ? (
-                    filteredActivity
-                      .slice((page - 1) * pageSize, page * pageSize)
-                      .map((activity: ActivityType) => (
-                        <Grid item xs={12} sm={6} key={activity._id}>
-                          <Activity activity={activity} />
-                        </Grid>
-                      ))
+                    <>
+                      {filteredActivity
+                        .slice((page - 1) * pageSize, page * pageSize)
+                        .map((activity: ActivityType) => (
+                          <Grid item xs={12} sm={6} key={activity._id}>
+                            <Activity activity={activity} />
+                          </Grid>
+                        ))}
+                      <PageSelector
+                        length={filteredActivity.length}
+                        pageSize={pageSize}
+                        currentPage={page}
+                        handlePageChange={handleActivityChange}
+                      />
+                    </>
                   ) : (
                     <Typography sx={{ ml: 2 }}>No activities found.</Typography>
                   )}
                 </Grid>
-                <Typography sx={{ mt: 2 }}>Page No.</Typography>
-
-                <RadioGroup
-                  row
-                  aria-labelledby="page"
-                  defaultValue="1"
-                  name="page-buttons-group"
-                  onChange={handleActivityChange}
-                  sx={{ mb: 1 }}
-                >
-                  {Array.from(
-                    { length: Math.ceil(filteredActivity.length / pageSize) },
-                    (_, index) => (
-                      <FormControlLabel
-                        key={index + 1}
-                        value={`${index + 1}`}
-                        control={<Radio />}
-                        label={`${index + 1}`}
-                      />
-                    )
-                  )}
-                </RadioGroup>
               </Grid>
-            ) : (
-              <></>
-            )}
+            ) : null}
             {user.user.comments && (
               <Grid item xs={12} sx={{ mb: 8 }}>
                 <Typography
                   sx={{
                     fontWeight: "bold",
                     fontSize: 20,
-                    mt: 2,
+                    mt: 0,
                     color: "#505050",
                   }}
                 >
                   Comments
                 </Typography>
-                {user.user.comments
-                  .slice()
-                  .reverse()
-                  .map((comment) => (
-                    <Link to={`/${comment.type}/${comment.activityId}`}>
-                      <CommentCard key={comment._id} comment={comment} />
-                    </Link>
-                  ))}
-                <Typography sx={{ mt: 2 }}>Page No.</Typography>
-
-                <RadioGroup
-                  row
-                  aria-labelledby="page"
-                  defaultValue="1"
-                  name="page-buttons-group"
-                  onChange={handleCommentChange}
-                  sx={{ mb: 5 }}
-                >
-                  {Array.from(
-                    { length: Math.ceil(user.user.comments.length / pageSize) },
-                    (_, index) => (
-                      <FormControlLabel
-                        key={index + 1}
-                        value={`${index + 1}`}
-                        control={<Radio />}
-                        label={`${index + 1}`}
+                <Grid container spacing={2} sx={{ mt: 0 }}>
+                  {Array.isArray(user.user.comments) &&
+                  user.user.comments.length > 0 ? (
+                    <>
+                      {user.user.comments
+                        .slice()
+                        .reverse()
+                        .map((comment) => (
+                          <Grid item xs={12} key={comment._id} sx={{ mb: 0 }}>
+                            <Link to={`/${comment.type}/${comment.activityId}`}>
+                              <CommentCard comment={comment} />
+                            </Link>
+                          </Grid>
+                        ))}
+                      <PageSelector
+                        length={user.user.comments.length}
+                        pageSize={pageSize}
+                        currentPage={page}
+                        handlePageChange={handleCommentChange}
                       />
-                    )
+                    </>
+                  ) : (
+                    <Typography sx={{ ml: 2 }}>No comments found.</Typography>
                   )}
-                </RadioGroup>
+                </Grid>
               </Grid>
             )}
           </Grid>

@@ -52,7 +52,7 @@ export const FoodPage = (): JSX.Element => {
   }, [dispatch, id]);
 
   return (
-    <Container sx={{ mt: 12 }}>
+    <Container sx={{ mt: 12 }} maxWidth="md">
       <CssBaseline />
       {food.loading ? (
         <Box sx={{}}>
@@ -83,7 +83,9 @@ export const FoodPage = (): JSX.Element => {
                   .slice()
                   .reverse()
                   .map((comment) => (
-                    <CommentCard key={comment._id} comment={comment} />
+                    <Box sx={{ mt: 2 }}>
+                      <CommentCard key={comment._id} comment={comment} />
+                    </Box>
                   ))}
               </Grid>
             ) : (

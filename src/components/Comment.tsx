@@ -10,10 +10,10 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
   return (
     <Card
       sx={{
-        my: 1,
         backgroundColor: "#ebe9e1",
         borderRadius: 0,
         border: 0,
+        mb: 0,
       }}
       elevation={2}
     >

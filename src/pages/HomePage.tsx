@@ -22,6 +22,7 @@ import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
 import { fetchFoods } from "../redux/food/food.actions";
 import { fetchWorkouts } from "../redux/workout/workout.actions";
+import { PageSelector } from "../components/PageSelector";
 
 export const HomePage = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -84,9 +85,10 @@ export const HomePage = (): JSX.Element => {
           flexDirection: "column",
           alignItems: "center",
           paddingLeft: 0,
+          mb: 8,
         }}
       >
-        <Grid container spacing={2} maxWidth="md" sx={{ paddingLeft: 0 }}>
+        <Grid container spacing={2} maxWidth="md">
           <Grid
             item
             xs={12}
@@ -167,38 +169,25 @@ export const HomePage = (): JSX.Element => {
             <Grid container spacing={2} sx={{ mt: 2 }}>
               {Array.isArray(filteredActivity) &&
               filteredActivity.length > 0 ? (
-                filteredActivity
-                  .slice((page - 1) * pageSize, page * pageSize)
-                  .map((activity: ActivityType) => (
-                    <Grid item xs={12} sm={6} key={activity._id}>
-                      <Activity activity={activity} />
-                    </Grid>
-                  ))
+                <>
+                  {filteredActivity
+                    .slice((page - 1) * pageSize, page * pageSize)
+                    .map((activity: ActivityType) => (
+                      <Grid item xs={12} sm={6} key={activity._id}>
+                        <Activity activity={activity} />
+                      </Grid>
+                    ))}
+                  <PageSelector
+                    length={filteredActivity.length}
+                    pageSize={pageSize}
+                    currentPage={page}
+                    handlePageChange={handlePageChange}
+                  />
+                </>
               ) : (
                 <Typography sx={{ ml: 2 }}>No activities found.</Typography>
               )}
             </Grid>
-            <Typography sx={{ mt: 5 }}>Page No.</Typography>
-            <RadioGroup
-              row
-              aria-labelledby="page"
-              defaultValue="1"
-              name="page-buttons-group"
-              onChange={handlePageChange}
-              sx={{ mb: 5 }}
-            >
-              {Array.from(
-                { length: Math.ceil(filteredActivity.length / pageSize) },
-                (_, index) => (
-                  <FormControlLabel
-                    key={index + 1}
-                    value={`${index + 1}`}
-                    control={<Radio />}
-                    label={`${index + 1}`}
-                  />
-                )
-              )}
-            </RadioGroup>
           </Grid>
         </Grid>
       </Box>
