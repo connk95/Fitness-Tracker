@@ -19,6 +19,8 @@ import { newComment } from "../redux/comment/comment.actions";
 import { Comment } from "../redux/comment/comment.type";
 import { CommentCard } from "../components/Comment";
 import { Activity } from "../components/Activity";
+import { PageSelector } from "../components/PageSelector";
+import { useState } from "react";
 
 export const WorkoutPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -30,6 +32,8 @@ export const WorkoutPage = (): JSX.Element => {
     handleSubmit,
     formState: { errors },
   } = useForm<Comment>();
+  const [page, setPage] = useState<number>(1);
+  const pageSize = 12; // Number of items per page
 
   const onSubmit: SubmitHandler<Comment> = async (data) => {
     if (!id) {
@@ -50,6 +54,10 @@ export const WorkoutPage = (): JSX.Element => {
       dispatch(fetchSingleWorkout(id));
     }
   }, [dispatch, id]);
+
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(Number((event.target as HTMLInputElement).value));
+  };
 
   return (
     <Container sx={{ mt: 12 }} maxWidth="md">
@@ -88,6 +96,14 @@ export const WorkoutPage = (): JSX.Element => {
                       <CommentCard key={comment._id} comment={comment} />
                     </Box>
                   ))}
+                <Box sx={{ ml: -2 }}>
+                  <PageSelector
+                    length={workout.singleWorkout.comments.length}
+                    pageSize={pageSize}
+                    currentPage={page}
+                    handlePageChange={handleCommentChange}
+                  />
+                </Box>
               </Grid>
             ) : (
               <Typography sx={{ m: 2, ml: 3 }}>

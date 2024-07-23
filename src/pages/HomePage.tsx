@@ -10,11 +10,6 @@ import {
   Button,
   Box,
   Grid,
-  FormControl,
-  FormLabel,
-  FormControlLabel,
-  Radio,
-  RadioGroup,
 } from "@mui/material";
 import { Activity } from "../components/Activity";
 import { ActivityType } from "../redux/types";
@@ -23,6 +18,7 @@ import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp
 import { fetchFoods } from "../redux/food/food.actions";
 import { fetchWorkouts } from "../redux/workout/workout.actions";
 import { PageSelector } from "../components/PageSelector";
+import { ActivitySelector } from "../components/ActivitySelector";
 
 export const HomePage = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
@@ -108,42 +104,10 @@ export const HomePage = (): JSX.Element => {
                   paddingLeft: 0,
                 }}
               >
-                <FormControl>
-                  <FormLabel
-                    id="radio"
-                    sx={{ fontSize: 20, fontWeight: "bold" }}
-                  >
-                    Activity Log
-                  </FormLabel>
-                  <RadioGroup
-                    row
-                    aria-labelledby="radio"
-                    defaultValue="all"
-                    name="radio-buttons-group"
-                    onChange={handleFilterChange}
-                  >
-                    <FormControlLabel
-                      value="all"
-                      control={<Radio />}
-                      label="All Activity"
-                    />
-                    <FormControlLabel
-                      value="friends"
-                      control={<Radio />}
-                      label="Friend Activity"
-                    />
-                    <FormControlLabel
-                      value="foods"
-                      control={<Radio />}
-                      label="Meals Only"
-                    />
-                    <FormControlLabel
-                      value="workouts"
-                      control={<Radio />}
-                      label="Workouts Only"
-                    />
-                  </RadioGroup>
-                </FormControl>
+                <ActivitySelector
+                  filter={filter}
+                  handleFilterChange={handleFilterChange}
+                />
                 <Box>
                   <Button
                     variant="contained"
