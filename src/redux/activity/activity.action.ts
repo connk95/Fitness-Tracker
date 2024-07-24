@@ -9,24 +9,19 @@ type GenericState = {
   };
 };
 
-export const newComment = createAsyncThunk(
-  "comments/newComment",
+export const addLike = createAsyncThunk(
+  "likes/newLike",
   async (
-    {
-      text,
-      activityId,
-      type,
-    }: { text: string; activityId: string; type: string },
+    { activityId, type }: { activityId: string; type: string },
     thunkApi
   ) => {
     const state = thunkApi.getState() as GenericState;
     const res = await axios.patch(
-      `${import.meta.env.VITE_API_URL}/${type}/${activityId}`,
+      `${import.meta.env.VITE_API_URL}/${type}/${activityId}/like`,
       {
         activityId,
-        text,
-        user: state.auth.loggedInUser.user,
         type,
+        user: state.auth.loggedInUser.user,
       }
     );
     return res.data;

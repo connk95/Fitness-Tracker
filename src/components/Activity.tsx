@@ -1,4 +1,4 @@
-import { CardContent, Card, Typography } from "@mui/material";
+import { CardContent, Card, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ActivityProps } from "../redux/types";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
@@ -7,11 +7,16 @@ import ThumbUpSharpIcon from "@mui/icons-material/ThumbUpSharp";
 import PersonAddAltSharpIcon from "@mui/icons-material/PersonAddAltSharp";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import { addLike } from "../redux/activity/activity.action";
 
 export const Activity: React.FC<ActivityProps> = ({
   activity,
 }: ActivityProps): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
+
+  const handleLike = () => {
+    addLike({ activityId: activity._id, type: activity.type });
+  };
 
   return (
     <Link to={`/${activity.type}/${activity._id}`}>
@@ -68,13 +73,31 @@ export const Activity: React.FC<ActivityProps> = ({
             alignItems: "flex-start",
           }}
         >
-          <ThumbUpSharpIcon />
-          {auth.loggedInUser.access_token &&
-          activity.user.username == auth.loggedInUser.user.username ? (
-            <></>
-          ) : (
-            <PersonAddAltSharpIcon />
-          )}
+          <Box>
+            <ThumbUpSharpIcon
+              onClick={() => {
+                handleLike;
+              }}
+            />
+            {auth.loggedInUser.access_token &&
+            activity.user.username == auth.loggedInUser.user.username ? (
+              <></>
+            ) : auth.loggedInUser.access_token ? (
+              <PersonAddAltSharpIcon sx={{ ml: 1 }} />
+            ) : (
+              <></>
+            )}
+          </Box>
+          <Box>
+            {activity.likes && activity.likes.length > 0 ? (
+              <Typography>
+                {activity.likes.length}{" "}
+                {activity.likes.length > 1 ? "users" : "user"} liked this!
+              </Typography>
+            ) : (
+              <></>
+            )}
+          </Box>
         </CardContent>
       </Card>
     </Link>
