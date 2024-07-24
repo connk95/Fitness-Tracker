@@ -5,7 +5,7 @@ import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
 import ThumbUpSharpIcon from "@mui/icons-material/ThumbUpSharp";
 import PersonAddAltSharpIcon from "@mui/icons-material/PersonAddAltSharp";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../redux/store";
 import { addLike } from "../redux/activity/activity.action";
 
@@ -13,9 +13,12 @@ export const Activity: React.FC<ActivityProps> = ({
   activity,
 }: ActivityProps): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
 
-  const handleLike = () => {
-    addLike({ activityId: activity._id, type: activity.type });
+  const handleLike = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    event.preventDefault();
+    dispatch(addLike({ activityId: activity._id, type: activity.type }));
   };
 
   return (
@@ -74,11 +77,7 @@ export const Activity: React.FC<ActivityProps> = ({
           }}
         >
           <Box>
-            <ThumbUpSharpIcon
-              onClick={() => {
-                handleLike;
-              }}
-            />
+            <ThumbUpSharpIcon onClick={handleLike} />
             {auth.loggedInUser.access_token &&
             activity.user.username == auth.loggedInUser.user.username ? (
               <></>
