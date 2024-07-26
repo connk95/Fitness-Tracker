@@ -1,5 +1,6 @@
-import { Workout } from "./workout/workout.type";
-import { Food } from "./food/food.type";
+// import { Workout } from "./workout/workout.type";
+// import { Food } from "./food/food.type";
+import { Activity } from "./activity/activity.type";
 
 export interface baseMongooseType {
   _id: string;
@@ -12,8 +13,9 @@ export interface baseState {
   error: string;
 }
 
-export type ActivityType = Workout | Food;
+// export type ActivityType = Workout | Food;
+export type ActivityType = Activity;
 
 export interface ActivityProps {
-  activity: ActivityType;
+  content: ActivityType;
 }

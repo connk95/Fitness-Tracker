@@ -10,7 +10,7 @@ import { RootState } from "../redux/store";
 import { addLike } from "../redux/activity/activity.action";
 
 export const Activity: React.FC<ActivityProps> = ({
-  activity,
+  content,
 }: ActivityProps): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
@@ -18,11 +18,11 @@ export const Activity: React.FC<ActivityProps> = ({
   const handleLike = (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    dispatch(addLike({ activityId: activity._id, type: activity.type }));
+    dispatch(addLike({ activityId: activity._id }));
   };
 
   return (
-    <Link to={`/${activity.type}/${activity._id}`}>
+    <Link to={`/${content.type}/${content._id}`}>
       <Card
         sx={{
           backgroundColor: "#ebe9e1",
@@ -35,35 +35,35 @@ export const Activity: React.FC<ActivityProps> = ({
         elevation={2}
       >
         <CardContent>
-          {activity.type == "workouts" ? (
+          {content.type == "workouts" ? (
             <>
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                 <SportsGymnasticsSharpIcon sx={{ mr: 1 }} />
-                {activity.title}
+                {content.title}
               </Typography>
               <Typography>
-                {activity.user.username || "I"} logged a workout!
+                {content.user.username || "I"} logged a workout!
               </Typography>
-              <Typography>Duration: {activity.duration} minutes</Typography>
-              <Typography>Calories burned: {activity.calories}</Typography>
+              <Typography>Duration: {content.duration} minutes</Typography>
+              <Typography>Calories burned: {content.calories}</Typography>
               <Typography>
-                {activity.createdAt.slice(11, 16)} on{" "}
-                {new Date(activity.createdAt).toLocaleDateString()}
+                {content.createdAt.slice(11, 16)} on{" "}
+                {new Date(content.createdAt).toLocaleDateString()}
               </Typography>
             </>
           ) : (
             <>
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                 <RestaurantSharpIcon sx={{ mr: 1 }} />
-                {activity.title}
+                {content.title}
               </Typography>
               <Typography>
-                {activity.user.username || "I"} logged a food!
+                {content.user.username || "I"} logged a food!
               </Typography>
-              <Typography>Calories: {activity.calories}</Typography>
+              <Typography>Calories: {content.calories}</Typography>
               <Typography>
-                {new Date(activity.createdAt).toLocaleDateString()} at {""}
-                {activity.createdAt.slice(11, 16)}
+                {new Date(content.createdAt).toLocaleDateString()} at {""}
+                {content.createdAt.slice(11, 16)}
               </Typography>
             </>
           )}
@@ -79,7 +79,7 @@ export const Activity: React.FC<ActivityProps> = ({
           <Box>
             <ThumbUpSharpIcon onClick={handleLike} />
             {auth.loggedInUser.access_token &&
-            activity.user.username == auth.loggedInUser.user.username ? (
+            content.user.username == auth.loggedInUser.user.username ? (
               <></>
             ) : auth.loggedInUser.access_token ? (
               <PersonAddAltSharpIcon sx={{ ml: 1 }} />
@@ -88,10 +88,10 @@ export const Activity: React.FC<ActivityProps> = ({
             )}
           </Box>
           <Box>
-            {activity.likes && activity.likes.length > 0 ? (
+            {content.likes && content.likes.length > 0 ? (
               <Typography>
-                {activity.likes.length}{" "}
-                {activity.likes.length > 1 ? "users" : "user"} liked this!
+                {content.likes.length}{" "}
+                {content.likes.length > 1 ? "users" : "user"} liked this!
               </Typography>
             ) : (
               <></>

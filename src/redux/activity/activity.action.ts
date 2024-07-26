@@ -30,7 +30,7 @@ export const fetchActivities = createAsyncThunk(
 );
 
 export const newActivity = createAsyncThunk(
-  "workouts/newWorkout",
+  "activities/newActivity",
   async (activity: Activity, thunkApi) => {
     const state = thunkApi.getState() as GenericState;
 
@@ -53,7 +53,7 @@ export const newActivity = createAsyncThunk(
 );
 
 export const addLike = createAsyncThunk(
-  "likes/newLike",
+  "activities/like",
   async ({ activityId }: { activityId: string }, thunkApi) => {
     console.log("test like action");
 

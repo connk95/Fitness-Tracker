@@ -1,0 +1,160 @@
+import {
+  Box,
+  CircularProgress,
+  Container,
+  Grid,
+  Typography,
+  Button,
+  TextField,
+} from "@mui/material";
+import { useParams } from "react-router-dom";
+import { useAppDispatch } from "../redux/hooks";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { useEffect } from "react";
+import { fetchSingleActivity } from "../redux/activity/activity.action";
+import CssBaseline from "@mui/material";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { newComment } from "../redux/comment/comment.actions";
+import { Comment } from "../redux/comment/comment.type";
+import { CommentCard } from "../components/Comment";
+import { Activity } from "../components/Activity";
+import { PageSelector } from "../components/PageSelector";
+import { useState } from "react";
+
+export const ActivityPage = (): JSX.Element => {
+  const dispatch = useAppDispatch();
+  const { id } = useParams();
+  const activity = useSelector((state: RootState) => state.activities);
+  const auth = useSelector((state: RootState) => state.auth);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Comment>();
+  const [page, setPage] = useState<number>(1);
+  const pageSize = 12; // Number of items per page
+
+  const onSubmit: SubmitHandler<Comment> = async (data) => {
+    if (!id) {
+      console.error("No activity ID found");
+      return;
+    }
+    const commentData = {
+      text: data.text,
+      activityId: id,
+      type: activity.singleActivity.type,
+    };
+    await dispatch(newComment(commentData));
+    window.location.reload();
+  };
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchSingleActivity(id));
+    }
+  }, [dispatch, id]);
+
+  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPage(Number((event.target as HTMLInputElement).value));
+  };
+
+  return (
+    <Container sx={{ mt: 12 }} maxWidth="md">
+      <CssBaseline />
+      {activity.loading ? (
+        <Box sx={{}}>
+          <CircularProgress />
+        </Box>
+      ) : activity.singleActivity.title ? (
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+          component="form"
+          onSubmit={handleSubmit(onSubmit)}
+          noValidate
+        >
+          <Grid container spacing={2} maxWidth="md">
+            <Grid item xs={12}>
+              <Activity content={activity.singleActivity} />
+            </Grid>
+            {activity.singleActivity.comments &&
+            activity.singleActivity.comments.length > 0 ? (
+              <Grid item xs={12}>
+                <Typography sx={{ ml: 1, mb: 2 }}>
+                  Comments: {`${activity.singleActivity.comments.length}`}
+                </Typography>
+                {activity.singleActivity.comments
+                  .slice()
+                  .reverse()
+                  .map((comment) => (
+                    <Box sx={{ mt: 2 }}>
+                      <CommentCard key={comment._id} comment={comment} />
+                    </Box>
+                  ))}
+                <Box sx={{ ml: -2 }}>
+                  <PageSelector
+                    length={activity.singleActivity.comments.length}
+                    pageSize={pageSize}
+                    currentPage={page}
+                    handlePageChange={handleCommentChange}
+                  />
+                </Box>
+              </Grid>
+            ) : (
+              <Typography sx={{ m: 2, ml: 3 }}>
+                Be the first to leave a comment!
+              </Typography>
+            )}
+            {auth.loggedInUser.access_token ? (
+              <Grid item xs={12}>
+                <TextField
+                  {...register("text", {
+                    required: "Please add a comment and try again",
+                    maxLength: {
+                      value: 240,
+                      message:
+                        "Comments cannot exceed 240 characters in length",
+                    },
+                  })}
+                  id="text"
+                  label="Comment"
+                  variant="outlined"
+                  fullWidth
+                  InputProps={{ sx: { borderRadius: 0 } }}
+                />
+                {errors.text && (
+                  <Typography variant="caption" color="error">
+                    {errors.text.message}
+                  </Typography>
+                )}
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Submit
+                </Button>
+                <Button
+                  href="/home"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Back
+                </Button>
+              </Grid>
+            ) : (
+              <></>
+            )}
+          </Grid>
+        </Box>
+      ) : (
+        <></>
+      )}
+    </Container>
+  );
+};

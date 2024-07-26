@@ -37,19 +37,3 @@ export const newFood = createAsyncThunk(
     return res;
   }
 );
-
-// export const foodComment = createAsyncThunk(
-//   "posts/newComment",
-//   async ({ text, activityId }: Comment, thunkApi) => {
-//     const state = thunkApi.getState() as GenericState;
-//     const res = await axios.patch(
-//       `${import.meta.env.VITE_API_URL}/foods/${activityId}`,
-//       {
-//         activityId,
-//         text,
-//         user: state.auth.loggedInUser.user,
-//       }
-//     );
-//     return res.data;
-//   }
-// );

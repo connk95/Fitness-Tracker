@@ -19,11 +19,13 @@ import { fetchFoods } from "../redux/food/food.actions";
 import { fetchWorkouts } from "../redux/workout/workout.actions";
 import { PageSelector } from "../components/PageSelector";
 import { ActivitySelector } from "../components/ActivitySelector";
+import { fetchActivities } from "../redux/activity/activity.action";
 
 export const HomePage = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
-  const workouts = useSelector((state: RootState) => state.workouts);
-  const foods = useSelector((state: RootState) => state.foods);
+  // const workouts = useSelector((state: RootState) => state.workouts);
+  // const foods = useSelector((state: RootState) => state.foods);
+  const activities = useSelector((state: RootState) => state.activities);
   const dispatch = useAppDispatch();
 
   const [filter, setFilter] = useState<string>("all");
@@ -34,22 +36,24 @@ export const HomePage = (): JSX.Element => {
 
   useEffect(() => {
     dispatch(fetchUsers());
-    dispatch(fetchFoods());
-    dispatch(fetchWorkouts());
+    // dispatch(fetchFoods());
+    // dispatch(fetchWorkouts());
+    dispatch(fetchActivities);
   }, [dispatch]);
 
   useEffect(() => {
-    const allActivity: ActivityType[] = [
-      ...foods.allFoods,
-      ...workouts.allWorkouts,
-    ];
+    // const allActivity: ActivityType[] = [
+    //   // ...foods.allFoods,
+    //   // ...workouts.allWorkouts,
+    //   ...activities.allActivities,
+    // ];
 
-    const sortedActivities = allActivity.sort((a, b) => {
+    const sortedActivities = activities.allActivities.sort((a, b) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 
     setSortedByCreatedAt(sortedActivities);
-  }, [foods.allFoods, workouts.allWorkouts]);
+  }, [activities.allActivities]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilter((event.target as HTMLInputElement).value);
@@ -111,7 +115,8 @@ export const HomePage = (): JSX.Element => {
                 <Box>
                   <Button
                     variant="contained"
-                    href="/foods/new"
+                    // href="/foods/new"
+                    href="/activities/new"
                     sx={{ width: 180, mt: 0, borderRadius: 0 }}
                   >
                     <RestaurantSharpIcon sx={{ mr: 1 }} />
@@ -138,7 +143,7 @@ export const HomePage = (): JSX.Element => {
                     .slice((page - 1) * pageSize, page * pageSize)
                     .map((activity: ActivityType) => (
                       <Grid item xs={12} sm={6} key={activity._id}>
-                        <Activity activity={activity} />
+                        <Activity content={activity} />
                       </Grid>
                     ))}
                   <PageSelector
