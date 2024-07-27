@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { FoodState, Food } from "./food.type";
 import { fetchFoods, fetchSingleFood, newFood } from "./food.actions";
+import { addLike } from "../activity/activity.action";
 
 const initialState: FoodState = {
   allFoods: [],
@@ -66,6 +67,19 @@ const foodSlice = createSlice({
     });
     builder.addCase(newFood.rejected, (state, action) => {
       state.error = action.error.message || "Could not create food";
+      state.loading = false;
+    });
+    builder.addCase(addLike.fulfilled, (state, action: PayloadAction<Food>) => {
+      state.singleFood = action.payload;
+      state.error = "";
+      state.loading = false;
+    });
+    builder.addCase(addLike.pending, (state) => {
+      state.error = "";
+      state.loading = true;
+    });
+    builder.addCase(addLike.rejected, (state, action) => {
+      state.error = action.error.message || "Could not add like";
       state.loading = false;
     });
   },

@@ -38,6 +38,21 @@ export const newFood = createAsyncThunk(
   }
 );
 
+// export const addLike = createAsyncThunk(
+//   "likes/newLike",
+//   async ({ activityId }: { activityId: string }, thunkApi) => {
+//     const state = thunkApi.getState() as GenericState;
+//     const res = await axios.patch(
+//       `${import.meta.env.VITE_API_URL}/activities/${activityId}/like`,
+//       {
+//         activityId,
+//         user: state.auth.loggedInUser.user,
+//       }
+//     );
+//     return res.data;
+//   }
+// );
+
 // export const foodComment = createAsyncThunk(
 //   "posts/newComment",
 //   async ({ text, activityId }: Comment, thunkApi) => {

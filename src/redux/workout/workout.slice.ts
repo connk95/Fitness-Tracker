@@ -5,6 +5,7 @@ import {
   fetchWorkouts,
   newWorkout,
 } from "./workout.actions";
+import { addLike } from "../activity/activity.action";
 
 const initialState: WorkoutState = {
   allWorkouts: [],
@@ -70,6 +71,22 @@ const workoutSlice = createSlice({
     });
     builder.addCase(newWorkout.rejected, (state, action) => {
       state.error = action.error.message || "Could not create workout";
+      state.loading = false;
+    });
+    builder.addCase(
+      addLike.fulfilled,
+      (state, action: PayloadAction<Workout>) => {
+        state.singleWorkout = action.payload;
+        state.error = "";
+        state.loading = false;
+      }
+    );
+    builder.addCase(addLike.pending, (state) => {
+      state.error = "";
+      state.loading = true;
+    });
+    builder.addCase(addLike.rejected, (state, action) => {
+      state.error = action.error.message || "Could not add like";
       state.loading = false;
     });
   },

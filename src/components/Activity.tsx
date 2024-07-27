@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import { CardContent, Card, Typography, Box } from "@mui/material";
 import { Link } from "react-router-dom";
 import { ActivityProps } from "../redux/types";
@@ -5,21 +6,28 @@ import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
 import ThumbUpSharpIcon from "@mui/icons-material/ThumbUpSharp";
 import PersonAddAltSharpIcon from "@mui/icons-material/PersonAddAltSharp";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { addLike } from "../redux/activity/activity.action";
+import { useAppDispatch } from "../redux/hooks";
 
 export const Activity: React.FC<ActivityProps> = ({
   activity,
 }: ActivityProps): JSX.Element => {
+  const dispatch = useAppDispatch();
   const auth = useSelector((state: RootState) => state.auth);
-  const dispatch = useDispatch();
+  const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
 
-  const handleLike = (event: React.MouseEvent) => {
+  const handleLike = async (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-    dispatch(addLike({ activityId: activity._id, type: activity.type }));
+    await dispatch(addLike({ activityId: activity._id, type: activity.type }));
   };
+
+  useEffect(() => {
+    // Update local likeCount when activity.likes changes
+    setLikeCount(activity.likes?.length ?? 0);
+  }, [activity.likes]);
 
   return (
     <Link to={`/${activity.type}/${activity._id}`}>
@@ -35,7 +43,7 @@ export const Activity: React.FC<ActivityProps> = ({
         elevation={2}
       >
         <CardContent>
-          {activity.type == "workouts" ? (
+          {activity.type === "workouts" ? (
             <>
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                 <SportsGymnasticsSharpIcon sx={{ mr: 1 }} />
@@ -62,7 +70,7 @@ export const Activity: React.FC<ActivityProps> = ({
               </Typography>
               <Typography>Calories: {activity.calories}</Typography>
               <Typography>
-                {new Date(activity.createdAt).toLocaleDateString()} at {""}
+                {new Date(activity.createdAt).toLocaleDateString()} at{" "}
                 {activity.createdAt.slice(11, 16)}
               </Typography>
             </>
@@ -73,29 +81,29 @@ export const Activity: React.FC<ActivityProps> = ({
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
-            alignItems: "flex-start",
+            alignItems: "flex-end",
           }}
         >
-          <Box>
-            <ThumbUpSharpIcon onClick={handleLike} />
+          <Box sx={{ position: "relative", top: 23 }}>
+            <ThumbUpSharpIcon onClick={handleLike} sx={{ cursor: "pointer" }} />
             {auth.loggedInUser.access_token &&
-            activity.user.username == auth.loggedInUser.user.username ? (
+            activity.user.username === auth.loggedInUser.user.username ? (
               <></>
             ) : auth.loggedInUser.access_token ? (
               <PersonAddAltSharpIcon sx={{ ml: 1 }} />
             ) : (
               <></>
             )}
-          </Box>
-          <Box>
-            {activity.likes && activity.likes.length > 0 ? (
-              <Typography>
-                {activity.likes.length}{" "}
-                {activity.likes.length > 1 ? "users" : "user"} liked this!
-              </Typography>
-            ) : (
-              <></>
-            )}
+            <Typography
+              sx={{
+                fontSize: "8px",
+                position: "relative",
+                bottom: 10,
+                left: 10,
+              }}
+            >
+              {likeCount}
+            </Typography>
           </Box>
         </CardContent>
       </Card>
