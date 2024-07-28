@@ -10,6 +10,7 @@ export interface User {
   foods?: Food[];
   workouts?: Workout[];
   likes?: [];
+  friends?: User[];
   comments?: Comment[];
   _id?: string;
 }

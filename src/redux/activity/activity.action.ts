@@ -28,3 +28,21 @@ export const addLike = createAsyncThunk(
     return { ...res.data, type, activityId };
   }
 );
+
+export const addFriend = createAsyncThunk(
+  "friends/newFriend",
+  async ({ friendId }: { friendId: string }, thunkApi) => {
+    console.log("test friend action: ", friendId);
+    const state = thunkApi.getState() as GenericState;
+    const res = await axios.patch(
+      `${import.meta.env.VITE_API_URL}/users/${
+        state.auth.loggedInUser.user._id
+      }/friends`,
+      {
+        user: { _id: friendId },
+      }
+    );
+
+    return res.data;
+  }
+);
