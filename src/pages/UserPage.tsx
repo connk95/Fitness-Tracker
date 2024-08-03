@@ -9,6 +9,7 @@ import {
   CircularProgress,
   Container,
   Box,
+  Pagination,
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Link } from "react-router-dom";
@@ -17,7 +18,7 @@ import { useAppDispatch } from "../redux/hooks";
 import { ActivityType } from "../redux/types";
 import { Activity } from "../components/Activity";
 import { CommentCard } from "../components/Comment";
-import { PageSelector } from "../components/PageSelector";
+// import { PageSelector } from "../components/PageSelector";
 import { ActivitySelector } from "../components/ActivitySelector";
 
 export const UserPage = (): JSX.Element => {
@@ -26,11 +27,12 @@ export const UserPage = (): JSX.Element => {
   const user = useSelector((state: RootState) => state.users);
 
   const [filter, setFilter] = useState<string>("all");
-  const [page, setPage] = useState<number>(1);
+  const [activityPage, setActivityPage] = useState<number>(1);
+  const [commentPage, setCommentPage] = useState<number>(1);
+
   const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
     []
   );
-  const pageSize = 6; // Number of items per page
 
   useEffect(() => {
     if (auth.loggedInUser.access_token) {
@@ -56,7 +58,7 @@ export const UserPage = (): JSX.Element => {
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilter((event.target as HTMLInputElement).value);
-    setPage(1); // Reset page to 1 when filter changes
+    setActivityPage(1); // Reset page to 1 when filter changes
   };
 
   const filteredActivity: ActivityType[] = sortedByCreatedAt.filter(
@@ -68,13 +70,31 @@ export const UserPage = (): JSX.Element => {
     }
   );
 
-  const handleActivityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(Number((event.target as HTMLInputElement).value));
+  // const handleActivityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPage(Number((event.target as HTMLInputElement).value));
+  // };
+
+  // const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPage(Number((event.target as HTMLInputElement).value));
+  // };
+
+  const handleActivityChange = (
+    _: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setActivityPage(value);
   };
 
-  const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(Number((event.target as HTMLInputElement).value));
+  const activitySize = 6; // Number of items per page
+
+  const handleCommentChange = (
+    _: React.ChangeEvent<unknown>,
+    value: number
+  ) => {
+    setCommentPage(value);
   };
+
+  const commentSize = 8; // Number of items per page
 
   return (
     <Container component="main" sx={{ mt: 12 }} maxWidth="md">
@@ -132,22 +152,33 @@ export const UserPage = (): JSX.Element => {
                   filteredActivity.length > 0 ? (
                     <>
                       {filteredActivity
-                        .slice((page - 1) * pageSize, page * pageSize)
+                        .slice(
+                          (activityPage - 1) * activitySize,
+                          activityPage * activitySize
+                        )
                         .map((activity: ActivityType) => (
                           <Grid item xs={12} sm={6} key={activity._id}>
                             <Activity activity={activity} />
                           </Grid>
                         ))}
-                      <PageSelector
+                      {/* <PageSelector
                         length={filteredActivity.length}
-                        pageSize={pageSize}
-                        currentPage={page}
-                        handlePageChange={handleActivityChange}
-                      />
+                        pageSize={activitySize}
+                        currentPage={activityPage}
+                        onChange={handleActivityChange}
+                      /> */}
                     </>
                   ) : (
                     <Typography sx={{ ml: 2 }}>No activities found.</Typography>
                   )}
+                  <Pagination
+                    count={Math.ceil(filteredActivity.length / activitySize)}
+                    shape="rounded"
+                    sx={{ mt: 2 }}
+                    size="large"
+                    page={activityPage}
+                    onChange={handleActivityChange}
+                  />
                 </Grid>
               </Grid>
             ) : null}
@@ -177,16 +208,24 @@ export const UserPage = (): JSX.Element => {
                             </Link>
                           </Grid>
                         ))}
-                      <PageSelector
+                      {/* <PageSelector
                         length={user.user.comments.length}
                         pageSize={pageSize}
                         currentPage={page}
                         handlePageChange={handleCommentChange}
-                      />
+                      /> */}
                     </>
                   ) : (
                     <Typography sx={{ ml: 2 }}>No comments found.</Typography>
                   )}
+                  <Pagination
+                    count={Math.ceil(user.user.comments.length / commentSize)}
+                    shape="rounded"
+                    sx={{ mt: 2 }}
+                    size="large"
+                    page={commentPage}
+                    onChange={handleCommentChange}
+                  />
                 </Grid>
               </Grid>
             )}

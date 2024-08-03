@@ -10,6 +10,7 @@ import {
   Button,
   Box,
   Grid,
+  Pagination,
 } from "@mui/material";
 import { Activity } from "../components/Activity";
 import { ActivityType } from "../redux/types";
@@ -17,7 +18,7 @@ import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
 import { fetchFoods } from "../redux/food/food.actions";
 import { fetchWorkouts } from "../redux/workout/workout.actions";
-import { PageSelector } from "../components/PageSelector";
+// import { PageSelector } from "../components/PageSelector";
 import { ActivitySelector } from "../components/ActivitySelector";
 
 export const HomePage = (): JSX.Element => {
@@ -60,13 +61,19 @@ export const HomePage = (): JSX.Element => {
     (activity) => {
       if (filter === "all") {
         return true;
+      } else if (filter === "friends") {
+        return auth.loggedInUser.user.friends?.includes(activity.user);
       }
       return activity.type === filter;
     }
   );
 
-  const handlePageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPage(Number((event.target as HTMLInputElement).value));
+  // const handlePageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   setPage(Number((event.target as HTMLInputElement).value));
+  // };
+
+  const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
   };
 
   const pageSize = 12; // Number of items per page
@@ -84,7 +91,12 @@ export const HomePage = (): JSX.Element => {
           mb: 8,
         }}
       >
-        <Grid container spacing={2} maxWidth="md">
+        <Grid
+          container
+          spacing={2}
+          maxWidth="md"
+          sx={{ display: "flex", justifyContent: "center" }}
+        >
           <Grid
             item
             xs={12}
@@ -130,7 +142,11 @@ export const HomePage = (): JSX.Element => {
             ) : (
               <Typography>All Activity</Typography>
             )}
-            <Grid container spacing={2} sx={{ mt: 2 }}>
+            <Grid
+              container
+              spacing={2}
+              sx={{ mt: 2, display: "felx", justifyContent: "flexStart" }}
+            >
               {Array.isArray(filteredActivity) &&
               filteredActivity.length > 0 ? (
                 <>
@@ -141,18 +157,32 @@ export const HomePage = (): JSX.Element => {
                         <Activity activity={activity} />
                       </Grid>
                     ))}
-                  <PageSelector
+                  {/* <PageSelector
                     length={filteredActivity.length}
                     pageSize={pageSize}
                     currentPage={page}
                     handlePageChange={handlePageChange}
-                  />
+                  /> */}
+                  {/* <Pagination
+                    count={filteredActivity.length / 12}
+                    shape="rounded"
+                    sx={{ mt: 2 }}
+                    size="large"
+                  /> */}
                 </>
               ) : (
                 <Typography sx={{ ml: 2 }}>No activities found.</Typography>
               )}
             </Grid>
           </Grid>
+          <Pagination
+            count={Math.ceil(filteredActivity.length / pageSize)}
+            shape="rounded"
+            sx={{ mt: 2 }}
+            size="large"
+            page={page}
+            onChange={handlePageChange}
+          />
         </Grid>
       </Box>
     </Container>
