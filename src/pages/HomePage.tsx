@@ -33,6 +33,8 @@ export const HomePage = (): JSX.Element => {
     []
   );
 
+  console.log(auth.loggedInUser.user);
+
   useEffect(() => {
     dispatch(fetchUsers());
     dispatch(fetchFoods());
@@ -95,7 +97,7 @@ export const HomePage = (): JSX.Element => {
           container
           spacing={2}
           maxWidth="md"
-          sx={{ display: "flex", justifyContent: "center" }}
+          sx={{ display: "flex", justifyContent: "flex-start" }}
         >
           <Grid
             item

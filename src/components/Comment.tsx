@@ -24,7 +24,7 @@ export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
           {comment.createdAt.slice(11, 16)}
         </Typography>
         <Typography sx={{ fontSize: 14 }}>
-          by {comment.user.username}
+          by {comment.user.username || "me"}
         </Typography>
       </CardContent>
     </Card>

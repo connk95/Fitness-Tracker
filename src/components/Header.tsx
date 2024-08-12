@@ -29,8 +29,9 @@ export const ButtonAppBar = (): JSX.Element => {
       username: auth.loggedInUser.user.username,
       password: auth.loggedInUser.user.password,
     };
+    console.log("test logout");
     await dispatch(userLogout(data));
-    navigate("/");
+    navigate("/home");
   };
 
   return (

@@ -10,7 +10,6 @@ import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { addFriend, addLike } from "../redux/activity/activity.action";
 import { useAppDispatch } from "../redux/hooks";
-import { User } from "../redux/user/user.type";
 
 export const Activity: React.FC<ActivityProps> = ({
   activity,
@@ -18,20 +17,18 @@ export const Activity: React.FC<ActivityProps> = ({
   const dispatch = useAppDispatch();
   const auth = useSelector((state: RootState) => state.auth);
   const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
+  const userId = auth.loggedInUser?.user?._id;
 
   const handleLike = async (event: React.MouseEvent) => {
     event.stopPropagation();
     event.preventDefault();
-
-    const userId = auth.loggedInUser?.user?._id;
 
     if (!userId) {
       console.error("Please log in to interact with this post.");
       return;
     }
 
-    const likeIds = activity.likes?.map((like: User) => like._id);
-    const hasLiked = likeIds?.includes(userId);
+    const hasLiked = activity.likes?.includes(auth.loggedInUser.user);
 
     if (hasLiked) {
       return;
@@ -47,18 +44,21 @@ export const Activity: React.FC<ActivityProps> = ({
     event.stopPropagation();
     event.preventDefault();
 
-    console.log("test friend dispatch");
+    const hasFriend = auth.loggedInUser.user.friends?.includes(activity.user);
+    console.log(activity.user.friends);
+    console.log(hasFriend);
 
-    if (
+    if (hasFriend) {
+      return;
+    } else if (
       activity.user._id &&
       auth.loggedInUser.user._id &&
       activity.user._id !== auth.loggedInUser.user._id
-    )
-      await dispatch(
-        addFriend({
-          friendId: activity.user._id,
-        })
-      );
+    ) {
+      await dispatch(addFriend({ friend: activity.user }));
+    } else {
+      return Error("Could not add friend");
+    }
   };
 
   useEffect(() => {
@@ -102,7 +102,8 @@ export const Activity: React.FC<ActivityProps> = ({
                 {activity.title}
               </Typography>
               <Typography>
-                {activity.user.username || "I"} logged a food!
+                {activity.user._id === userId ? "I" : activity.user.username}{" "}
+                logged a food!
               </Typography>
               <Typography>Calories: {activity.calories}</Typography>
               <Typography>
@@ -159,8 +160,8 @@ export const Activity: React.FC<ActivityProps> = ({
               >
                 {likeCount}
               </Typography>
-              {(auth.loggedInUser.access_token &&
-                activity.user.username === auth.loggedInUser.user.username) ||
+              {auth.loggedInUser.user.friends?.includes(activity.user) ||
+              activity.user === auth.loggedInUser.user ||
               window.location.href.includes("/profile") ? (
                 <></>
               ) : auth.loggedInUser.access_token ? (
@@ -169,10 +170,10 @@ export const Activity: React.FC<ActivityProps> = ({
                     fontSize: "8px",
                     position: "relative",
                     bottom: 10,
-                    left: 20,
+                    left: 25,
                   }}
                 >
-                  + Friend
+                  Follow
                 </Typography>
               ) : (
                 <></>
