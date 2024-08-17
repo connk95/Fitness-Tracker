@@ -18,7 +18,6 @@ import { useAppDispatch } from "../redux/hooks";
 import { ActivityType } from "../redux/types";
 import { Activity } from "../components/Activity";
 import { CommentCard } from "../components/Comment";
-// import { PageSelector } from "../components/PageSelector";
 import { ActivitySelector } from "../components/ActivitySelector";
 
 export const UserPage = (): JSX.Element => {
@@ -147,7 +146,11 @@ export const UserPage = (): JSX.Element => {
                   filter={filter}
                   handleFilterChange={handleFilterChange}
                 />
-                <Grid container spacing={2} sx={{ mt: 0 }}>
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{ mt: 0, display: "flex", flexDirection: "column" }}
+                >
                   {Array.isArray(filteredActivity) &&
                   filteredActivity.length > 0 ? (
                     <>
@@ -161,12 +164,6 @@ export const UserPage = (): JSX.Element => {
                             <Activity activity={activity} />
                           </Grid>
                         ))}
-                      {/* <PageSelector
-                        length={filteredActivity.length}
-                        pageSize={activitySize}
-                        currentPage={activityPage}
-                        onChange={handleActivityChange}
-                      /> */}
                     </>
                   ) : (
                     <Typography sx={{ ml: 2 }}>No activities found.</Typography>
@@ -194,7 +191,11 @@ export const UserPage = (): JSX.Element => {
                 >
                   Comments
                 </Typography>
-                <Grid container spacing={2} sx={{ mt: 0 }}>
+                <Grid
+                  container
+                  spacing={2}
+                  sx={{ mt: 0, display: "flex", flexDirection: "column" }}
+                >
                   {Array.isArray(user.user.comments) &&
                   user.user.comments.length > 0 ? (
                     <>
@@ -208,12 +209,6 @@ export const UserPage = (): JSX.Element => {
                             </Link>
                           </Grid>
                         ))}
-                      {/* <PageSelector
-                        length={user.user.comments.length}
-                        pageSize={pageSize}
-                        currentPage={page}
-                        handlePageChange={handleCommentChange}
-                      /> */}
                     </>
                   ) : (
                     <Typography sx={{ ml: 2 }}>No comments found.</Typography>

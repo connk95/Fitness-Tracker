@@ -18,7 +18,6 @@ import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
 import { fetchFoods } from "../redux/food/food.actions";
 import { fetchWorkouts } from "../redux/workout/workout.actions";
-// import { PageSelector } from "../components/PageSelector";
 import { ActivitySelector } from "../components/ActivitySelector";
 
 export const HomePage = (): JSX.Element => {
@@ -32,8 +31,6 @@ export const HomePage = (): JSX.Element => {
   const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
     []
   );
-
-  console.log(auth.loggedInUser.user);
 
   useEffect(() => {
     dispatch(fetchUsers());
@@ -63,16 +60,18 @@ export const HomePage = (): JSX.Element => {
     (activity) => {
       if (filter === "all") {
         return true;
-      } else if (filter === "friends") {
-        return auth.loggedInUser.user.friends?.includes(activity.user);
+      } else if (
+        filter === "friends" &&
+        auth.loggedInUser.user.friends &&
+        activity.user
+      ) {
+        return (
+          auth.loggedInUser.user.friends?.includes(activity.user._id!) ?? false
+        );
       }
       return activity.type === filter;
     }
   );
-
-  // const handlePageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPage(Number((event.target as HTMLInputElement).value));
-  // };
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -159,18 +158,6 @@ export const HomePage = (): JSX.Element => {
                         <Activity activity={activity} />
                       </Grid>
                     ))}
-                  {/* <PageSelector
-                    length={filteredActivity.length}
-                    pageSize={pageSize}
-                    currentPage={page}
-                    handlePageChange={handlePageChange}
-                  /> */}
-                  {/* <Pagination
-                    count={filteredActivity.length / 12}
-                    shape="rounded"
-                    sx={{ mt: 2 }}
-                    size="large"
-                  /> */}
                 </>
               ) : (
                 <Typography sx={{ ml: 2 }}>No activities found.</Typography>

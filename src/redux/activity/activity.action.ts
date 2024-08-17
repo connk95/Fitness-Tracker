@@ -32,7 +32,6 @@ export const addLike = createAsyncThunk(
 export const addFriend = createAsyncThunk(
   "friends/newFriend",
   async ({ friend }: { friend: User }, thunkApi) => {
-    console.log("test friend action: ", friend);
     const state = thunkApi.getState() as GenericState;
     const res = await axios.patch(
       `${import.meta.env.VITE_API_URL}/users/${

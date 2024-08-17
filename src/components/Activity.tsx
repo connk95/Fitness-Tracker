@@ -18,6 +18,9 @@ export const Activity: React.FC<ActivityProps> = ({
   const auth = useSelector((state: RootState) => state.auth);
   const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
   const userId = auth.loggedInUser?.user?._id;
+  const [isFriend, setIsFriend] = useState(
+    auth.loggedInUser?.user?.friends?.includes(activity.user._id!) ?? false
+  );
 
   const handleLike = async (event: React.MouseEvent) => {
     event.stopPropagation();
@@ -44,17 +47,14 @@ export const Activity: React.FC<ActivityProps> = ({
     event.stopPropagation();
     event.preventDefault();
 
-    const hasFriend = auth.loggedInUser.user.friends?.includes(activity.user);
-    console.log(activity.user.friends);
-    console.log(hasFriend);
-
-    if (hasFriend) {
+    if (isFriend) {
       return;
     } else if (
       activity.user._id &&
       auth.loggedInUser.user._id &&
       activity.user._id !== auth.loggedInUser.user._id
     ) {
+      setIsFriend(true);
       await dispatch(addFriend({ friend: activity.user }));
     } else {
       return Error("Could not add friend");
@@ -133,7 +133,8 @@ export const Activity: React.FC<ActivityProps> = ({
             />
             {(auth.loggedInUser.access_token &&
               activity.user.username === auth.loggedInUser.user.username) ||
-            window.location.href.includes("/profile") ? (
+            window.location.href.includes("/profile") ||
+            isFriend ? (
               <></>
             ) : auth.loggedInUser.access_token ? (
               <PersonAddAltSharpIcon
@@ -160,9 +161,10 @@ export const Activity: React.FC<ActivityProps> = ({
               >
                 {likeCount}
               </Typography>
-              {auth.loggedInUser.user.friends?.includes(activity.user) ||
-              activity.user === auth.loggedInUser.user ||
-              window.location.href.includes("/profile") ? (
+              {(auth.loggedInUser.access_token &&
+                activity.user.username === auth.loggedInUser.user.username) ||
+              window.location.href.includes("/profile") ||
+              isFriend ? (
                 <></>
               ) : auth.loggedInUser.access_token ? (
                 <Typography

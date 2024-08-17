@@ -9,8 +9,8 @@ export interface User {
   email: string;
   foods?: Food[];
   workouts?: Workout[];
-  likes?: [];
-  friends?: User[];
+  likes?: string[];
+  friends?: string[];
   comments?: Comment[];
   _id?: string;
 }
