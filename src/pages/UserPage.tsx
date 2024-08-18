@@ -149,7 +149,7 @@ export const UserPage = (): JSX.Element => {
                 <Grid
                   container
                   spacing={2}
-                  sx={{ mt: 0, display: "flex", flexDirection: "column" }}
+                  sx={{ mt: 0, display: "flex", flexDirection: "row" }}
                 >
                   {Array.isArray(filteredActivity) &&
                   filteredActivity.length > 0 ? (
@@ -168,15 +168,15 @@ export const UserPage = (): JSX.Element => {
                   ) : (
                     <Typography sx={{ ml: 2 }}>No activities found.</Typography>
                   )}
-                  <Pagination
-                    count={Math.ceil(filteredActivity.length / activitySize)}
-                    shape="rounded"
-                    sx={{ mt: 2 }}
-                    size="large"
-                    page={activityPage}
-                    onChange={handleActivityChange}
-                  />
                 </Grid>
+                <Pagination
+                  count={Math.ceil(filteredActivity.length / activitySize)}
+                  shape="rounded"
+                  sx={{ mt: 2 }}
+                  size="large"
+                  page={activityPage}
+                  onChange={handleActivityChange}
+                />
               </Grid>
             ) : null}
             {user.user.comments && (
@@ -213,15 +213,15 @@ export const UserPage = (): JSX.Element => {
                   ) : (
                     <Typography sx={{ ml: 2 }}>No comments found.</Typography>
                   )}
-                  <Pagination
-                    count={Math.ceil(user.user.comments.length / commentSize)}
-                    shape="rounded"
-                    sx={{ mt: 2 }}
-                    size="large"
-                    page={commentPage}
-                    onChange={handleCommentChange}
-                  />
                 </Grid>
+                <Pagination
+                  count={Math.ceil(user.user.comments.length / commentSize)}
+                  shape="rounded"
+                  sx={{ mt: 2 }}
+                  size="large"
+                  page={commentPage}
+                  onChange={handleCommentChange}
+                />
               </Grid>
             )}
           </Grid>
