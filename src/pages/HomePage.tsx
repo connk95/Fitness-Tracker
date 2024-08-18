@@ -25,6 +25,7 @@ export const HomePage = (): JSX.Element => {
   const workouts = useSelector((state: RootState) => state.workouts);
   const foods = useSelector((state: RootState) => state.foods);
   const dispatch = useAppDispatch();
+  const pageSize = 12; // Number of items per page
 
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState<number>(1);
@@ -77,10 +78,8 @@ export const HomePage = (): JSX.Element => {
     setPage(value);
   };
 
-  const pageSize = 12; // Number of items per page
-
   return (
-    <Container component="main" maxWidth="md">
+    <Container maxWidth="md">
       <CssBaseline />
       <Box
         sx={{
@@ -88,7 +87,7 @@ export const HomePage = (): JSX.Element => {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
-          paddingLeft: 0,
+          pl: 0,
           mb: 8,
         }}
       >
@@ -96,15 +95,14 @@ export const HomePage = (): JSX.Element => {
           container
           spacing={2}
           maxWidth="md"
-          sx={{ display: "flex", justifyContent: "flex-start" }}
+          sx={{ display: "flex", justifyContent: "flex-start", ml: -2 }}
         >
           <Grid
             item
             xs={12}
             sx={{
               display: "flex",
-              paddingLeft: 0,
-              paddingTop: 0,
+              pl: 0,
               flexDirection: "column",
               alignItems: "flex-start",
             }}
@@ -114,7 +112,7 @@ export const HomePage = (): JSX.Element => {
                 sx={{
                   display: "flex",
                   flexDirection: "column",
-                  paddingLeft: 0,
+                  pl: 0,
                 }}
               >
                 <ActivitySelector
@@ -141,7 +139,18 @@ export const HomePage = (): JSX.Element => {
                 </Box>
               </Box>
             ) : (
-              <Typography>All Activity</Typography>
+              <Typography
+                sx={{
+                  fontSize: 20,
+                  fontWeight: "bold",
+                  color: "#505050",
+                  "&.Mui-focused": {
+                    color: "#505050",
+                  },
+                }}
+              >
+                All Activity
+              </Typography>
             )}
             <Grid
               container

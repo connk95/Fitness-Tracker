@@ -16,8 +16,11 @@ export const Activity: React.FC<ActivityProps> = ({
 }: ActivityProps): JSX.Element => {
   const dispatch = useAppDispatch();
   const auth = useSelector((state: RootState) => state.auth);
-  const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
   const userId = auth.loggedInUser?.user?._id;
+  const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
+  const [hasLiked, setHasLiked] = useState(
+    activity.likes?.includes(userId!) ?? false
+  );
   const [isFriend, setIsFriend] = useState(
     auth.loggedInUser?.user?.friends?.includes(activity.user._id!) ?? false
   );
@@ -31,11 +34,10 @@ export const Activity: React.FC<ActivityProps> = ({
       return;
     }
 
-    const hasLiked = activity.likes?.includes(auth.loggedInUser.user);
-
     if (hasLiked) {
       return;
     } else {
+      setHasLiked(true);
       setLikeCount((activity.likes?.length || 0) + 1);
       await dispatch(
         addLike({ activityId: activity._id, type: activity.type })
@@ -44,6 +46,11 @@ export const Activity: React.FC<ActivityProps> = ({
   };
 
   const handleFriend = async (event: React.MouseEvent) => {
+    // TO DO:
+    // IMPLEMENT FRIEND ADDING BEHAVIOUR IMMEDIATELY
+    // CURRENTLY, THE USER MUST RELOG TO SHOW FRIENDS
+    // ADD FRIEND SHOULD IMMEDIATELY REFLECT FRIEND IN THE AUTH STATE
+
     event.stopPropagation();
     event.preventDefault();
 
@@ -91,8 +98,8 @@ export const Activity: React.FC<ActivityProps> = ({
               <Typography>Duration: {activity.duration} minutes</Typography>
               <Typography>Calories burned: {activity.calories}</Typography>
               <Typography>
-                {activity.createdAt.slice(11, 16)} on{" "}
-                {new Date(activity.createdAt).toLocaleDateString()}
+                {new Date(activity.createdAt).toLocaleDateString()} at{" "}
+                {activity.createdAt.slice(11, 16)}
               </Typography>
             </>
           ) : (

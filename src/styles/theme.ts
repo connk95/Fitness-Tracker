@@ -52,5 +52,13 @@ export const theme: ThemeOptions = {
     //     },
     //   },
     // },
+    MuiGrid: {
+      styleOverrides: {
+        item: {
+          paddingLeft: 0,
+          // You can override other paddings as needed
+        },
+      },
+    },
   },
 };
