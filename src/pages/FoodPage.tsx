@@ -23,20 +23,31 @@ import { Activity } from "../components/Activity";
 import { useState } from "react";
 
 export const FoodPage = (): JSX.Element => {
-  const dispatch = useAppDispatch();
   const { id } = useParams();
-  const food = useSelector((state: RootState) => state.foods);
   const auth = useSelector((state: RootState) => state.auth);
+  const food = useSelector((state: RootState) => state.foods.singleFood);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Comment>();
+  const dispatch = useAppDispatch();
   const pageSize = 12; // Number of items per page
 
   const [page, setPage] = useState<number>(1);
 
-  const onSubmit: SubmitHandler<Comment> = async (data) => {
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchSingleFood(id));
+    }
+  }, [dispatch, id]);
+
+  const onSubmit: SubmitHandler<Comment> = async (data, event) => {
+    if (event) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+
     if (!id) {
       console.error("No activity ID found");
       return;
@@ -47,14 +58,8 @@ export const FoodPage = (): JSX.Element => {
       type: "foods",
     };
     await dispatch(newComment(commentData));
-    window.location.reload();
+    dispatch(fetchSingleFood(id));
   };
-
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchSingleFood(id));
-    }
-  }, [dispatch, id]);
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -63,11 +68,13 @@ export const FoodPage = (): JSX.Element => {
   return (
     <Container sx={{ mt: 12 }} maxWidth="md">
       <CssBaseline />
-      {food.loading ? (
+      {!food ? (
         <Box sx={{}}>
           <CircularProgress />
         </Box>
-      ) : food.singleFood.title ? (
+      ) : !auth.loggedInUser ? (
+        <Typography>Loading user data...</Typography>
+      ) : food._id ? (
         <Box
           sx={{
             marginTop: 8,
@@ -81,7 +88,7 @@ export const FoodPage = (): JSX.Element => {
         >
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12}>
-              <Activity activity={food.singleFood} />
+              <Activity activity={food} />
             </Grid>
             {auth.loggedInUser.access_token ? (
               <Grid item xs={12}>
@@ -123,12 +130,12 @@ export const FoodPage = (): JSX.Element => {
             ) : (
               <></>
             )}
-            {food.singleFood.comments && food.singleFood.comments.length > 0 ? (
+            {food.comments && food.comments.length > 0 ? (
               <Grid item xs={12}>
                 <Typography sx={{ ml: 1, mb: 2, mt: -2 }}>
-                  Comments: {`${food.singleFood.comments.length}`}
+                  Comments: {`${food.comments.length}`}
                 </Typography>
-                {food.singleFood.comments
+                {food.comments
                   .slice()
                   .reverse()
                   .map((comment) => (
@@ -138,9 +145,7 @@ export const FoodPage = (): JSX.Element => {
                   ))}
                 <Box sx={{ ml: -2, mb: 10 }}>
                   <Pagination
-                    count={Math.ceil(
-                      food.singleFood.comments.length / pageSize
-                    )}
+                    count={Math.ceil(food.comments.length / pageSize)}
                     shape="rounded"
                     sx={{ mt: 2 }}
                     size="large"

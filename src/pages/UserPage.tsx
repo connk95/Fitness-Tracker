@@ -69,14 +69,6 @@ export const UserPage = (): JSX.Element => {
     }
   );
 
-  // const handleActivityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPage(Number((event.target as HTMLInputElement).value));
-  // };
-
-  // const handleCommentChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   setPage(Number((event.target as HTMLInputElement).value));
-  // };
-
   const handleActivityChange = (
     _: React.ChangeEvent<unknown>,
     value: number
@@ -200,7 +192,10 @@ export const UserPage = (): JSX.Element => {
                   user.user.comments.length > 0 ? (
                     <>
                       {user.user.comments
-                        .slice()
+                        .slice(
+                          (commentPage - 1) * commentSize,
+                          commentPage * commentSize
+                        )
                         .reverse()
                         .map((comment) => (
                           <Grid item xs={12} key={comment._id} sx={{ mb: 0 }}>

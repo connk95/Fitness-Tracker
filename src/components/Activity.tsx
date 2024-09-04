@@ -18,11 +18,16 @@ export const Activity: React.FC<ActivityProps> = ({
   const auth = useSelector((state: RootState) => state.auth);
   const userId = auth.loggedInUser?.user?._id;
   const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
+  const [isFriend, setIsFriend] = useState(() => {
+    if (!auth.loggedInUser || !auth.loggedInUser.user) {
+      return false;
+    }
+    return (
+      auth.loggedInUser.user.friends?.includes(activity.user._id!) ?? false
+    );
+  });
   const [hasLiked, setHasLiked] = useState(
     activity.likes?.includes(userId!) ?? false
-  );
-  const [isFriend, setIsFriend] = useState(
-    auth.loggedInUser?.user?.friends?.includes(activity.user._id!) ?? false
   );
 
   const handleLike = async (event: React.MouseEvent) => {
@@ -46,11 +51,6 @@ export const Activity: React.FC<ActivityProps> = ({
   };
 
   const handleFriend = async (event: React.MouseEvent) => {
-    // TO DO:
-    // IMPLEMENT FRIEND ADDING BEHAVIOUR IMMEDIATELY
-    // CURRENTLY, THE USER MUST RELOG TO SHOW FRIENDS
-    // ADD FRIEND SHOULD IMMEDIATELY REFLECT FRIEND IN THE AUTH STATE
-
     event.stopPropagation();
     event.preventDefault();
 
@@ -69,8 +69,19 @@ export const Activity: React.FC<ActivityProps> = ({
   };
 
   useEffect(() => {
+    if (auth.loggedInUser?.user && activity.user._id) {
+      setIsFriend(
+        auth.loggedInUser.user.friends?.includes(activity.user._id) ?? false
+      );
+    } else {
+      setIsFriend(false);
+    }
+  }, [auth.loggedInUser?.user?.friends, activity.user._id, auth.loggedInUser]);
+
+  useEffect(() => {
     setLikeCount(activity.likes?.length ?? 0);
-  }, [activity.likes]);
+    setHasLiked(activity.likes?.includes(userId!) ?? false);
+  }, [activity.likes, userId]);
 
   return (
     <Link to={`/${activity.type}/${activity._id}`}>
@@ -138,12 +149,12 @@ export const Activity: React.FC<ActivityProps> = ({
                 },
               }}
             />
-            {(auth.loggedInUser.access_token &&
-              activity.user.username === auth.loggedInUser.user.username) ||
+            {!auth.loggedInUser.access_token ||
+            activity.user.username === auth.loggedInUser.user.username ||
             window.location.href.includes("/profile") ||
             isFriend ? (
               <></>
-            ) : auth.loggedInUser.access_token ? (
+            ) : (
               <PersonAddAltSharpIcon
                 onClick={handleFriend}
                 sx={{
@@ -154,8 +165,6 @@ export const Activity: React.FC<ActivityProps> = ({
                   },
                 }}
               />
-            ) : (
-              <></>
             )}
             <Box sx={{ display: "flex", flexDirection: "row" }}>
               <Typography
@@ -168,12 +177,12 @@ export const Activity: React.FC<ActivityProps> = ({
               >
                 {likeCount}
               </Typography>
-              {(auth.loggedInUser.access_token &&
-                activity.user.username === auth.loggedInUser.user.username) ||
+              {!auth.loggedInUser.access_token ||
+              activity.user.username === auth.loggedInUser.user.username ||
               window.location.href.includes("/profile") ||
               isFriend ? (
                 <></>
-              ) : auth.loggedInUser.access_token ? (
+              ) : (
                 <Typography
                   sx={{
                     fontSize: "8px",
@@ -184,8 +193,6 @@ export const Activity: React.FC<ActivityProps> = ({
                 >
                   Follow
                 </Typography>
-              ) : (
-                <></>
               )}
             </Box>
           </Box>

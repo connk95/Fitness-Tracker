@@ -8,7 +8,7 @@ export interface Workout extends baseMongooseType {
   duration: number;
   calories: number;
   user: User;
-  likes?: User[];
+  likes?: string[];
   comments?: Comment[];
 }
 

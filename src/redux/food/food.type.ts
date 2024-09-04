@@ -7,7 +7,7 @@ export interface Food extends baseMongooseType {
   title: string;
   calories: number;
   user: User;
-  likes?: User[];
+  likes?: string[];
   comments?: Comment[];
 }
 
