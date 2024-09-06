@@ -19,6 +19,7 @@ import { ActivityType } from "../redux/types";
 import { Activity } from "../components/Activity";
 import { CommentCard } from "../components/Comment";
 import { ActivitySelector } from "../components/ActivitySelector";
+import { CalorieGraph } from "../components/CalorieGraph";
 
 export const UserPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -32,6 +33,42 @@ export const UserPage = (): JSX.Element => {
   const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
     []
   );
+
+  const [weeklyData, setWeeklyData] = useState<{
+    [key: string]: ActivityType[];
+  }>({});
+
+  useEffect(() => {
+    const taskArray: ActivityType[] = [
+      ...(auth.loggedInUser.user?.workouts || []),
+      ...(auth.loggedInUser.user?.foods || []),
+    ];
+    setWeeklyData(getWeeklyData(taskArray));
+  }, [auth.loggedInUser]);
+
+  const getWeeklyData = (data: ActivityType[]) => {
+    const result: { [key: string]: ActivityType[] } = {};
+    const today = new Date();
+
+    for (let i = 0; i < 7; i++) {
+      const day = new Date(today);
+      day.setDate(today.getDate() - i);
+      const dayKey = day.toISOString().split("T")[0]; // Using ISO date as key
+
+      const dayData = data.filter((entry: ActivityType) => {
+        const entryDate = new Date(entry.createdAt);
+        return (
+          entryDate.getDate() === day.getDate() &&
+          entryDate.getMonth() === day.getMonth() &&
+          entryDate.getFullYear() === day.getFullYear()
+        );
+      });
+
+      result[dayKey] = dayData;
+    }
+
+    return result;
+  };
 
   useEffect(() => {
     if (auth.loggedInUser.access_token) {
@@ -119,6 +156,19 @@ export const UserPage = (): JSX.Element => {
                     Username
                   </Typography>
                   <Typography>{user.user.username}</Typography>
+                </CardContent>
+              </Card>
+              <Card
+                sx={{
+                  backgroundColor: "#ebe9e1",
+                  border: 0,
+                  borderRadius: 0,
+                  mt: 2,
+                }}
+                elevation={2}
+              >
+                <CardContent>
+                  <CalorieGraph weeklyData={weeklyData}></CalorieGraph>
                 </CardContent>
               </Card>
             </Grid>

@@ -63,7 +63,7 @@ export const HomePage = (): JSX.Element => {
         return true;
       } else if (
         filter === "friends" &&
-        // auth.loggedInUser.user.friends &&
+        auth.loggedInUser.user.friends &&
         activity.user
       ) {
         return (
