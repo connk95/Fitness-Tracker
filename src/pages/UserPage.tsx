@@ -20,6 +20,8 @@ import { Activity } from "../components/Activity";
 import { CommentCard } from "../components/Comment";
 import { ActivitySelector } from "../components/ActivitySelector";
 import { CalorieGraph } from "../components/CalorieGraph";
+import { Food } from "../redux/food/food.type";
+import { Workout } from "../redux/workout/workout.type";
 
 export const UserPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -39,24 +41,34 @@ export const UserPage = (): JSX.Element => {
   }>({});
 
   useEffect(() => {
-    const taskArray: ActivityType[] = [
-      ...(auth.loggedInUser.user?.workouts || []),
-      ...(auth.loggedInUser.user?.foods || []),
-    ];
+    const foods = auth.loggedInUser.user?.foods || [];
+    const workouts = auth.loggedInUser.user?.workouts || [];
+
+    const taskArray: ActivityType[] = [...foods, ...workouts];
+
+    console.log("taskArray: ", taskArray);
     setWeeklyData(getWeeklyData(taskArray));
   }, [auth.loggedInUser]);
+
+  console.log("weeklyData: ", weeklyData);
 
   const getWeeklyData = (data: ActivityType[]) => {
     const result: { [key: string]: ActivityType[] } = {};
     const today = new Date();
+
+    console.log("data :", data);
+
+    // Convert to JST by adjusting for the offset (JST is UTC+9)
+    today.setHours(today.getHours() + 9);
 
     for (let i = 0; i < 7; i++) {
       const day = new Date(today);
       day.setDate(today.getDate() - i);
       const dayKey = day.toISOString().split("T")[0]; // Using ISO date as key
 
-      const dayData = data.filter((entry: ActivityType) => {
+      const dayData = data.filter((entry: Food | Workout) => {
         const entryDate = new Date(entry.createdAt);
+
         return (
           entryDate.getDate() === day.getDate() &&
           entryDate.getMonth() === day.getMonth() &&

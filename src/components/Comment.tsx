@@ -7,8 +7,6 @@ interface CommentCardProps {
 }
 
 export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
-  console.log(comment);
-
   return (
     <Card
       sx={{
