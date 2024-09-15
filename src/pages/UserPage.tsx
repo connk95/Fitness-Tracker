@@ -10,6 +10,9 @@ import {
   Container,
   Box,
   Pagination,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Link } from "react-router-dom";
@@ -20,8 +23,6 @@ import { Activity } from "../components/Activity";
 import { CommentCard } from "../components/Comment";
 import { ActivitySelector } from "../components/ActivitySelector";
 import { CalorieGraph } from "../components/CalorieGraph";
-import { Food } from "../redux/food/food.type";
-import { Workout } from "../redux/workout/workout.type";
 
 export const UserPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -36,7 +37,8 @@ export const UserPage = (): JSX.Element => {
     []
   );
 
-  const [weeklyData, setWeeklyData] = useState<{
+  const [dataRange, setDataRange] = useState<number>(7);
+  const [calorieData, setCalorieData] = useState<{
     [key: string]: ActivityType[];
   }>({});
 
@@ -46,27 +48,22 @@ export const UserPage = (): JSX.Element => {
 
     const taskArray: ActivityType[] = [...foods, ...workouts];
 
-    console.log("taskArray: ", taskArray);
-    setWeeklyData(getWeeklyData(taskArray));
-  }, [auth.loggedInUser]);
+    setCalorieData(getCalorieData(taskArray));
+  }, [auth.loggedInUser, dataRange]);
 
-  console.log("weeklyData: ", weeklyData);
-
-  const getWeeklyData = (data: ActivityType[]) => {
+  const getCalorieData = (data: ActivityType[]) => {
     const result: { [key: string]: ActivityType[] } = {};
     const today = new Date();
-
-    console.log("data :", data);
 
     // Convert to JST by adjusting for the offset (JST is UTC+9)
     today.setHours(today.getHours() + 9);
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < dataRange; i++) {
       const day = new Date(today);
       day.setDate(today.getDate() - i);
       const dayKey = day.toISOString().split("T")[0]; // Using ISO date as key
 
-      const dayData = data.filter((entry: Food | Workout) => {
+      const dayData = data.filter((entry: ActivityType) => {
         const entryDate = new Date(entry.createdAt);
 
         return (
@@ -107,6 +104,12 @@ export const UserPage = (): JSX.Element => {
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setFilter((event.target as HTMLInputElement).value);
     setActivityPage(1); // Reset page to 1 when filter changes
+  };
+
+  const handleDataRangeChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setDataRange(Number((event.target as HTMLInputElement).value));
   };
 
   const filteredActivity: ActivityType[] = sortedByCreatedAt.filter(
@@ -170,6 +173,37 @@ export const UserPage = (): JSX.Element => {
                   <Typography>{user.user.username}</Typography>
                 </CardContent>
               </Card>
+              <Box sx={{ display: "flex", alignItems: "center", mt: 2 }}>
+                <Typography
+                  sx={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    color: "#505050",
+                    mr: 2,
+                  }}
+                >
+                  My Calories
+                </Typography>
+
+                <RadioGroup
+                  row
+                  aria-label="data-range"
+                  name="data-range"
+                  value={dataRange.toString()}
+                  onChange={handleDataRangeChange}
+                >
+                  <FormControlLabel
+                    value="7"
+                    control={<Radio />}
+                    label="7 Days"
+                  />
+                  <FormControlLabel
+                    value="30"
+                    control={<Radio />}
+                    label="30 Days"
+                  />
+                </RadioGroup>
+              </Box>
               <Card
                 sx={{
                   backgroundColor: "#ebe9e1",
@@ -180,7 +214,7 @@ export const UserPage = (): JSX.Element => {
                 elevation={2}
               >
                 <CardContent>
-                  <CalorieGraph weeklyData={weeklyData}></CalorieGraph>
+                  <CalorieGraph weeklyData={calorieData}></CalorieGraph>
                 </CardContent>
               </Card>
             </Grid>
