@@ -12,32 +12,35 @@ import {
   Grid,
   Pagination,
 } from "@mui/material";
+// import Radio from "@mui/joy/Radio";
 import { Activity } from "../components/Activity";
 import { ActivityType } from "../redux/types";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
-import { fetchFoods } from "../redux/food/food.actions";
-import { fetchWorkouts } from "../redux/workout/workout.actions";
+// import { fetchFoods } from "../redux/food/food.actions";
+// import { fetchWorkouts } from "../redux/workout/workout.actions";
 import { ActivitySelector } from "../components/ActivitySelector";
+import { fetchPaginatedActivities } from "../redux/activity/activity.action";
 
 export const HomePage = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
   const workouts = useSelector((state: RootState) => state.workouts);
   const foods = useSelector((state: RootState) => state.foods);
+  const activities = useSelector((state: RootState) => state.activities);
   const dispatch = useAppDispatch();
-  const pageSize = 12; // Number of items per page
+  const limit = 12; // Number of items per page
 
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState<number>(1);
   const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
     []
   );
+  const totalItems = activities.totalCount;
 
   useEffect(() => {
     dispatch(fetchUsers());
-    dispatch(fetchFoods());
-    dispatch(fetchWorkouts());
-  }, [dispatch]);
+    dispatch(fetchPaginatedActivities({ page, limit }));
+  }, [dispatch, page]);
 
   useEffect(() => {
     const allActivity: ActivityType[] = [
@@ -161,7 +164,7 @@ export const HomePage = (): JSX.Element => {
               filteredActivity.length > 0 ? (
                 <>
                   {filteredActivity
-                    .slice((page - 1) * pageSize, page * pageSize)
+                    .slice((page - 1) * limit, page * limit)
                     .map((activity: ActivityType) => (
                       <Grid item xs={12} sm={6} key={activity._id}>
                         <Activity activity={activity} />
@@ -174,7 +177,7 @@ export const HomePage = (): JSX.Element => {
             </Grid>
           </Grid>
           <Pagination
-            count={Math.ceil(filteredActivity.length / pageSize)}
+            count={Math.ceil(totalItems / limit)}
             shape="rounded"
             sx={{ mt: 2 }}
             size="large"

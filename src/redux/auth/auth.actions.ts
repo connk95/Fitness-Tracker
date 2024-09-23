@@ -16,6 +16,7 @@ export const userLogin = createAsyncThunk(
       );
       if (res.data) {
         localStorage.setItem("loggedInUser", JSON.stringify(res.data));
+        console.log("data: ", res.data);
         return res.data;
       }
     } catch (error) {
@@ -24,15 +25,44 @@ export const userLogin = createAsyncThunk(
   }
 );
 
+// export const setLoggedInUser = createAsyncThunk(
+//   "auth/setLoggedInUser",
+//   async () => {
+//     const user = await localStorage.getItem("loggedInUser");
+//     if (user) {
+//       const loggedInUser = JSON.parse(user);
+//       console.log("loggedInUser: ", loggedInUser);
+//       return loggedInUser;
+//     } else {
+//       return;
+//     }
+//   }
+// );
+
 export const setLoggedInUser = createAsyncThunk(
   "auth/setLoggedInUser",
   async () => {
     const user = await localStorage.getItem("loggedInUser");
     if (user) {
-      const loggedInUser = JSON.parse(user);
-      return loggedInUser;
-    } else {
-      return;
+      let loggedInUser = JSON.parse(user);
+      const username = loggedInUser.user.username;
+      const password = loggedInUser.user.password;
+
+      try {
+        const res = await axios.post(
+          `${import.meta.env.VITE_API_URL}/auth/login`,
+          {
+            username,
+            password,
+          }
+        );
+        if (res.data) {
+          localStorage.setItem("loggedInUser", JSON.stringify(res.data));
+          return (loggedInUser = res.data);
+        }
+      } catch (error) {
+        throw new Error("Invalid username or password. Please try again");
+      }
     }
   }
 );

@@ -56,7 +56,7 @@ export const UserPage = (): JSX.Element => {
     const today = new Date();
 
     // Convert to JST by adjusting for the offset (JST is UTC+9)
-    today.setHours(today.getHours() + 9);
+    today.setHours(today.getHours());
 
     for (let i = 0; i < dataRange; i++) {
       const day = new Date(today);
@@ -137,7 +137,7 @@ export const UserPage = (): JSX.Element => {
     setCommentPage(value);
   };
 
-  const commentSize = 8; // Number of items per page
+  const commentSize = 6; // Number of items per page
 
   return (
     <Container component="main" sx={{ mt: 12 }} maxWidth="md">

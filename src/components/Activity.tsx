@@ -104,7 +104,10 @@ export const Activity: React.FC<ActivityProps> = ({
                 {activity.title}
               </Typography>
               <Typography>
-                {activity.user.username || "I"} logged a workout!
+                {String(activity.user) === userId
+                  ? "I"
+                  : activity.user.username}{" "}
+                logged a workout!
               </Typography>
               <Typography>Duration: {activity.duration} minutes</Typography>
               <Typography>Calories burned: {activity.calories}</Typography>
@@ -120,7 +123,9 @@ export const Activity: React.FC<ActivityProps> = ({
                 {activity.title}
               </Typography>
               <Typography>
-                {activity.user._id === userId ? "I" : activity.user.username}{" "}
+                {String(activity.user) === userId
+                  ? "I"
+                  : activity.user.username}{" "}
                 logged a food!
               </Typography>
               <Typography>Calories: {activity.calories}</Typography>

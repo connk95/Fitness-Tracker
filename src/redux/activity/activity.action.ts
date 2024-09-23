@@ -45,3 +45,13 @@ export const addFriend = createAsyncThunk(
     return res.data;
   }
 );
+
+export const fetchPaginatedActivities = createAsyncThunk(
+  "activities/fetchPaginatedData",
+  async ({ page = 1, limit = 10 }: { page?: number; limit?: number }) => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/activities`, {
+      params: { page, limit },
+    });
+    return res.data;
+  }
+);

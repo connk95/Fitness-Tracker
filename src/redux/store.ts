@@ -3,11 +3,13 @@ import foodSlice from "./food/food.slice";
 import workoutSlice from "./workout/workout.slice";
 import userSlice from "./user/user.slice";
 import authSlice from "./auth/auth.slice";
+import activitySlice from "./activity/activity.slice";
 
 export const store = configureStore({
   reducer: {
     foods: foodSlice,
     workouts: workoutSlice,
+    activities: activitySlice,
     users: userSlice,
     auth: authSlice,
   },
