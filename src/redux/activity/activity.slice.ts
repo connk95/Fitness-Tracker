@@ -5,6 +5,7 @@ import { createSlice } from "@reduxjs/toolkit";
 interface ActivityState {
   activities: ActivityType[];
   totalCount: number;
+  currentPage: number;
   loading: boolean;
   error: string | null;
 }
@@ -12,6 +13,7 @@ interface ActivityState {
 const initialState: ActivityState = {
   activities: [],
   totalCount: 0,
+  currentPage: 1,
   error: "",
   loading: false,
 };
@@ -24,6 +26,7 @@ const activitySlice = createSlice({
     builder.addCase(fetchPaginatedActivities.fulfilled, (state, action) => {
       state.activities = action.payload.activities;
       state.totalCount = action.payload.totalCount;
+      state.currentPage = action.payload.page;
       state.error = "";
       state.loading = false;
     });

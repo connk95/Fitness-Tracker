@@ -24,61 +24,89 @@ import { fetchPaginatedActivities } from "../redux/activity/activity.action";
 
 export const HomePage = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
-  const workouts = useSelector((state: RootState) => state.workouts);
-  const foods = useSelector((state: RootState) => state.foods);
+  // const workouts = useSelector((state: RootState) => state.workouts);
+  // const foods = useSelector((state: RootState) => state.foods);
   const activities = useSelector((state: RootState) => state.activities);
   const dispatch = useAppDispatch();
-  const limit = 12; // Number of items per page
+
+  console.log(activities);
 
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState<number>(1);
-  const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
-    []
-  );
+  // const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
+  //   []
+  // );
+
   const totalItems = activities.totalCount;
+  const limit = 12; // Number of items per page
 
   useEffect(() => {
     dispatch(fetchUsers());
-    dispatch(fetchPaginatedActivities({ page, limit }));
-  }, [dispatch, page]);
+    dispatch(fetchPaginatedActivities({ page, limit, filter }));
+  }, [dispatch, page, filter]);
 
-  useEffect(() => {
-    const allActivity: ActivityType[] = [
-      ...foods.allFoods,
-      ...workouts.allWorkouts,
-    ];
+  // useEffect(() => {
+  //   const allActivity: ActivityType[] = [
+  //     ...foods.allFoods,
+  //     ...workouts.allWorkouts,
+  //   ];
 
-    const sortedActivities = allActivity.sort((a, b) => {
-      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-    });
+  //   const sortedActivities = allActivity.sort((a, b) => {
+  //     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  //   });
 
-    setSortedByCreatedAt(sortedActivities);
-  }, [foods.allFoods, workouts.allWorkouts]);
+  //   setSortedByCreatedAt(sortedActivities);
+  // }, [foods.allFoods, workouts.allWorkouts]);
+
+  // useEffect(() => {
+  //   if (activities.activities.length > 0) {
+  //     const sortedActivities = activities.activities.sort((a, b) => {
+  //       return (
+  //         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  //       );
+  //     });
+  //     setSortedByCreatedAt(sortedActivities);
+  //   }
+  // }, [activities.activities]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter((event.target as HTMLInputElement).value);
+    const newFilter = (event.target as HTMLInputElement).value;
+    setFilter(newFilter);
     setPage(1); // Reset page to 1 when filter changes
+    dispatch(fetchPaginatedActivities({ page: 1, limit, filter: newFilter }));
   };
 
-  const filteredActivity: ActivityType[] = sortedByCreatedAt.filter(
-    (activity) => {
-      if (filter === "all") {
-        return true;
-      } else if (
-        filter === "friends" &&
-        auth.loggedInUser.user.friends &&
-        activity.user
-      ) {
-        return (
-          auth.loggedInUser.user.friends?.includes(activity.user._id!) ?? false
-        );
-      }
-      return activity.type === filter;
-    }
-  );
+  // const filteredActivity: ActivityType[] = activities.activities.filter(
+  //   (activity) => {
+  //     if (filter === "all") {
+  //       return true;
+  //     } else if (
+  //       filter === "friends" &&
+  //       auth.loggedInUser.user.friends &&
+  //       activity.user
+  //     ) {
+  //       return (
+  //         auth.loggedInUser.user.friends.includes(activity.user._id!) ?? false
+  //       );
+  //     }
+  //     return activity.type === filter;
+  //   }
+  // );
+
+  // const filteredActivity: ActivityType[] = sortedByCreatedAt.filter(
+  //   (activity) => {
+  //     if (filter === "all") {
+  //       return true;
+  //     } else if (filter === "friends" && auth.loggedInUser.user.friends) {
+  //       return auth.loggedInUser.user.friends.includes(activity.user._id);
+  //     }
+  //     return activity.type === filter;
+  //   }
+  // );
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
+    dispatch(fetchPaginatedActivities({ page: value, limit, filter }));
   };
 
   return (
@@ -160,10 +188,10 @@ export const HomePage = (): JSX.Element => {
               spacing={2}
               sx={{ mt: 2, display: "felx", justifyContent: "flexStart" }}
             >
-              {Array.isArray(filteredActivity) &&
-              filteredActivity.length > 0 ? (
+              {Array.isArray(activities.activities) &&
+              activities.activities.length > 0 ? (
                 <>
-                  {filteredActivity
+                  {activities.activities
                     .slice((page - 1) * limit, page * limit)
                     .map((activity: ActivityType) => (
                       <Grid item xs={12} sm={6} key={activity._id}>

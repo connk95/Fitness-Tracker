@@ -24,7 +24,6 @@ export const addLike = createAsyncThunk(
         user: state.auth.loggedInUser.user,
       }
     );
-    // return res.data;
     return { ...res.data, type, activityId };
   }
 );
@@ -48,10 +47,22 @@ export const addFriend = createAsyncThunk(
 
 export const fetchPaginatedActivities = createAsyncThunk(
   "activities/fetchPaginatedData",
-  async ({ page = 1, limit = 10 }: { page?: number; limit?: number }) => {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/activities`, {
-      params: { page, limit },
-    });
+  async ({
+    page = 1,
+    limit = 12,
+    filter = "all",
+  }: {
+    page?: number;
+    limit?: number;
+    filter?: string;
+  }) => {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/data/paginated`,
+      {
+        params: { page, limit, filter },
+      }
+    );
+    console.log(res.data);
     return res.data;
   }
 );
