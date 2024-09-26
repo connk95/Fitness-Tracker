@@ -25,8 +25,6 @@ export const HomePage = (): JSX.Element => {
   const activities = useSelector((state: RootState) => state.activities);
   const dispatch = useAppDispatch();
 
-  console.log(activities);
-
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState<number>(1);
 

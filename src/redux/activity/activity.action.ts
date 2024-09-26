@@ -62,7 +62,6 @@ export const fetchPaginatedActivities = createAsyncThunk(
         params: { page, limit, filter },
       }
     );
-    console.log(res.data);
     return res.data;
   }
 );

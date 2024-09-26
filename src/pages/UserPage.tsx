@@ -23,11 +23,13 @@ import { Activity } from "../components/Activity";
 import { CommentCard } from "../components/Comment";
 import { ActivitySelector } from "../components/ActivitySelector";
 import { CalorieGraph } from "../components/CalorieGraph";
+import { fetchPaginatedActivities } from "../redux/activity/activity.action";
 
 export const UserPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const auth = useSelector((state: RootState) => state.auth);
   const user = useSelector((state: RootState) => state.users);
+  const activities = useSelector((state: RootState) => state.activities);
 
   const [filter, setFilter] = useState<string>("all");
   const [activityPage, setActivityPage] = useState<number>(1);
@@ -41,6 +43,9 @@ export const UserPage = (): JSX.Element => {
   const [calorieData, setCalorieData] = useState<{
     [key: string]: ActivityType[];
   }>({});
+
+  const totalItems = activities.totalCount;
+  const activityLimit = 6; // Number of items per page
 
   useEffect(() => {
     const foods = auth.loggedInUser.user?.foods || [];
@@ -84,9 +89,12 @@ export const UserPage = (): JSX.Element => {
       const userId = auth.loggedInUser.user._id;
       if (userId) {
         dispatch(fetchUser(userId));
+        dispatch(
+          fetchPaginatedActivities({ page: 1, limit: activityLimit, filter })
+        );
       }
     }
-  }, [dispatch, auth]);
+  }, [dispatch, auth, activityPage, filter]);
 
   useEffect(() => {
     const allActivity: ActivityType[] = [
@@ -102,8 +110,16 @@ export const UserPage = (): JSX.Element => {
   }, [user.user.foods, user.user.workouts]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setFilter((event.target as HTMLInputElement).value);
+    const newFilter = (event.target as HTMLInputElement).value;
+    setFilter(newFilter);
     setActivityPage(1); // Reset page to 1 when filter changes
+    dispatch(
+      fetchPaginatedActivities({
+        page: 1,
+        limit: activityLimit,
+        filter: newFilter,
+      })
+    );
   };
 
   const handleDataRangeChange = (
@@ -126,9 +142,10 @@ export const UserPage = (): JSX.Element => {
     value: number
   ) => {
     setActivityPage(value);
+    dispatch(
+      fetchPaginatedActivities({ page: value, limit: activityLimit, filter })
+    );
   };
-
-  const activitySize = 6; // Number of items per page
 
   const handleCommentChange = (
     _: React.ChangeEvent<unknown>,
@@ -242,23 +259,18 @@ export const UserPage = (): JSX.Element => {
                   {Array.isArray(filteredActivity) &&
                   filteredActivity.length > 0 ? (
                     <>
-                      {filteredActivity
-                        .slice(
-                          (activityPage - 1) * activitySize,
-                          activityPage * activitySize
-                        )
-                        .map((activity: ActivityType) => (
-                          <Grid item xs={12} sm={6} key={activity._id}>
-                            <Activity activity={activity} />
-                          </Grid>
-                        ))}
+                      {filteredActivity.map((activity: ActivityType) => (
+                        <Grid item xs={12} sm={6} key={activity._id}>
+                          <Activity activity={activity} />
+                        </Grid>
+                      ))}
                     </>
                   ) : (
                     <Typography sx={{ ml: 2 }}>No activities found.</Typography>
                   )}
                 </Grid>
                 <Pagination
-                  count={Math.ceil(filteredActivity.length / activitySize)}
+                  count={Math.ceil(totalItems / activityLimit)}
                   shape="rounded"
                   sx={{ mt: 2 }}
                   size="large"
