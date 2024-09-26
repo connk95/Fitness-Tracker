@@ -17,15 +17,11 @@ import { Activity } from "../components/Activity";
 import { ActivityType } from "../redux/types";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
-// import { fetchFoods } from "../redux/food/food.actions";
-// import { fetchWorkouts } from "../redux/workout/workout.actions";
 import { ActivitySelector } from "../components/ActivitySelector";
 import { fetchPaginatedActivities } from "../redux/activity/activity.action";
 
 export const HomePage = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
-  // const workouts = useSelector((state: RootState) => state.workouts);
-  // const foods = useSelector((state: RootState) => state.foods);
   const activities = useSelector((state: RootState) => state.activities);
   const dispatch = useAppDispatch();
 
@@ -33,9 +29,6 @@ export const HomePage = (): JSX.Element => {
 
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState<number>(1);
-  // const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
-  //   []
-  // );
 
   const totalItems = activities.totalCount;
   const limit = 12; // Number of items per page
@@ -45,64 +38,12 @@ export const HomePage = (): JSX.Element => {
     dispatch(fetchPaginatedActivities({ page, limit, filter }));
   }, [dispatch, page, filter]);
 
-  // useEffect(() => {
-  //   const allActivity: ActivityType[] = [
-  //     ...foods.allFoods,
-  //     ...workouts.allWorkouts,
-  //   ];
-
-  //   const sortedActivities = allActivity.sort((a, b) => {
-  //     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-  //   });
-
-  //   setSortedByCreatedAt(sortedActivities);
-  // }, [foods.allFoods, workouts.allWorkouts]);
-
-  // useEffect(() => {
-  //   if (activities.activities.length > 0) {
-  //     const sortedActivities = activities.activities.sort((a, b) => {
-  //       return (
-  //         new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  //       );
-  //     });
-  //     setSortedByCreatedAt(sortedActivities);
-  //   }
-  // }, [activities.activities]);
-
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFilter = (event.target as HTMLInputElement).value;
     setFilter(newFilter);
     setPage(1); // Reset page to 1 when filter changes
     dispatch(fetchPaginatedActivities({ page: 1, limit, filter: newFilter }));
   };
-
-  // const filteredActivity: ActivityType[] = activities.activities.filter(
-  //   (activity) => {
-  //     if (filter === "all") {
-  //       return true;
-  //     } else if (
-  //       filter === "friends" &&
-  //       auth.loggedInUser.user.friends &&
-  //       activity.user
-  //     ) {
-  //       return (
-  //         auth.loggedInUser.user.friends.includes(activity.user._id!) ?? false
-  //       );
-  //     }
-  //     return activity.type === filter;
-  //   }
-  // );
-
-  // const filteredActivity: ActivityType[] = sortedByCreatedAt.filter(
-  //   (activity) => {
-  //     if (filter === "all") {
-  //       return true;
-  //     } else if (filter === "friends" && auth.loggedInUser.user.friends) {
-  //       return auth.loggedInUser.user.friends.includes(activity.user._id);
-  //     }
-  //     return activity.type === filter;
-  //   }
-  // );
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -191,13 +132,11 @@ export const HomePage = (): JSX.Element => {
               {Array.isArray(activities.activities) &&
               activities.activities.length > 0 ? (
                 <>
-                  {activities.activities
-                    .slice((page - 1) * limit, page * limit)
-                    .map((activity: ActivityType) => (
-                      <Grid item xs={12} sm={6} key={activity._id}>
-                        <Activity activity={activity} />
-                      </Grid>
-                    ))}
+                  {activities.activities.map((activity: ActivityType) => (
+                    <Grid item xs={12} sm={6} key={activity._id}>
+                      <Activity activity={activity} />
+                    </Grid>
+                  ))}
                 </>
               ) : (
                 <Typography sx={{ ml: 2 }}>No activities found.</Typography>
