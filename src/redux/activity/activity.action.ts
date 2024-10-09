@@ -1,6 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { User } from "../user/user.type";
+import { ActivityInterface } from "../types";
 
 type GenericState = {
   auth: {
@@ -9,6 +10,39 @@ type GenericState = {
     };
   };
 };
+
+export const fetchSingleActivity = createAsyncThunk(
+  "activities/fetchSingleActivity",
+  async (id: string) => {
+    const res = await axios.get(
+      `${import.meta.env.VITE_API_URL}/activities/${id}`
+    );
+    return res.data;
+  }
+);
+
+export const fetchActivities = createAsyncThunk(
+  "activities/fetchAllActivities",
+  async () => {
+    const res = await axios.get(`${import.meta.env.VITE_API_URL}/activities`);
+    return res.data;
+  }
+);
+
+export const newActivity = createAsyncThunk(
+  "activities/newActivity",
+  async ({ type, title, duration, calories }: ActivityInterface, thunkApi) => {
+    const state = thunkApi.getState() as GenericState;
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/activities`, {
+      type,
+      title,
+      duration: duration ? duration : null,
+      calories,
+      user: state.auth.loggedInUser.user,
+    });
+    return res;
+  }
+);
 
 export const addLike = createAsyncThunk(
   "likes/newLike",

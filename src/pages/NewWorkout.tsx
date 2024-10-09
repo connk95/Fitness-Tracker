@@ -14,7 +14,9 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Workout } from "../redux/workout/workout.type";
-import { newWorkout } from "../redux/workout/workout.actions";
+// import { newWorkout } from "../redux/workout/workout.actions";
+import { newActivity } from "../redux/activity/activity.action";
+import { ActivityInterface } from "../redux/types";
 
 export const NewWorkout = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -27,8 +29,14 @@ export const NewWorkout = (): JSX.Element => {
     formState: { errors },
   } = useForm<Workout>();
 
-  const onSubmit: SubmitHandler<Workout> = async (data) => {
-    await dispatch(newWorkout(data));
+  // const onSubmit: SubmitHandler<Workout> = async (data) => {
+  //   await dispatch(newWorkout(data));
+  //   navigate("/home");
+  // };
+
+  const onSubmit: SubmitHandler<ActivityInterface> = async (data) => {
+    data.type = "workout";
+    await dispatch(newActivity(data));
     navigate("/home");
   };
 
