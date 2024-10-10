@@ -1,7 +1,7 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { User } from "../user/user.type";
-import { ActivityInterface } from "../types";
+import { ActivityType } from "./activity.type";
 
 type GenericState = {
   auth: {
@@ -31,7 +31,7 @@ export const fetchActivities = createAsyncThunk(
 
 export const newActivity = createAsyncThunk(
   "activities/newActivity",
-  async ({ type, title, duration, calories }: ActivityInterface, thunkApi) => {
+  async ({ type, title, duration, calories }: ActivityType, thunkApi) => {
     const state = thunkApi.getState() as GenericState;
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/activities`, {
       type,
@@ -40,6 +40,8 @@ export const newActivity = createAsyncThunk(
       calories,
       user: state.auth.loggedInUser.user,
     });
+    console.log(res);
+
     return res;
   }
 );

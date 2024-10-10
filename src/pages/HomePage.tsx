@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 // import Radio from "@mui/joy/Radio";
 import { Activity } from "../components/Activity";
-import { ActivityType } from "../redux/types";
+import { ActivityType } from "../redux/activity/activity.type";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
 import SportsGymnasticsSharpIcon from "@mui/icons-material/SportsGymnasticsSharp";
 import { ActivitySelector } from "../components/ActivitySelector";
@@ -127,10 +127,10 @@ export const HomePage = (): JSX.Element => {
               spacing={2}
               sx={{ mt: 2, display: "felx", justifyContent: "flexStart" }}
             >
-              {Array.isArray(activities.activities) &&
-              activities.activities.length > 0 ? (
+              {Array.isArray(activities.allActivities) &&
+              activities.allActivities.length > 0 ? (
                 <>
-                  {activities.activities.map((activity: ActivityType) => (
+                  {activities.allActivities.map((activity: ActivityType) => (
                     <Grid item xs={12} sm={6} key={activity._id}>
                       <Activity activity={activity} />
                     </Grid>

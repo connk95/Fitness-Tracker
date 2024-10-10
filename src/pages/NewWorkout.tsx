@@ -16,7 +16,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { Workout } from "../redux/workout/workout.type";
 // import { newWorkout } from "../redux/workout/workout.actions";
 import { newActivity } from "../redux/activity/activity.action";
-import { ActivityInterface } from "../redux/types";
+import { ActivityType } from "../redux/activity/activity.type";
 
 export const NewWorkout = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -34,8 +34,9 @@ export const NewWorkout = (): JSX.Element => {
   //   navigate("/home");
   // };
 
-  const onSubmit: SubmitHandler<ActivityInterface> = async (data) => {
+  const onSubmit: SubmitHandler<ActivityType> = async (data) => {
     data.type = "workout";
+    console.log(data);
     await dispatch(newActivity(data));
     navigate("/home");
   };

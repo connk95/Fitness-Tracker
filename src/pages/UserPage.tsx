@@ -18,7 +18,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { Link } from "react-router-dom";
 import { fetchUser } from "../redux/user/user.actions";
 import { useAppDispatch } from "../redux/hooks";
-import { ActivityType } from "../redux/types";
+import { ActivityType } from "../redux/activity/activity.type";
 import { Activity } from "../components/Activity";
 import { CommentCard } from "../components/Comment";
 import { ActivitySelector } from "../components/ActivitySelector";
@@ -48,10 +48,11 @@ export const UserPage = (): JSX.Element => {
   const activityLimit = 6; // Number of items per page
 
   useEffect(() => {
-    const foods = auth.loggedInUser.user?.foods || [];
-    const workouts = auth.loggedInUser.user?.workouts || [];
+    // const foods = auth.loggedInUser.user?.foods || [];
+    // const workouts = auth.loggedInUser.user?.workouts || [];
+    const activities = auth.loggedInUser.user?.activities || [];
 
-    const taskArray: ActivityType[] = [...foods, ...workouts];
+    const taskArray: ActivityType[] = activities;
 
     setCalorieData(getCalorieData(taskArray));
   }, [auth.loggedInUser, dataRange]);
@@ -97,17 +98,14 @@ export const UserPage = (): JSX.Element => {
   }, [dispatch, auth, activityPage, filter]);
 
   useEffect(() => {
-    const allActivity: ActivityType[] = [
-      ...(user.user.foods || []),
-      ...(user.user.workouts || []),
-    ];
+    const allActivity: ActivityType[] = [...(user.user.activities || [])];
 
     const sortedActivities = allActivity.sort((a, b) => {
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
 
     setSortedByCreatedAt(sortedActivities);
-  }, [user.user.foods, user.user.workouts]);
+  }, [user.user.activities]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFilter = (event.target as HTMLInputElement).value;
@@ -235,7 +233,7 @@ export const UserPage = (): JSX.Element => {
                 </CardContent>
               </Card>
             </Grid>
-            {user.user.workouts || user.user.foods ? (
+            {user.user.activities ? (
               <Grid
                 item
                 xs={12}
