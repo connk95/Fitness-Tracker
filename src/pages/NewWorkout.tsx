@@ -13,30 +13,22 @@ import {
 import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { Workout } from "../redux/workout/workout.type";
-// import { newWorkout } from "../redux/workout/workout.actions";
 import { newActivity } from "../redux/activity/activity.action";
 import { ActivityType } from "../redux/activity/activity.type";
 
 export const NewWorkout = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const workouts = useSelector((state: RootState) => state.workouts);
+  const activities = useSelector((state: RootState) => state.activities);
   const auth = useSelector((state: RootState) => state.auth);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Workout>();
-
-  // const onSubmit: SubmitHandler<Workout> = async (data) => {
-  //   await dispatch(newWorkout(data));
-  //   navigate("/home");
-  // };
+  } = useForm<ActivityType>();
 
   const onSubmit: SubmitHandler<ActivityType> = async (data) => {
     data.type = "workout";
-    console.log(data);
     await dispatch(newActivity(data));
     navigate("/home");
   };
@@ -44,7 +36,7 @@ export const NewWorkout = (): JSX.Element => {
   return (
     <Container component="main" sx={{ mt: 12 }}>
       <CssBaseline />
-      {workouts.loading ? (
+      {activities.loading ? (
         <Box sx={{ ml: "46%" }}>
           <CircularProgress />
         </Box>
@@ -128,14 +120,14 @@ export const NewWorkout = (): JSX.Element => {
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10 }}
+                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
               >
                 Submit
               </Button>
               <Button
                 href="/home"
                 variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10 }}
+                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
               >
                 Back
               </Button>

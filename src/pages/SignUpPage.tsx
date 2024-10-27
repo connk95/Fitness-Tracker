@@ -54,7 +54,7 @@ export const SignUp = (): JSX.Element => {
   }, [auth.loggedInUser.access_token, auth.error, navigate]);
 
   return (
-    <Container component="main" maxWidth="false" sx={{ mt: 12 }}>
+    <Container component="main" sx={{ mt: 12 }}>
       <CssBaseline />
       {(!auth.error || !auth.loading) && (
         <Box

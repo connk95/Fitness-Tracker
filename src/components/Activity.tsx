@@ -44,9 +44,7 @@ export const Activity: React.FC<ActivityProps> = ({
     } else {
       setHasLiked(true);
       setLikeCount((activity.likes?.length || 0) + 1);
-      await dispatch(
-        addLike({ activityId: activity._id, type: activity.type })
-      );
+      await dispatch(addLike({ activityId: activity._id }));
     }
   };
 
@@ -84,7 +82,7 @@ export const Activity: React.FC<ActivityProps> = ({
   }, [activity.likes, userId]);
 
   return (
-    <Link to={`/${activity.type}/${activity._id}`}>
+    <Link to={`/activities/${activity._id}`}>
       <Card
         sx={{
           backgroundColor: "#ebe9e1",
@@ -97,7 +95,7 @@ export const Activity: React.FC<ActivityProps> = ({
         elevation={2}
       >
         <CardContent>
-          {activity.type === "workouts" ? (
+          {activity.type === "workout" ? (
             <>
               <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                 <SportsGymnasticsSharpIcon sx={{ mr: 1 }} />

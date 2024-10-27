@@ -13,7 +13,6 @@ import { useAppDispatch } from "../redux/hooks";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { useEffect } from "react";
-import { fetchSingleFood } from "../redux/food/food.actions";
 import { CssBaseline } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { newComment } from "../redux/comment/comment.actions";
@@ -21,36 +20,23 @@ import { Comment } from "../redux/comment/comment.type";
 import { CommentCard } from "../components/Comment";
 import { Activity } from "../components/Activity";
 import { useState } from "react";
+import { fetchSingleActivity } from "../redux/activity/activity.action";
 
-export const FoodPage = (): JSX.Element => {
+export const ActivityPage = (): JSX.Element => {
+  const dispatch = useAppDispatch();
   const { id } = useParams();
+  const activity = useSelector((state: RootState) => state.activities);
   const auth = useSelector((state: RootState) => state.auth);
-  // const food = useSelector((state: RootState) => state.foods.singleFood);
-  const food = useSelector(
-    (state: RootState) => state.activities.singleActivity
-  );
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<Comment>();
-  const dispatch = useAppDispatch();
   const pageSize = 12; // Number of items per page
 
   const [page, setPage] = useState<number>(1);
 
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchSingleFood(id));
-    }
-  }, [dispatch, id]);
-
-  const onSubmit: SubmitHandler<Comment> = async (data, event) => {
-    if (event) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-
+  const onSubmit: SubmitHandler<Comment> = async (data) => {
     if (!id) {
       console.error("No activity ID found");
       return;
@@ -58,11 +44,16 @@ export const FoodPage = (): JSX.Element => {
     const commentData = {
       text: data.text,
       activityId: id,
-      type: "foods",
     };
     await dispatch(newComment(commentData));
-    dispatch(fetchSingleFood(id));
+    window.location.reload();
   };
+
+  useEffect(() => {
+    if (id) {
+      dispatch(fetchSingleActivity(id));
+    }
+  }, [dispatch, id]);
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -71,13 +62,11 @@ export const FoodPage = (): JSX.Element => {
   return (
     <Container sx={{ mt: 12 }} maxWidth="md">
       <CssBaseline />
-      {!food ? (
+      {activity.loading ? (
         <Box sx={{}}>
           <CircularProgress />
         </Box>
-      ) : !auth.loggedInUser ? (
-        <Typography>Loading user data...</Typography>
-      ) : food._id ? (
+      ) : activity.singleActivity.title ? (
         <Box
           sx={{
             marginTop: 8,
@@ -91,7 +80,7 @@ export const FoodPage = (): JSX.Element => {
         >
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12}>
-              <Activity activity={food} />
+              <Activity activity={activity.singleActivity} />
             </Grid>
             {auth.loggedInUser.access_token ? (
               <Grid item xs={12}>
@@ -133,12 +122,13 @@ export const FoodPage = (): JSX.Element => {
             ) : (
               <></>
             )}
-            {food.comments && food.comments.length > 0 ? (
+            {activity.singleActivity.comments &&
+            activity.singleActivity.comments.length > 0 ? (
               <Grid item xs={12}>
                 <Typography sx={{ ml: 1, mb: 2, mt: -2 }}>
-                  Comments: {`${food.comments.length}`}
+                  Comments: {`${activity.singleActivity.comments.length}`}
                 </Typography>
-                {food.comments
+                {activity.singleActivity.comments
                   .slice()
                   .reverse()
                   .map((comment) => (
@@ -148,7 +138,9 @@ export const FoodPage = (): JSX.Element => {
                   ))}
                 <Box sx={{ ml: -2, mb: 10 }}>
                   <Pagination
-                    count={Math.ceil(food.comments.length / pageSize)}
+                    count={Math.ceil(
+                      activity.singleActivity.comments.length / pageSize
+                    )}
                     shape="rounded"
                     sx={{ mt: 2 }}
                     size="large"

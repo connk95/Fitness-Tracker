@@ -14,12 +14,13 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Food } from "../redux/food/food.type";
-import { newFood } from "../redux/food/food.actions";
+import { newActivity } from "../redux/activity/activity.action";
+import { ActivityType } from "../redux/activity/activity.type";
 
 export const NewFood = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const foods = useSelector((state: RootState) => state.foods);
+  const activities = useSelector((state: RootState) => state.activities);
   const auth = useSelector((state: RootState) => state.auth);
   const {
     register,
@@ -27,15 +28,16 @@ export const NewFood = (): JSX.Element => {
     formState: { errors },
   } = useForm<Food>();
 
-  const onSubmit: SubmitHandler<Food> = async (data) => {
-    await dispatch(newFood(data));
+  const onSubmit: SubmitHandler<ActivityType> = async (data) => {
+    data.type = "food";
+    await dispatch(newActivity(data));
     navigate("/home");
   };
 
   return (
     <Container component="main" sx={{ mt: 12 }}>
       <CssBaseline />
-      {foods.loading ? (
+      {activities.loading ? (
         <Box sx={{ ml: "46%" }}>
           <CircularProgress />
         </Box>
@@ -98,14 +100,14 @@ export const NewFood = (): JSX.Element => {
               <Button
                 type="submit"
                 variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10 }}
+                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
               >
                 Submit
               </Button>
               <Button
                 href="/home"
                 variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10 }}
+                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
               >
                 Back
               </Button>

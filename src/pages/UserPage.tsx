@@ -48,8 +48,6 @@ export const UserPage = (): JSX.Element => {
   const activityLimit = 6; // Number of items per page
 
   useEffect(() => {
-    // const foods = auth.loggedInUser.user?.foods || [];
-    // const workouts = auth.loggedInUser.user?.workouts || [];
     const activities = auth.loggedInUser.user?.activities || [];
 
     const taskArray: ActivityType[] = activities;
@@ -305,7 +303,7 @@ export const UserPage = (): JSX.Element => {
                         .reverse()
                         .map((comment) => (
                           <Grid item xs={12} key={comment._id} sx={{ mb: 0 }}>
-                            <Link to={`/${comment.type}/${comment.activityId}`}>
+                            <Link to={`/activities/${comment.activityId}`}>
                               <CommentCard comment={comment} />
                             </Link>
                           </Grid>

@@ -14,3 +14,4 @@ export interface baseState {
 export interface ActivityProps {
   activity: ActivityType;
 }
+export type { ActivityType };

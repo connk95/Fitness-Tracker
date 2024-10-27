@@ -96,7 +96,7 @@ export const HomePage = (): JSX.Element => {
                     sx={{ width: 180, mt: 0, borderRadius: 0 }}
                   >
                     <RestaurantSharpIcon sx={{ mr: 1 }} />
-                    New Meal
+                    New Food
                   </Button>
                   <Button
                     variant="contained"

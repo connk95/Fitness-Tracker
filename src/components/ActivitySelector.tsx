@@ -63,12 +63,12 @@ export const ActivitySelector: React.FC<{
             label="All Activity"
           />
           <FormControlLabel
-            value="foods"
+            value="food"
             control={<Radio />}
             label="Food Only"
           />
           <FormControlLabel
-            value="workouts"
+            value="workout"
             control={<Radio />}
             label="Workouts Only"
           />

@@ -5,7 +5,7 @@ import { Comment } from "../comment/comment.type";
 export interface ActivityType extends baseMongooseType {
   type: string;
   title: string;
-  duration: number;
+  duration?: number;
   calories: number;
   user: User;
   likes?: string[];

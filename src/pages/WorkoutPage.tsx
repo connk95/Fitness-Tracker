@@ -25,7 +25,8 @@ import { useState } from "react";
 export const WorkoutPage = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
-  const workout = useSelector((state: RootState) => state.workouts);
+  // const workout = useSelector((state: RootState) => state.workouts);
+  const workout = useSelector((state: RootState) => state.activities);
   const auth = useSelector((state: RootState) => state.auth);
   const {
     register,
@@ -67,7 +68,7 @@ export const WorkoutPage = (): JSX.Element => {
         <Box sx={{}}>
           <CircularProgress />
         </Box>
-      ) : workout.singleWorkout.title ? (
+      ) : workout.singleActivity.title ? (
         <Box
           sx={{
             marginTop: 8,
@@ -81,7 +82,7 @@ export const WorkoutPage = (): JSX.Element => {
         >
           <Grid container spacing={2} maxWidth="md">
             <Grid item xs={12}>
-              <Activity activity={workout.singleWorkout} />
+              <Activity activity={workout.singleActivity} />
             </Grid>
             {auth.loggedInUser.access_token ? (
               <Grid item xs={12}>
@@ -123,13 +124,13 @@ export const WorkoutPage = (): JSX.Element => {
             ) : (
               <></>
             )}
-            {workout.singleWorkout.comments &&
-            workout.singleWorkout.comments.length > 0 ? (
+            {workout.singleActivity.comments &&
+            workout.singleActivity.comments.length > 0 ? (
               <Grid item xs={12}>
                 <Typography sx={{ ml: 1, mb: 2, mt: -2 }}>
-                  Comments: {`${workout.singleWorkout.comments.length}`}
+                  Comments: {`${workout.singleActivity.comments.length}`}
                 </Typography>
-                {workout.singleWorkout.comments
+                {workout.singleActivity.comments
                   .slice()
                   .reverse()
                   .map((comment) => (
@@ -140,7 +141,7 @@ export const WorkoutPage = (): JSX.Element => {
                 <Box sx={{ ml: -2, mb: 10 }}>
                   <Pagination
                     count={Math.ceil(
-                      workout.singleWorkout.comments.length / pageSize
+                      workout.singleActivity.comments.length / pageSize
                     )}
                     shape="rounded"
                     sx={{ mt: 2 }}
