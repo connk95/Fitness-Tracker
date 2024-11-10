@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=DotGothic16&family=Knewave&family=Monoton&family=Quattrocento:wght@400;700&family=Train+One&display=swap");
+
 body {
   margin: 0;
 }
@@ -25,3 +27,41 @@ span {
 .css-9ztnf7-MuiGrid-root > .MuiGrid-item {
   padding-left: 0px !important;
 } */
+
+.css-1tz8lv8-MuiContainer-root {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  max-width: 100% !important;
+  background-color: #ebe9e1;
+}
+
+.quattrocento-regular {
+  font-family: "Quattrocento", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #e43d12;
+}
+
+.knewave-regular {
+  font-family: "Knewave", serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #e43d12;
+}
+
+.dotgothic16-regular {
+  font-family: "DotGothic16", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  color: #e43d12;
+}
+
+.train-one-regular {
+  font-family: "Train One", system-ui;
+  font-weight: 400;
+  font-style: normal;
+  color: #e43d12;
+}
+h2 {
+  padding: 0;
+}

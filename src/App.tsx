@@ -12,8 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect } from "react";
 import { useAppDispatch } from "./redux/hooks";
 import { setLoggedInUser } from "./redux/auth/auth.actions";
-// import { FoodPage } from "./pages/FoodPage";
-// import { WorkoutPage } from "./pages/WorkoutPage";
+import { SplashPage } from "./pages/SplashPage";
 import { UserPage } from "./pages/UserPage";
 import { ActivityPage } from "./pages/ActivityPage";
 
@@ -30,13 +29,11 @@ const App = () => {
     <ThemeProvider theme={defaultTheme}>
       <Router>
         <Provider store={store}>
-          <ButtonAppBar />
+          {window.location.pathname !== "/" ? <ButtonAppBar /> : null}
           <Routes>
-            {/* <Route path="/" element={<SplashPage />} /> */}
+            <Route path="/" element={<SplashPage />} />
             <Route path="/home" element={<HomePage />} />
-            {/* <Route path="/workouts/:id" element={<WorkoutPage />} /> */}
             <Route path="/workouts/new" element={<NewWorkout />} />
-            {/* <Route path="/foods/:id" element={<FoodPage />} /> */}
             <Route path="/foods/new" element={<NewFood />} />
             <Route path="/activities/:id" element={<ActivityPage />} />
             <Route path="/signup" element={<SignUp />} />

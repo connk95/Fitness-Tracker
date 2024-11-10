@@ -24,8 +24,6 @@ export const HomePage = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
   const activities = useSelector((state: RootState) => state.activities);
 
-  console.log(activities);
-
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState<number>(1);
 
