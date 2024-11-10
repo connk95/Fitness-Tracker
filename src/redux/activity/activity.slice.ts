@@ -19,8 +19,8 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 const initialState: ActivityTypeState = {
   allActivities: [],
   singleActivity: <ActivityType>{},
-  totalCount: 0,
-  currentPage: 1,
+  totalPages: 1,
+  page: 1,
   error: "",
   loading: false,
 };
@@ -102,20 +102,20 @@ const activitySlice = createSlice({
     });
     builder.addCase(fetchPaginatedActivities.fulfilled, (state, action) => {
       state.allActivities = action.payload.activities;
-      state.totalCount = action.payload.totalCount;
-      state.currentPage = action.payload.page;
+      state.totalPages = action.payload.pages;
+      state.page = action.payload.page;
       state.error = "";
       state.loading = false;
     });
     builder.addCase(fetchPaginatedActivities.pending, (state) => {
       state.allActivities = [];
-      state.totalCount = 0;
+      state.totalPages = 0;
       state.error = "";
       state.loading = true;
     });
     builder.addCase(fetchPaginatedActivities.rejected, (state, action) => {
       state.allActivities = [];
-      state.totalCount = 0;
+      state.totalPages = 0;
       state.error = action.error.message || "Could not load activities";
       state.loading = false;
     });

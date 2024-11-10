@@ -45,7 +45,7 @@ export const WorkoutPage = (): JSX.Element => {
     const commentData = {
       text: data.text,
       activityId: id,
-      type: "workouts",
+      type: "workout",
     };
     await dispatch(newComment(commentData));
     window.location.reload();

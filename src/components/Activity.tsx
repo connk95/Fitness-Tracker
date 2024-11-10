@@ -19,7 +19,9 @@ export const Activity: React.FC<ActivityProps> = ({
   const userId = auth.loggedInUser?.user?._id;
   const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
   const [isFriend, setIsFriend] = useState(() => {
-    if (!auth.loggedInUser || !auth.loggedInUser.user) {
+    if (userId == activity.user._id) {
+      return true;
+    } else if (!auth.loggedInUser || !userId) {
       return false;
     }
     return (
@@ -54,11 +56,7 @@ export const Activity: React.FC<ActivityProps> = ({
 
     if (isFriend) {
       return;
-    } else if (
-      activity.user._id &&
-      auth.loggedInUser.user._id &&
-      activity.user._id !== auth.loggedInUser.user._id
-    ) {
+    } else if (activity.user._id && userId && activity.user._id !== userId) {
       setIsFriend(true);
       await dispatch(addFriend({ friend: activity.user }));
     } else {
@@ -102,7 +100,7 @@ export const Activity: React.FC<ActivityProps> = ({
                 {activity.title}
               </Typography>
               <Typography>
-                {String(activity.user) === userId
+                {String(activity.user._id) === userId
                   ? "I"
                   : activity.user.username}{" "}
                 logged a workout!
@@ -121,7 +119,7 @@ export const Activity: React.FC<ActivityProps> = ({
                 {activity.title}
               </Typography>
               <Typography>
-                {String(activity.user) === userId
+                {String(activity.user._id) === userId
                   ? "I"
                   : activity.user.username}{" "}
                 logged a food!

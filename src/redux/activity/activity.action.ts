@@ -29,6 +29,27 @@ export const fetchActivities = createAsyncThunk(
   }
 );
 
+export const fetchPaginatedActivities = createAsyncThunk(
+  "activities/fetchPaginatedActivities",
+  async ({
+    filter,
+    page,
+    limit,
+  }: {
+    filter?: string;
+    page?: number;
+    limit?: number;
+  }) => {
+    const res = await axios.get(
+      `${
+        import.meta.env.VITE_API_URL
+      }/activities?type=${filter}&page=${page}&limit=${limit}`
+    );
+
+    return res.data;
+  }
+);
+
 export const newActivity = createAsyncThunk(
   "activities/newActivity",
   async ({ type, title, duration, calories }: ActivityType, thunkApi) => {
@@ -73,27 +94,6 @@ export const addFriend = createAsyncThunk(
       }
     );
 
-    return res.data;
-  }
-);
-
-export const fetchPaginatedActivities = createAsyncThunk(
-  "activities/fetchPaginatedData",
-  async ({
-    page = 1,
-    limit = 12,
-    filter = "all",
-  }: {
-    page?: number;
-    limit?: number;
-    filter?: string;
-  }) => {
-    const res = await axios.get(
-      `${import.meta.env.VITE_API_URL}/data/paginated`,
-      {
-        params: { page, limit, filter },
-      }
-    );
     return res.data;
   }
 );

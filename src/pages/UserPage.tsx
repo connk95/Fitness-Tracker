@@ -44,7 +44,7 @@ export const UserPage = (): JSX.Element => {
     [key: string]: ActivityType[];
   }>({});
 
-  const totalItems = activities.totalCount;
+  const totalItems = activities.totalPages;
   const activityLimit = 6; // Number of items per page
 
   useEffect(() => {
@@ -89,7 +89,7 @@ export const UserPage = (): JSX.Element => {
       if (userId) {
         dispatch(fetchUser(userId));
         dispatch(
-          fetchPaginatedActivities({ page: 1, limit: activityLimit, filter })
+          fetchPaginatedActivities({ filter, page: 1, limit: activityLimit })
         );
       }
     }
@@ -197,7 +197,6 @@ export const UserPage = (): JSX.Element => {
                 >
                   My Calories
                 </Typography>
-
                 <RadioGroup
                   row
                   aria-label="data-range"

@@ -15,6 +15,8 @@ export interface ActivityType extends baseMongooseType {
 export interface ActivityTypeState extends baseState {
   allActivities: ActivityType[];
   singleActivity: ActivityType;
-  totalCount: number;
-  currentPage: number;
+  totalPages: number;
+  page: number;
+  error: string;
+  loading: boolean;
 }

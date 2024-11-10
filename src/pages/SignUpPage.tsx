@@ -162,7 +162,7 @@ export const SignUp = (): JSX.Element => {
               fullWidth
               variant="contained"
               name="submit"
-              sx={{ mt: 3, mb: 2 }}
+              sx={{ mt: 3, mb: 2, borderRadius: 0 }}
             >
               Sign Up
             </Button>

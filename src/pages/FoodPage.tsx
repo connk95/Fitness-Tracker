@@ -58,7 +58,7 @@ export const FoodPage = (): JSX.Element => {
     const commentData = {
       text: data.text,
       activityId: id,
-      type: "foods",
+      type: "food",
     };
     await dispatch(newComment(commentData));
     dispatch(fetchSingleFood(id));

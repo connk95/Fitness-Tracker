@@ -12,7 +12,6 @@ import {
   Grid,
   Pagination,
 } from "@mui/material";
-// import Radio from "@mui/joy/Radio";
 import { Activity } from "../components/Activity";
 import { ActivityType } from "../redux/activity/activity.type";
 import RestaurantSharpIcon from "@mui/icons-material/RestaurantSharp";
@@ -21,27 +20,54 @@ import { ActivitySelector } from "../components/ActivitySelector";
 import { fetchPaginatedActivities } from "../redux/activity/activity.action";
 
 export const HomePage = (): JSX.Element => {
+  const dispatch = useAppDispatch();
   const auth = useSelector((state: RootState) => state.auth);
   const activities = useSelector((state: RootState) => state.activities);
-  const dispatch = useAppDispatch();
+
+  console.log(activities);
 
   const [filter, setFilter] = useState<string>("all");
   const [page, setPage] = useState<number>(1);
 
-  const totalItems = activities.totalCount;
+  const [sortedByCreatedAt, setSortedByCreatedAt] = useState<ActivityType[]>(
+    []
+  );
+
+  const totalItems = activities.totalPages;
   const limit = 12; // Number of items per page
 
   useEffect(() => {
     dispatch(fetchUsers());
-    dispatch(fetchPaginatedActivities({ page, limit, filter }));
+    dispatch(fetchPaginatedActivities({ filter, page: 1, limit: limit }));
   }, [dispatch, page, filter]);
+
+  useEffect(() => {
+    const allActivity: ActivityType[] = [...(activities.allActivities || [])];
+
+    const sortedActivities = allActivity.sort((a, b) => {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    });
+
+    setSortedByCreatedAt(sortedActivities);
+  }, [activities.allActivities]);
 
   const handleFilterChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newFilter = (event.target as HTMLInputElement).value;
     setFilter(newFilter);
     setPage(1); // Reset page to 1 when filter changes
-    dispatch(fetchPaginatedActivities({ page: 1, limit, filter: newFilter }));
+    dispatch(
+      fetchPaginatedActivities({ page: 1, limit: limit, filter: filter })
+    );
   };
+
+  const filteredActivity: ActivityType[] = sortedByCreatedAt.filter(
+    (activity) => {
+      if (filter === "all") {
+        return true;
+      }
+      return activity.type === filter;
+    }
+  );
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -127,10 +153,10 @@ export const HomePage = (): JSX.Element => {
               spacing={2}
               sx={{ mt: 2, display: "felx", justifyContent: "flexStart" }}
             >
-              {Array.isArray(activities.allActivities) &&
-              activities.allActivities.length > 0 ? (
+              {Array.isArray(filteredActivity) &&
+              filteredActivity.length > 0 ? (
                 <>
-                  {activities.allActivities.map((activity: ActivityType) => (
+                  {filteredActivity.map((activity: ActivityType) => (
                     <Grid item xs={12} sm={6} key={activity._id}>
                       <Activity activity={activity} />
                     </Grid>
