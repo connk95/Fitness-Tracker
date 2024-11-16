@@ -29,7 +29,6 @@ export const ButtonAppBar = (): JSX.Element => {
       username: auth.loggedInUser.user.username,
       password: auth.loggedInUser.user.password,
     };
-    console.log("test logout");
     await dispatch(userLogout(data));
     navigate("/home");
   };
@@ -73,7 +72,7 @@ export const ButtonAppBar = (): JSX.Element => {
                 Logout
               </Button>
             </>
-          ) : window.location.pathname !== "/" ? (
+          ) : (
             <>
               <Button color="inherit" href="/login" sx={{ color: "#e43d12" }}>
                 <LoginSharpIcon sx={{ mr: 1 }} />
@@ -84,8 +83,6 @@ export const ButtonAppBar = (): JSX.Element => {
                 Create Account
               </Button>
             </>
-          ) : (
-            <></>
           )}
         </Toolbar>
       </AppBar>

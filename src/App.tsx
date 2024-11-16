@@ -29,7 +29,7 @@ const App = () => {
     <ThemeProvider theme={defaultTheme}>
       <Router>
         <Provider store={store}>
-          {window.location.pathname !== "/" ? <ButtonAppBar /> : null}
+          <ButtonAppBar />
           <Routes>
             <Route path="/" element={<SplashPage />} />
             <Route path="/home" element={<HomePage />} />

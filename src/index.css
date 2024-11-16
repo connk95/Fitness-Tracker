@@ -28,36 +28,29 @@ span {
   padding-left: 0px !important;
 } */
 
-.css-1tz8lv8-MuiContainer-root {
-  padding-left: 0px !important;
-  padding-right: 0px !important;
-  max-width: 100% !important;
-  background-color: #ebe9e1;
-}
-
 .quattrocento-regular {
-  font-family: "Quattrocento", serif;
+  font-family: "Quattrocento", serif !important;
   font-weight: 400;
   font-style: normal;
   color: #e43d12;
 }
 
 .knewave-regular {
-  font-family: "Knewave", serif;
+  font-family: "Knewave", serif !important;
   font-weight: 400;
   font-style: normal;
   color: #e43d12;
 }
 
 .dotgothic16-regular {
-  font-family: "DotGothic16", sans-serif;
+  font-family: "DotGothic16", sans-serif !important;
   font-weight: 400;
   font-style: normal;
   color: #e43d12;
 }
 
 .train-one-regular {
-  font-family: "Train One", system-ui;
+  font-family: "Train One", system-ui !important;
   font-weight: 400;
   font-style: normal;
   color: #e43d12;
