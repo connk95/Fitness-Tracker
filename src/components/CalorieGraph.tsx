@@ -27,6 +27,8 @@ export const CalorieGraph: React.FC<{
       series={[{ data: caloriesPerDay }]}
       height={180}
       xAxis={[{ data: daysOfWeek, scaleType: "band" }]}
+      yAxis={[{}]}
+      grid={{ horizontal: true }}
       margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
     />
   );

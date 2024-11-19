@@ -31,13 +31,12 @@ export const HomePage = (): JSX.Element => {
     []
   );
 
-  const totalItems = activities.totalPages;
   const limit = 12; // Number of items per page
 
   useEffect(() => {
     dispatch(fetchUsers());
     dispatch(fetchPaginatedActivities({ filter, page: 1, limit: limit }));
-  }, [dispatch, page, filter]);
+  }, [dispatch, filter]);
 
   useEffect(() => {
     const allActivity: ActivityType[] = [...(activities.allActivities || [])];
@@ -53,9 +52,14 @@ export const HomePage = (): JSX.Element => {
     const newFilter = (event.target as HTMLInputElement).value;
     setFilter(newFilter);
     setPage(1); // Reset page to 1 when filter changes
-    dispatch(
-      fetchPaginatedActivities({ page: 1, limit: limit, filter: filter })
-    );
+    while (activities.allActivities.length < 1 && filter !== "friends") {
+      // prevent switch without data
+      setFilter(newFilter);
+      setPage(1);
+      dispatch(
+        fetchPaginatedActivities({ page: 1, limit: limit, filter: filter })
+      );
+    }
   };
 
   const filteredActivity: ActivityType[] = sortedByCreatedAt.filter(
@@ -69,6 +73,7 @@ export const HomePage = (): JSX.Element => {
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
+    console.log("value: ", value, "page: ", page);
     dispatch(fetchPaginatedActivities({ page: value, limit, filter }));
   };
 
@@ -166,7 +171,7 @@ export const HomePage = (): JSX.Element => {
             </Grid>
           </Grid>
           <Pagination
-            count={Math.ceil(totalItems / limit)}
+            count={activities.totalPages}
             shape="rounded"
             sx={{ mt: 2 }}
             size="large"

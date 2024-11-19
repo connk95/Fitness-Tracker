@@ -53,7 +53,7 @@ export const SplashPage = (): JSX.Element => {
     },
     {
       image: avatar2,
-      title: "My friends fitness journey inspires me!",
+      title: "My friends' fitness journey inspires me!",
       text: '"Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur nesciunt sunt quod ut ipsam, sit tempore aliquam quas earum molestias obcaecati, veniam ipsa tenetur nisi? Corrupti totam ad nam deleniti."',
       name: "Sabrina",
     },
@@ -67,18 +67,26 @@ export const SplashPage = (): JSX.Element => {
 
   const moreInfo = [
     {
+      title: "Work Better",
+      font: "knewave-regular",
       image: info1,
       text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi aperiam quos quibusdam reprehenderit iste sint nam in officiis nostrum totam, sit cumque saepe incidunt labore unde esse magnam ipsa mollitia.",
     },
     {
+      title: "Eat Better",
+      font: "train-one-regular",
       image: info2,
       text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe, fugit itaque impedit minus exercitationem officia inventore error laborum nostrum est, quaerat aperiam dicta delectus magnam, corporis doloremque. Alias, blanditiis expedita!",
     },
     {
+      title: "Track Better",
+      font: "dotgothic16-regular",
       image: info3,
       text: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Alias dolor vero non. Dolorum quidem corporis sequi veniam a eos facere recusandae, molestiae sit distinctio deleniti cupiditate perferendis voluptates. Sint, unde.",
     },
     {
+      title: "Live Better",
+      font: "quattrocento-regular",
       image: info4,
       text: "Lorem ipsum dolor sit amet consectetur, adipisicing elit. Odit asperiores sint illo cupiditate repudiandae doloremque soluta quasi voluptate quibusdam? Nemo quidem laboriosam perspiciatis cumque velit! Facere autem dolorum in quos!",
     },
@@ -144,62 +152,22 @@ export const SplashPage = (): JSX.Element => {
       </Box>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <Box sx={{ width: "50vw" }}>
-          <Typography
-            onMouseOver={() => setInfo(0)}
-            className={pages[0].font}
-            sx={{
-              fontSize: "100px",
-              "&:hover": {
-                fontSize: "110px",
-                cursor: "default",
-                color: "#02B2AF",
-              },
-            }}
-          >
-            Work Better
-          </Typography>
-          <Typography
-            onMouseOver={() => setInfo(1)}
-            className={pages[1].font}
-            sx={{
-              fontSize: "100px",
-              "&:hover": {
-                fontSize: "110px",
-                cursor: "default",
-                color: "#02B2AF",
-              },
-            }}
-          >
-            Eat Better
-          </Typography>
-          <Typography
-            onMouseOver={() => setInfo(2)}
-            className={pages[2].font}
-            sx={{
-              fontSize: "100px",
-              "&:hover": {
-                fontSize: "110px",
-                cursor: "default",
-                color: "#02B2AF",
-              },
-            }}
-          >
-            Track Better
-          </Typography>
-          <Typography
-            onMouseOver={() => setInfo(3)}
-            className="quattrocento-regular"
-            sx={{
-              fontSize: "100px",
-              "&:hover": {
-                fontSize: "110px",
-                cursor: "default",
-                color: "#02B2AF",
-              },
-            }}
-          >
-            Live Better
-          </Typography>
+          {moreInfo.map((info, index) => (
+            <Typography
+              key={index}
+              onMouseOver={() => setInfo(index)}
+              className={info.font}
+              sx={{
+                fontSize: "100px",
+                "&:hover": {
+                  fontSize: "110px",
+                  cursor: "default",
+                },
+              }}
+            >
+              {info.title}
+            </Typography>
+          ))}
         </Box>
         <Box
           sx={{

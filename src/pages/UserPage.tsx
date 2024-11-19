@@ -49,10 +49,9 @@ export const UserPage = (): JSX.Element => {
 
   useEffect(() => {
     const activities = auth.loggedInUser.user?.activities || [];
-
     const taskArray: ActivityType[] = activities;
-
     setCalorieData(getCalorieData(taskArray));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [auth.loggedInUser, dataRange]);
 
   const getCalorieData = (data: ActivityType[]) => {

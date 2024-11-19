@@ -79,6 +79,8 @@ export const Activity: React.FC<ActivityProps> = ({
     setHasLiked(activity.likes?.includes(userId!) ?? false);
   }, [activity.likes, userId]);
 
+  console.log(activity.user, userId);
+
   return (
     <Link to={`/activities/${activity._id}`}>
       <Card
@@ -100,7 +102,7 @@ export const Activity: React.FC<ActivityProps> = ({
                 {activity.title}
               </Typography>
               <Typography>
-                {String(activity.user._id) === userId
+                {String(activity.user) === userId
                   ? "I"
                   : activity.user.username}{" "}
                 logged a workout!
@@ -119,7 +121,7 @@ export const Activity: React.FC<ActivityProps> = ({
                 {activity.title}
               </Typography>
               <Typography>
-                {String(activity.user._id) === userId
+                {String(activity.user) === userId
                   ? "I"
                   : activity.user.username}{" "}
                 logged a food!

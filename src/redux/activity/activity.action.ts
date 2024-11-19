@@ -45,7 +45,16 @@ export const fetchPaginatedActivities = createAsyncThunk(
         import.meta.env.VITE_API_URL
       }/activities?type=${filter}&page=${page}&limit=${limit}`
     );
-
+    console.log(
+      "filter: ",
+      filter,
+      "page: ",
+      page,
+      "limit: ",
+      limit,
+      "data: ",
+      res.data
+    );
     return res.data;
   }
 );
