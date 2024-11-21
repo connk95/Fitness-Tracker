@@ -1,13 +1,17 @@
-import React from "react";
+import React, { ReactNode } from "react";
 
-export const Linkify = ({ children }) => {
-  const isUrl = (word) => {
+interface LinkifyProps {
+  children: ReactNode;
+}
+
+export const Linkify: React.FC<LinkifyProps> = ({ children }) => {
+  const isUrl = (word: string) => {
     const urlPattern =
       /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([-.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/gm;
     return word.match(urlPattern);
   };
 
-  const linkifyText = (text) => {
+  const linkifyText = (text: string) => {
     const words = text.split(/\s+/);
     return words.map((word, index) => {
       return isUrl(word) ? (
@@ -20,7 +24,7 @@ export const Linkify = ({ children }) => {
     });
   };
 
-  const linkifiedContent = linkifyText(children);
+  const linkifiedContent = linkifyText(children as string);
 
   return <span>{linkifiedContent}</span>;
 };
