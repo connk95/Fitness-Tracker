@@ -37,6 +37,7 @@ export const ActivityPage = (): JSX.Element => {
   const [page, setPage] = useState<number>(1);
 
   const onSubmit: SubmitHandler<Comment> = async (data) => {
+    console.log("test submit");
     if (!id) {
       console.error("No activity ID found");
       return;

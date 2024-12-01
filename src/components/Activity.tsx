@@ -79,8 +79,6 @@ export const Activity: React.FC<ActivityProps> = ({
     setHasLiked(activity.likes?.includes(userId!) ?? false);
   }, [activity.likes, userId]);
 
-  console.log(activity.user, userId);
-
   return (
     <Link to={`/activities/${activity._id}`}>
       <Card

@@ -30,6 +30,8 @@ export const NewFood = (): JSX.Element => {
 
   const onSubmit: SubmitHandler<ActivityType> = async (data) => {
     data.type = "food";
+    data.calories = Number(data.calories);
+    console.log("data: ", data);
     await dispatch(newActivity(data));
     navigate("/home");
   };

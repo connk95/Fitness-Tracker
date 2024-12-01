@@ -15,8 +15,8 @@ export const newComment = createAsyncThunk(
     { text, activityId }: { text: string; activityId: string },
     thunkApi
   ) => {
+    console.log("test newComment action");
     const state = thunkApi.getState() as GenericState;
-    console.log("activityId: ", activityId);
     const res = await axios.patch(
       `${import.meta.env.VITE_API_URL}/activities/${activityId}/comment`,
       {
