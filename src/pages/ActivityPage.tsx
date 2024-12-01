@@ -37,7 +37,6 @@ export const ActivityPage = (): JSX.Element => {
   const [page, setPage] = useState<number>(1);
 
   const onSubmit: SubmitHandler<Comment> = async (data) => {
-    console.log("test submit");
     if (!id) {
       console.error("No activity ID found");
       return;
@@ -133,8 +132,8 @@ export const ActivityPage = (): JSX.Element => {
                   .slice()
                   .reverse()
                   .map((comment) => (
-                    <Box sx={{ mt: 2 }}>
-                      <CommentCard key={comment._id} comment={comment} />
+                    <Box sx={{ mt: 2 }} key={comment._id}>
+                      <CommentCard comment={comment} />
                     </Box>
                   ))}
                 <Box sx={{ ml: -2, mb: 10 }}>
