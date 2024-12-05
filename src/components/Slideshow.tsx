@@ -1,4 +1,4 @@
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import React, { useEffect, useRef, useState } from "react";
 import { SlideshowProps } from "../redux/types";
 
@@ -31,13 +31,13 @@ export const Slideshow: React.FC<SlideshowProps> = ({
   }, [index, pages.length]);
 
   return (
-    <Container
+    <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         margin: "0 auto",
         overflow: "hidden",
-        maxWidth: "md",
+        padding: "0",
       }}
     >
       {pages.map((page, pageIndex) => (
@@ -57,6 +57,9 @@ export const Slideshow: React.FC<SlideshowProps> = ({
               padding: "20px",
               justifyContent: "center",
               alignItems: "center",
+              "@media (max-width: 600px)": {
+                display: "none",
+              },
             }}
           >
             <Typography sx={{ fontSize: "1.5rem" }}>{page.text}</Typography>
@@ -76,7 +79,7 @@ export const Slideshow: React.FC<SlideshowProps> = ({
               sx={{
                 position: "absolute",
                 top: "20px",
-                right: "40px",
+                right: "4px",
                 textAlign: "right",
                 fontSize: "7rem",
               }}
@@ -106,6 +109,9 @@ export const Slideshow: React.FC<SlideshowProps> = ({
               cursor: "pointer",
               margin: "0 5px",
               backgroundColor: index === ind ? "#e43d12" : "#c4c4c4",
+              "@media (max-width: 600px)": {
+                display: "none",
+              },
             }}
             onClick={() => {
               setIndex(ind);
@@ -113,6 +119,6 @@ export const Slideshow: React.FC<SlideshowProps> = ({
           ></Box>
         ))}
       </Box>
-    </Container>
+    </Box>
   );
 };

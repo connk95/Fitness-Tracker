@@ -118,11 +118,20 @@ export const HomePage = (): JSX.Element => {
                   filter={filter}
                   handleFilterChange={handleFilterChange}
                 />
-                <Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    gap: "20px",
+                    "@media (max-width: 600px)": {
+                      justifyContent: "center",
+                    },
+                  }}
+                >
                   <Button
                     variant="contained"
                     href="/foods/new"
-                    sx={{ width: 180, mt: 0, borderRadius: 0 }}
+                    sx={{ width: 180, mt: 0, mr: 0, borderRadius: 0 }}
                   >
                     <RestaurantSharpIcon sx={{ mr: 1 }} />
                     New Food
@@ -130,7 +139,7 @@ export const HomePage = (): JSX.Element => {
                   <Button
                     variant="contained"
                     href="/workouts/new"
-                    sx={{ width: 180, mt: 0, borderRadius: 0 }}
+                    sx={{ width: 180, mt: 0, mr: 0, borderRadius: 0 }}
                   >
                     <SportsGymnasticsSharpIcon sx={{ mr: 1 }} />
                     New Workout

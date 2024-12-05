@@ -80,7 +80,13 @@ export const SignUp = (): JSX.Element => {
             component="form"
             noValidate
             onSubmit={handleSubmit(onSubmit)}
-            sx={{ mt: 1, width: "30vw" }}
+            sx={{
+              mt: 1,
+              width: "30vw",
+              "@media (max-width: 600px)": {
+                width: "70vw",
+              },
+            }}
           >
             <Grid container spacing={2}>
               <Grid item xs={12}>

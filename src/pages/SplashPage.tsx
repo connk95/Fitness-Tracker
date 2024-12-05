@@ -97,12 +97,12 @@ export const SplashPage = (): JSX.Element => {
       sx={{
         height: "100%",
         width: "100%",
-        marginTop: "10rem",
-        marginBottom: "6rem",
+        marginTop: "5rem",
+        marginBottom: "0rem",
       }}
     >
       <CssBaseline />
-      <Box>
+      <Box sx={{ width: "100%" }}>
         <Grid>
           <Box>
             <Slideshow pages={pages}></Slideshow>
@@ -110,10 +110,13 @@ export const SplashPage = (): JSX.Element => {
           <Box
             sx={{
               display: "flex",
-              top: "40px",
+              top: "20px",
               justifyContent: "flex-end",
-              position: "relative",
-              right: "6px",
+              marginTop: "1rem",
+              gap: "20px",
+              "@media (max-width: 600px)": {
+                justifyContent: "center",
+              },
             }}
           >
             <Button
@@ -123,6 +126,7 @@ export const SplashPage = (): JSX.Element => {
                 width: 180,
                 mt: 0,
                 borderRadius: 0,
+                margin: 0,
               }}
             >
               Start
@@ -130,43 +134,54 @@ export const SplashPage = (): JSX.Element => {
             <Button
               variant="contained"
               href="/signup"
-              sx={{ width: 180, mt: 0, borderRadius: 0 }}
+              sx={{ width: 180, mt: 0, borderRadius: 0, margin: 0 }}
             >
               Create Account
             </Button>
           </Box>
         </Grid>
       </Box>
-      <Box sx={{ marginTop: "8rem" }}>
+      <Box sx={{ marginTop: "4rem", marginBottom: "6rem" }}>
         <Grid
           sx={{
             display: "flex",
+            flexWrap: "wrap",
             flexDirection: "row",
             justifyContent: "space-between",
           }}
         >
-          {testimonials.map((testimonial) => (
-            <Testimonial testimonial={testimonial}></Testimonial>
+          {testimonials.map((testimonial, index) => (
+            <Testimonial testimonial={testimonial} key={index}></Testimonial>
           ))}
         </Grid>
       </Box>
-      <Box sx={{ display: "flex", flexDirection: "row" }}>
-        <Box sx={{ width: "50vw" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+          "@media (max-width: 600px)": {
+            display: "none",
+          },
+        }}
+      >
+        <Box sx={{ minWidth: "max-content" }}>
           {moreInfo.map((info, index) => (
-            <Typography
-              key={index}
-              onMouseOver={() => setInfo(index)}
-              className={info.font}
-              sx={{
-                fontSize: "100px",
-                "&:hover": {
-                  fontSize: "110px",
-                  cursor: "default",
-                },
-              }}
-            >
-              {info.title}
-            </Typography>
+            <Box sx={{ display: "flex" }} key={index}>
+              <Typography
+                onMouseOver={() => setInfo(index)}
+                className={info.font}
+                sx={{
+                  fontSize: "5.5rem",
+                  "&:hover": {
+                    fontSize: "5.8rem",
+                    cursor: "default",
+                  },
+                }}
+              >
+                {info.title}
+              </Typography>
+            </Box>
           ))}
         </Box>
         <Box
@@ -174,14 +189,16 @@ export const SplashPage = (): JSX.Element => {
             display: "flex",
             flexDirection: "column",
             width: "35vw",
-            justifyContent: "center",
+            justifyContent: "flex-start",
+            marginTop: "4rem",
             alignItems: "center",
           }}
         >
           <Box
             sx={{
               backgroundImage: `url(${moreInfo[info].image})`,
-              backgroundSize: "cover",
+              backgroundSize: "contain",
+              backgroundRepeat: "no-repeat",
               backgroundPosition: "center",
               height: "185px",
               width: "100%",

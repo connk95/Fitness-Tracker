@@ -131,8 +131,8 @@ export const ActivityPage = (): JSX.Element => {
                 {activity.singleActivity.comments
                   .slice()
                   .reverse()
-                  .map((comment) => (
-                    <Box sx={{ mt: 2 }} key={comment._id}>
+                  .map((comment, index) => (
+                    <Box sx={{ mt: 2 }} key={index}>
                       <CommentCard comment={comment} />
                     </Box>
                   ))}

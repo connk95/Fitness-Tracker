@@ -9,17 +9,19 @@ export const Testimonial: React.FC<TestimonialProps> = ({
     <Container
       sx={{
         width: "20vw",
-        height: "500px",
         display: "flex",
         flexDirection: "column",
+        justifyContent: "space-between",
+        flex: "1",
         alignItems: "center",
+        minWidth: "16rem",
       }}
     >
       <Avatar
         src={testimonial.image}
         sx={{ height: "80px", width: "80px", marginBottom: "1rem" }}
       ></Avatar>
-      <Box sx={{ height: "5rem" }}>
+      <Box>
         <Typography
           sx={{
             fontWeight: "bold",
@@ -32,9 +34,7 @@ export const Testimonial: React.FC<TestimonialProps> = ({
         </Typography>
       </Box>
       <Box>
-        <Typography sx={{ height: "220px", textAlign: "center" }}>
-          {testimonial.text}
-        </Typography>
+        <Typography sx={{ textAlign: "center" }}>{testimonial.text}</Typography>
       </Box>
       <Box
         sx={{

@@ -17,15 +17,20 @@ export const Activity: React.FC<ActivityProps> = ({
   const dispatch = useAppDispatch();
   const auth = useSelector((state: RootState) => state.auth);
   const userId = auth.loggedInUser?.user?._id;
+  console.log("userIdu", userId);
+  console.log("activity user", activity.user._id);
   const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
   const [isFriend, setIsFriend] = useState(() => {
     if (userId == activity.user._id) {
+      console.log("test1");
       return true;
     } else if (!auth.loggedInUser || !userId) {
+      console.log("test2");
       return false;
     }
     return (
-      auth.loggedInUser.user.friends?.includes(activity.user._id!) ?? false
+      auth.loggedInUser.user.friends?.includes(activity.user._id!) ?? false,
+      console.log("test3")
     );
   });
   const [hasLiked, setHasLiked] = useState(

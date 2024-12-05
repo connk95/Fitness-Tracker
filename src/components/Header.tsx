@@ -35,9 +35,9 @@ export const ButtonAppBar = (): JSX.Element => {
 
   return (
     // <ThemeProvider theme={defaultTheme}>
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="fixed" elevation={0}>
-        <Toolbar>
+    <Box sx={{ padding: "0", flexDirection: "row" }}>
+      <AppBar position="fixed" elevation={0} sx={{ padding: "0" }}>
+        <Toolbar sx={{ display: "flex", flexDirection: "row", padding: "0" }}>
           <Typography
             variant="h6"
             component="div"
@@ -49,8 +49,17 @@ export const ButtonAppBar = (): JSX.Element => {
             </Link>
           </Typography>
           {auth.loggedInUser.access_token ? (
-            <>
-              <Typography sx={{ mr: 3, color: "#e43d12" }}>
+            <Box sx={{ display: "flex", flexDirection: "row" }}>
+              <Typography
+                sx={{
+                  lineHeight: "3rem",
+                  mr: 3,
+                  color: "#e43d12",
+                  "@media (max-width: 600px)": {
+                    display: "none",
+                  },
+                }}
+              >
                 Welcome {auth.loggedInUser.user.username}!
               </Typography>
               <IconButton
@@ -71,9 +80,9 @@ export const ButtonAppBar = (): JSX.Element => {
                 <LogoutSharpIcon sx={{ mr: 1 }} />
                 Logout
               </Button>
-            </>
+            </Box>
           ) : (
-            <>
+            <Box>
               <Button color="inherit" href="/login" sx={{ color: "#e43d12" }}>
                 <LoginSharpIcon sx={{ mr: 1 }} />
                 Login
@@ -82,7 +91,7 @@ export const ButtonAppBar = (): JSX.Element => {
                 <AddBoxSharpIcon sx={{ mr: 1 }} />
                 Create Account
               </Button>
-            </>
+            </Box>
           )}
         </Toolbar>
       </AppBar>
