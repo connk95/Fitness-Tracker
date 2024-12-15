@@ -74,6 +74,7 @@ export const HomePage = (): JSX.Element => {
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
     console.log("value: ", value, "page: ", page);
+    console.log(filter);
     dispatch(fetchPaginatedActivities({ page: value, limit, filter }));
   };
 
