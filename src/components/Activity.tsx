@@ -17,21 +17,15 @@ export const Activity: React.FC<ActivityProps> = ({
   const dispatch = useAppDispatch();
   const auth = useSelector((state: RootState) => state.auth);
   const userId = auth.loggedInUser?.user?._id;
-  // console.log("userId", userId);
-  // console.log("activity user", activity.user);
   const [likeCount, setLikeCount] = useState(activity.likes?.length ?? 0);
   const [isFriend, setIsFriend] = useState(() => {
-    if (userId == activity.user.toString()) {
-      // console.log("test1");
+    if (userId == activity.user._id) {
       return true;
     } else if (!auth.loggedInUser || !userId) {
-      // console.log("test2");
       return false;
     }
     return (
-      auth.loggedInUser.user.friends?.includes(activity.user.toString()!) ??
-      false
-      // console.log("test3")
+      auth.loggedInUser.user.friends?.includes(activity.user._id!) ?? false
     );
   });
   const [hasLiked, setHasLiked] = useState(
@@ -62,11 +56,7 @@ export const Activity: React.FC<ActivityProps> = ({
 
     if (isFriend) {
       return;
-    } else if (
-      activity.user.toString() &&
-      userId &&
-      activity.user.toString() !== userId
-    ) {
+    } else if (activity.user._id && userId && activity.user._id !== userId) {
       setIsFriend(true);
       await dispatch(addFriend({ friend: activity.user }));
     } else {
@@ -75,15 +65,18 @@ export const Activity: React.FC<ActivityProps> = ({
   };
 
   useEffect(() => {
-    if (auth.loggedInUser?.user && activity.user.toString()) {
+    if (
+      auth.loggedInUser?.user &&
+      activity.user._id &&
+      Array.isArray(auth.loggedInUser?.user.friends)
+    ) {
       setIsFriend(
-        auth.loggedInUser.user.friends?.includes(activity.user.toString()) ??
-          false
+        auth.loggedInUser?.user.friends?.includes(activity.user._id) ?? false
       );
     } else {
       setIsFriend(false);
     }
-  }, [auth.loggedInUser.user.friends, auth.loggedInUser, activity.user]);
+  }, [auth.loggedInUser?.user?.friends, auth.loggedInUser, activity.user]);
 
   useEffect(() => {
     setLikeCount(activity.likes?.length ?? 0);

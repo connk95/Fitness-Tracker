@@ -35,8 +35,22 @@ export const HomePage = (): JSX.Element => {
 
   useEffect(() => {
     dispatch(fetchUsers());
-    dispatch(fetchPaginatedActivities({ filter, page: 1, limit: limit }));
-  }, [dispatch, filter]);
+    const friends = auth.loggedInUser?.user?.friends;
+    if (!friends) return;
+    dispatch(
+      fetchPaginatedActivities({
+        filter,
+        page: 1,
+        limit: limit,
+        friends,
+      })
+    );
+  }, [
+    auth.loggedInUser?.user?._id,
+    auth.loggedInUser?.user?.friends,
+    dispatch,
+    filter,
+  ]);
 
   useEffect(() => {
     const allActivity: ActivityType[] = [...(activities.allActivities || [])];
@@ -52,12 +66,18 @@ export const HomePage = (): JSX.Element => {
     const newFilter = (event.target as HTMLInputElement).value;
     setFilter(newFilter);
     setPage(1); // Reset page to 1 when filter changes
+    const friends = auth.loggedInUser?.user?.friends || [];
     while (activities.allActivities.length < 1 && filter !== "friends") {
       // prevent switch without data
       setFilter(newFilter);
       setPage(1);
       dispatch(
-        fetchPaginatedActivities({ page: 1, limit: limit, filter: filter })
+        fetchPaginatedActivities({
+          page: 1,
+          limit: limit,
+          filter: filter,
+          friends,
+        })
       );
     }
   };
@@ -67,15 +87,26 @@ export const HomePage = (): JSX.Element => {
       if (filter === "all") {
         return true;
       }
+      if (filter === "friends") {
+        return true;
+      }
       return activity.type === filter;
     }
   );
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
-    console.log("value: ", value, "page: ", page);
-    console.log(filter);
-    dispatch(fetchPaginatedActivities({ page: value, limit, filter }));
+
+    const friends = auth.loggedInUser?.user?.friends || [];
+
+    dispatch(
+      fetchPaginatedActivities({
+        page: value,
+        limit,
+        filter,
+        friends,
+      })
+    );
   };
 
   return (
