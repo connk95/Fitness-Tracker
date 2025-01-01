@@ -8,8 +8,8 @@ export interface NewUser {
 }
 
 export interface AuthState extends baseState {
-  loggedInUser: LoggedInUser;
-  newUser: NewUser;
+  loggedInUser: LoggedInUser | null;
+  newUser: NewUser | null;
 }
 
 export interface LoggedInUser {

@@ -5,18 +5,10 @@ import {
   fetchSingleActivity,
   newActivity,
 } from "./activity.action";
-import { ActivityType, ActivityTypeState } from "./activity.type";
+import { ActivityType, ActivityState } from "./activity.type";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-// interface ActivityState {
-//   allActivities: ;
-//   totalCount: number;
-//   currentPage: number;
-//   loading: boolean;
-//   error: string | null;
-// }
-
-const initialState: ActivityTypeState = {
+const initialState: ActivityState = {
   allActivities: [],
   singleActivity: <ActivityType>{},
   totalPages: 1,

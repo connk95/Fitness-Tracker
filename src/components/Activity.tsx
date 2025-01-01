@@ -154,7 +154,7 @@ export const Activity: React.FC<ActivityProps> = ({
                 },
               }}
             />
-            {!auth.loggedInUser.access_token ||
+            {!auth.loggedInUser?.access_token ||
             activity.user.username === auth.loggedInUser.user.username ||
             window.location.href.includes("/profile") ||
             isFriend ? (
@@ -182,7 +182,7 @@ export const Activity: React.FC<ActivityProps> = ({
               >
                 {likeCount}
               </Typography>
-              {!auth.loggedInUser.access_token ||
+              {!auth.loggedInUser?.access_token ||
               activity.user.username === auth.loggedInUser.user.username ||
               window.location.href.includes("/profile") ||
               isFriend ? (

@@ -42,12 +42,12 @@ export const Login = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (auth.loggedInUser.access_token) {
+    if (auth.loggedInUser?.access_token) {
       navigate("/home");
     } else if (auth.error) {
       setErrorMessage(auth.error);
     }
-  }, [auth.loggedInUser.access_token, auth.error, navigate]);
+  }, [auth.loggedInUser?.access_token, auth.error, navigate]);
 
   return (
     <Container component="main" sx={{ mt: 12 }}>

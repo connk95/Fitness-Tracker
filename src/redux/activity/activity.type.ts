@@ -12,9 +12,9 @@ export interface ActivityType extends baseMongooseType {
   comments?: Comment[];
 }
 
-export interface ActivityTypeState extends baseState {
+export interface ActivityState extends baseState {
   allActivities: ActivityType[];
-  singleActivity: ActivityType;
+  singleActivity: ActivityType | null;
   totalPages: number;
   page: number;
   error: string;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { RootState } from "../redux/store";
 import { useSelector } from "react-redux";
 import { useAppDispatch } from "../redux/hooks";
-import { fetchUsers } from "../redux/user/user.actions";
+// import { fetchUsers } from "../redux/user/user.actions";
 import {
   Container,
   CssBaseline,
@@ -34,9 +34,7 @@ export const HomePage = (): JSX.Element => {
   const limit = 12; // Number of items per page
 
   useEffect(() => {
-    dispatch(fetchUsers());
-    const friends = auth.loggedInUser?.user?.friends;
-    if (!friends) return;
+    const friends = auth.loggedInUser?.user?.friends || [];
     dispatch(
       fetchPaginatedActivities({
         filter,
@@ -87,9 +85,6 @@ export const HomePage = (): JSX.Element => {
       if (filter === "all") {
         return true;
       }
-      if (filter === "friends") {
-        return true;
-      }
       return activity.type === filter;
     }
   );
@@ -138,18 +133,18 @@ export const HomePage = (): JSX.Element => {
               alignItems: "flex-start",
             }}
           >
-            {auth.loggedInUser?.access_token ? (
-              <Box
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  pl: 0,
-                }}
-              >
-                <ActivitySelector
-                  filter={filter}
-                  handleFilterChange={handleFilterChange}
-                />
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                pl: 0,
+              }}
+            >
+              <ActivitySelector
+                filter={filter}
+                handleFilterChange={handleFilterChange}
+              />
+              {auth.loggedInUser?.access_token ? (
                 <Box
                   sx={{
                     display: "flex",
@@ -177,21 +172,10 @@ export const HomePage = (): JSX.Element => {
                     New Workout
                   </Button>
                 </Box>
-              </Box>
-            ) : (
-              <Typography
-                sx={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  color: "#505050",
-                  "&.Mui-focused": {
-                    color: "#505050",
-                  },
-                }}
-              >
-                All Activity
-              </Typography>
-            )}
+              ) : (
+                <></>
+              )}
+            </Box>
             <Grid
               container
               spacing={2}

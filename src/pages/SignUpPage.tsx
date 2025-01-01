@@ -9,7 +9,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { useAppDispatch } from "../redux/hooks";
-import { createUser } from "../redux/auth/auth.actions";
+import { createUser, userLogin } from "../redux/auth/auth.actions";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
 import { CircularProgress } from "@mui/material";
@@ -26,7 +26,7 @@ interface SignUpFormInput {
 export const SignUp = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const user = useSelector((state: RootState) => state.users);
+  // const user = useSelector((state: RootState) => state.users);
   const auth = useSelector((state: RootState) => state.auth);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {
@@ -38,6 +38,8 @@ export const SignUp = (): JSX.Element => {
   const onSubmit: SubmitHandler<SignUpFormInput> = async (data) => {
     try {
       await dispatch(createUser(data));
+      await dispatch(userLogin(data));
+      navigate("/home");
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
@@ -46,12 +48,12 @@ export const SignUp = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (auth.loggedInUser.access_token) {
+    if (auth.loggedInUser?.access_token) {
       navigate("/home");
     } else if (auth.error) {
       setErrorMessage(auth.error);
     }
-  }, [auth.loggedInUser.access_token, auth.error, navigate]);
+  }, [auth.loggedInUser?.access_token, auth.error, navigate]);
 
   return (
     <Container component="main" sx={{ mt: 12 }}>
@@ -66,7 +68,7 @@ export const SignUp = (): JSX.Element => {
           }}
         >
           {auth.error && !errorMessage && <Typography>{auth.error}</Typography>}
-          {user.loading && <CircularProgress />}
+          {auth.loading && <CircularProgress />}
           <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
             <LockOutlinedIcon />
           </Avatar>
