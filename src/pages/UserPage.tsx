@@ -48,7 +48,7 @@ export const UserPage = (): JSX.Element => {
   const activityLimit = 6; // Number of items per page
 
   useEffect(() => {
-    const activities = auth.loggedInUser.user?.activities || [];
+    const activities = auth.loggedInUser?.user?.activities || [];
     const taskArray: ActivityType[] = activities;
     setCalorieData(getCalorieData(taskArray));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,12 +83,17 @@ export const UserPage = (): JSX.Element => {
   };
 
   useEffect(() => {
-    if (auth.loggedInUser.access_token) {
-      const userId = auth.loggedInUser.user._id;
+    if (auth.loggedInUser?.access_token) {
+      const userId = auth.loggedInUser?.user._id;
       if (userId) {
         dispatch(fetchUser(userId));
         dispatch(
-          fetchPaginatedActivities({ filter, page: 1, limit: activityLimit })
+          fetchPaginatedActivities({
+            filter,
+            page: 1,
+            limit: activityLimit,
+            friends: [],
+          })
         );
       }
     }
@@ -113,6 +118,7 @@ export const UserPage = (): JSX.Element => {
         page: 1,
         limit: activityLimit,
         filter: newFilter,
+        friends: [],
       })
     );
   };
@@ -138,7 +144,12 @@ export const UserPage = (): JSX.Element => {
   ) => {
     setActivityPage(value);
     dispatch(
-      fetchPaginatedActivities({ page: value, limit: activityLimit, filter })
+      fetchPaginatedActivities({
+        page: value,
+        limit: activityLimit,
+        filter,
+        friends: [],
+      })
     );
   };
 

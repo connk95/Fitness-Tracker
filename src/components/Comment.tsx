@@ -10,7 +10,7 @@ interface CommentCardProps {
 
 export const CommentCard: React.FC<CommentCardProps> = ({ comment }) => {
   const auth = useSelector((state: RootState) => state.auth);
-  const userId = auth.loggedInUser.user._id;
+  const userId = auth.loggedInUser?.user._id;
 
   return (
     <Card

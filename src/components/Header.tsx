@@ -25,12 +25,14 @@ export const ButtonAppBar = (): JSX.Element => {
   const auth = useSelector((state: RootState) => state.auth);
 
   const onClick = async () => {
-    const data = {
-      username: auth.loggedInUser.user.username,
-      password: auth.loggedInUser.user.password,
-    };
-    await dispatch(userLogout(data));
-    navigate("/home");
+    if (auth.loggedInUser?.user.username && auth.loggedInUser?.user.password) {
+      const data = {
+        username: auth.loggedInUser?.user.username,
+        password: auth.loggedInUser?.user.password,
+      };
+      await dispatch(userLogout(data));
+      navigate("/home");
+    }
   };
 
   return (
@@ -48,7 +50,7 @@ export const ButtonAppBar = (): JSX.Element => {
               FITTED
             </Link>
           </Typography>
-          {auth.loggedInUser.access_token ? (
+          {auth.loggedInUser?.access_token ? (
             <Box sx={{ display: "flex", flexDirection: "row" }}>
               <Typography
                 sx={{
@@ -60,7 +62,7 @@ export const ButtonAppBar = (): JSX.Element => {
                   },
                 }}
               >
-                Welcome {auth.loggedInUser.user.username}!
+                Welcome {auth.loggedInUser?.user.username}!
               </Typography>
               <IconButton
                 size="large"

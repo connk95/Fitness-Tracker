@@ -40,7 +40,7 @@ export const NewWorkout = (): JSX.Element => {
         <Box sx={{ ml: "46%" }}>
           <CircularProgress />
         </Box>
-      ) : auth.loggedInUser.access_token ? (
+      ) : auth.loggedInUser?.access_token ? (
         <Box
           sx={{
             marginTop: 8,
