@@ -66,7 +66,7 @@ export const ActivityPage = (): JSX.Element => {
         <Box sx={{}}>
           <CircularProgress />
         </Box>
-      ) : activity.singleActivity.title ? (
+      ) : activity.singleActivity?.title ? (
         <Box
           sx={{
             marginTop: 8,
@@ -82,7 +82,7 @@ export const ActivityPage = (): JSX.Element => {
             <Grid item xs={12}>
               <Activity activity={activity.singleActivity} />
             </Grid>
-            {auth.loggedInUser.access_token ? (
+            {auth.loggedInUser?.access_token ? (
               <Grid item xs={12}>
                 <TextField
                   {...register("text", {
