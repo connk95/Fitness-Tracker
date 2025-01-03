@@ -40,7 +40,7 @@ describe("SignUpPage", () => {
       },
     });
 
-  it("dispatches user data", () => {
+  it("dispatches user data", async () => {
     const mockStore = createMockStore(initialState);
 
     render(
@@ -68,7 +68,7 @@ describe("SignUpPage", () => {
 
     userEvent.click(submitButton);
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         createUser({
           username: "mockUsername",
@@ -79,7 +79,7 @@ describe("SignUpPage", () => {
     });
   });
 
-  it("produces error", () => {
+  it("produces error", async () => {
     const errorState = {
       auth: {
         loggedInUser: {
@@ -120,7 +120,7 @@ describe("SignUpPage", () => {
       </Provider>
     );
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(screen.getByText(/errorState.auth.error/i)).toBeInTheDocument();
     });
   });

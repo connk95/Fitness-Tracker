@@ -27,6 +27,7 @@ export const ActivityPage = (): JSX.Element => {
   const { id } = useParams();
   const activity = useSelector((state: RootState) => state.activities);
   const auth = useSelector((state: RootState) => state.auth);
+  const comment = useSelector((state: RootState) => state.comments);
   const {
     register,
     handleSubmit,
@@ -66,6 +67,10 @@ export const ActivityPage = (): JSX.Element => {
         <Box sx={{}}>
           <CircularProgress />
         </Box>
+      ) : activity.error || !id ? (
+        <Box>
+          <Typography>No activity found.</Typography>
+        </Box>
       ) : activity.singleActivity?.title ? (
         <Box
           sx={{
@@ -93,12 +98,17 @@ export const ActivityPage = (): JSX.Element => {
                         "Comments cannot exceed 240 characters in length",
                     },
                   })}
-                  id="text"
+                  id="comment-input"
                   label="Comment"
                   variant="outlined"
                   fullWidth
                   InputProps={{ sx: { borderRadius: 0 } }}
                 />
+                {comment.error && (
+                  <Typography variant="caption" color="error">
+                    {comment.error || "Could not add comment."}
+                  </Typography>
+                )}
                 {errors.text && (
                   <Typography variant="caption" color="error">
                     {errors.text.message}

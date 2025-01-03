@@ -16,14 +16,18 @@ export const newComment = createAsyncThunk(
     thunkApi
   ) => {
     const state = thunkApi.getState() as GenericState;
-    const res = await axios.patch(
-      `${import.meta.env.VITE_API_URL}/activities/${activityId}/comment`,
-      {
-        activityId,
-        text,
-        user: state.auth.loggedInUser.user,
-      }
-    );
-    return res.data;
+    try {
+      const res = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/activities/${activityId}/comment`,
+        {
+          activityId,
+          text,
+          user: state.auth.loggedInUser.user,
+        }
+      );
+      return res.data;
+    } catch (error) {
+      return thunkApi.rejectWithValue("Could not add comment.");
+    }
   }
 );

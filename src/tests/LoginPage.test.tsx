@@ -41,7 +41,7 @@ describe("LoginPage", () => {
       },
     });
 
-  it("dispatches user data", () => {
+  it("dispatches user data", async () => {
     const mockStore = createMockStore(initialState);
     render(
       <Provider store={mockStore}>
@@ -57,7 +57,7 @@ describe("LoginPage", () => {
     userEvent.type(usernameInput, "mockUsername");
     userEvent.type(passwordInput, "mockPassword");
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(usernameInput).toHaveValue("mockUsername");
       expect(passwordInput).toHaveValue("mockPassword");
     });
@@ -71,7 +71,7 @@ describe("LoginPage", () => {
 
     userEvent.click(submitButton);
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(mockStore.dispatch).toHaveBeenCalledWith(
         userLogin({ username: "mockUsername", password: "mockPassword" })
       );
@@ -128,7 +128,7 @@ describe("LoginPage", () => {
     });
   });
 
-  it("produces error after uncessfull login attempt", () => {
+  it("produces error after uncessfull login attempt", async () => {
     const errorState = {
       auth: {
         loggedInUser: {
@@ -170,7 +170,7 @@ describe("LoginPage", () => {
 
     userEvent.click(submitButton);
 
-    waitFor(() => {
+    await waitFor(() => {
       expect(
         screen.getByText(/Invalid username or password. Please try again/i) ||
           screen.getByText(/errorState.auth.error/i)
