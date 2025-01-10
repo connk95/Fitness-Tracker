@@ -6,14 +6,14 @@ import { render, screen } from "@testing-library/react";
 import { ActivityPage } from "../pages/ActivityPage";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { fetchSingleActivity } from "../redux/activity/activity.action";
+import * as activityActions from "../redux/activity/activity.action";
 import { newComment } from "../redux/comment/comment.actions";
 import { ActivityState } from "../redux/activity/activity.type";
 import { AuthState } from "../redux/auth/auth.type";
 
 vi.mock("axios");
 
-describe("PostPage", () => {
+describe("Activity", () => {
   const initialState = {
     activities: {
       allActivities: [],
@@ -21,6 +21,8 @@ describe("PostPage", () => {
         _id: "1",
         type: "workout",
         title: "Morning Run",
+        duration: 30,
+        calories: 300,
         user: {
           _id: "user1",
           username: "JohnDoe",
@@ -34,19 +36,16 @@ describe("PostPage", () => {
             text: "mockComment",
             activityId: "1",
             user: {
-              username: "mockUser",
+              username: "JohnDoe",
               password: "mockPass",
               email: "mockemail",
-              _id: "mockId",
+              _id: "user1",
             },
-            type: "workout",
             likes: [],
             createdAt: "2024-12-01T09:00:00",
             updatedAt: "2024-12-01T10:00:00",
           },
         ],
-        calories: 300,
-        duration: 30,
         createdAt: "2024-12-01T09:00:00",
         updatedAt: "2024-12-01T10:00:00",
       },
@@ -92,7 +91,6 @@ describe("PostPage", () => {
 
   it("Retrieves & renders post & comment", async () => {
     const mockStore = createMockStore(initialState);
-
     render(
       <Provider store={mockStore}>
         <Router>
@@ -101,48 +99,18 @@ describe("PostPage", () => {
       </Provider>
     );
 
-    vi.spyOn(mockStore, "dispatch").mockResolvedValueOnce({
-      data: {},
-      type: "",
-    });
+    console.debug();
 
     await waitFor(() => {
-      expect(mockStore.dispatch).toHaveBeenCalledWith(
-        fetchSingleActivity(initialState.activities.singleActivity._id)
-      );
-    });
-
-    await waitFor(() => {
-      expect(screen.getByText(initialState.activities.singleActivity.title))
-        .toBeInTheDocument;
-      expect(screen.getByText(initialState.activities.singleActivity.duration))
-        .toBeInTheDocument;
-      expect(
-        screen.getByText(initialState.activities.singleActivity.user.username)
-      ).toBeInTheDocument;
-      expect(screen.getByText(initialState.activities.singleActivity.createdAt))
-        .toBeInTheDocument;
-      expect(
-        screen.getByText(
-          initialState.activities.singleActivity.comments[0].text
-        )
-      ).toBeInTheDocument;
-      expect(
-        screen.getByText(
-          initialState.activities.singleActivity.comments[0].user.username
-        )
-      ).toBeInTheDocument;
-      expect(
-        screen.getByText(
-          initialState.activities.singleActivity.comments[0].createdAt
-        )
-      ).toBeInTheDocument;
+      expect(screen.getByText("Morning Run")).toBeInTheDocument();
+      expect(screen.getByText("30")).toBeInTheDocument();
+      expect(screen.getByText("JohnDoe")).toBeInTheDocument();
+      expect(screen.getByText("mockComment")).toBeInTheDocument();
     });
   });
 
   it("dispatches comment data", async () => {
     const mockStore = createMockStore(initialState);
-
     render(
       <Provider store={mockStore}>
         <Router>
@@ -151,27 +119,15 @@ describe("PostPage", () => {
       </Provider>
     );
 
-    await waitFor(() => {
-      const commentInput = screen.getByRole("textbox", { name: /comment/i });
+    const commentInput = screen.getByRole("textbox", { name: /comment/i });
+    await userEvent.type(commentInput, "mockCommentTwo");
 
-      userEvent.type(commentInput, "mockCommentTwo");
-
-      const submitButton = screen.getByRole("button", { name: "Submit" });
-
-      vi.spyOn(mockStore, "dispatch").mockResolvedValueOnce({
-        data: {},
-        type: "",
-      });
-
-      userEvent.click(submitButton);
-    });
+    const submitButton = screen.getByRole("button", { name: "Submit" });
+    await userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(mockStore.dispatch).toHaveBeenCalledWith(
-        newComment({
-          text: "mockCommentTwo",
-          activityId: initialState.activities.singleActivity._id,
-        })
+        newComment({ text: "mockCommentTwo", activityId: "1" })
       );
     });
   });

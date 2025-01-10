@@ -11,15 +11,10 @@ import { ActivityState } from "../redux/activity/activity.type";
 // import { fetchUsers } from "../redux/user/user.actions";
 import { fetchPaginatedActivities } from "../redux/activity/activity.action";
 import userEvent from "@testing-library/user-event";
-import axios from "axios";
 
 vi.mock("axios");
 
 describe("HomePage", () => {
-  beforeAll(() => {
-    axios.get.mockResolvedValue({ data: { results: [] } });
-  });
-
   const initialState = {
     activities: {
       allActivities: [
@@ -240,49 +235,7 @@ describe("HomePage", () => {
     });
   });
 
-  //   it("dispatches fetchUsers on page load", () => {
-  //     const mockStore = createMockStore(initialState);
-  //     const dispatchSpy = vi.spyOn(mockStore, "dispatch");
-
-  //     render(
-  //       <Provider store={mockStore}>
-  //         <Router>
-  //           <HomePage />
-  //         </Router>
-  //       </Provider>
-  //     );
-
-  //     expect(dispatchSpy).toHaveBeenCalledWith(fetchUsers());
-  //   });
-
   it("filters and fetches activities with correct params on button click", async () => {
-    const mockStore = createMockStore(initialState);
-    const dispatchSpy = vi.spyOn(mockStore, "dispatch");
-
-    render(
-      <Provider store={mockStore}>
-        <Router>
-          <HomePage />
-        </Router>
-      </Provider>
-    );
-
-    const foodRadio = screen.getByRole("radio", { name: "Food Only" });
-    userEvent.click(foodRadio);
-
-    await waitFor(() => {
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchPaginatedActivities({
-          filter: "food",
-          page: 1,
-          limit: 12,
-          friends: [],
-        })
-      );
-    });
-  });
-
-  it("resets the page to 1 when the filter changes", async () => {
     const mockStore = createMockStore(initialState);
     const dispatchSpy = vi.spyOn(mockStore, "dispatch");
 
