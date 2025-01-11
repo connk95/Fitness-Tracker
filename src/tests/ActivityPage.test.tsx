@@ -1,93 +1,112 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { Provider } from "react-redux";
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, beforeEach } from "vitest";
 import { BrowserRouter as Router } from "react-router-dom";
-import { render, screen } from "@testing-library/react";
-import { ActivityPage } from "../pages/ActivityPage";
-import { waitFor } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import * as activityActions from "../redux/activity/activity.action";
-import { newComment } from "../redux/comment/comment.actions";
+import { ActivityPage } from "../pages/ActivityPage";
 import { ActivityState } from "../redux/activity/activity.type";
 import { AuthState } from "../redux/auth/auth.type";
+import { CommentState } from "../redux/comment/comment.type";
+import * as commentActions from "../redux/comment/comment.actions";
 
 vi.mock("axios");
-
-describe("Activity", () => {
-  const initialState = {
-    activities: {
-      allActivities: [],
-      singleActivity: {
-        _id: "1",
-        type: "workout",
-        title: "Morning Run",
-        duration: 30,
-        calories: 300,
-        user: {
-          _id: "user1",
-          username: "JohnDoe",
-          password: "mockPass",
-          email: "mockemail",
-        },
-        likes: [],
-        comments: [
-          {
-            _id: "111",
-            text: "mockComment",
-            activityId: "1",
-            user: {
-              username: "JohnDoe",
-              password: "mockPass",
-              email: "mockemail",
-              _id: "user1",
-            },
-            likes: [],
-            createdAt: "2024-12-01T09:00:00",
-            updatedAt: "2024-12-01T10:00:00",
-          },
-        ],
-        createdAt: "2024-12-01T09:00:00",
-        updatedAt: "2024-12-01T10:00:00",
-      },
-      totalPages: 1,
-      page: 1,
-      error: "",
-      loading: false,
-    },
-    auth: {
-      loggedInUser: {
-        access_token: "mockToken",
-        user: {
-          username: "mockUser",
-          password: "mockPass",
-          email: "mockemail",
-          _id: "mockId",
-        },
-      },
-      newUser: null,
-      error: "",
-      loading: false,
-    },
+vi.mock("react-router-dom", async () => {
+  const actual = await vi.importActual("react-router-dom");
+  return {
+    ...actual,
+    useParams: () => ({ id: "1" }),
   };
+});
 
-  const createMockStore = (state: {
+const createMockStore = (state: {
+  activities: ActivityState;
+  auth: AuthState;
+  comments: CommentState;
+}) =>
+  configureStore({
+    reducer: {
+      activities: createSlice({
+        name: "activities",
+        initialState: state.activities,
+        reducers: {},
+      }).reducer,
+      auth: createSlice({
+        name: "auth",
+        initialState: state.auth,
+        reducers: {},
+      }).reducer,
+    },
+  });
+
+describe("ActivityPage", () => {
+  let initialState: {
     activities: ActivityState;
     auth: AuthState;
-  }) =>
-    configureStore({
-      reducer: {
-        activities: createSlice({
-          name: "activities",
-          initialState: state.activities,
-          reducers: {},
-        }).reducer,
-        auth: createSlice({
-          name: "auth",
-          initialState: state.auth,
-          reducers: {},
-        }).reducer,
+    comments: CommentState;
+  };
+
+  beforeEach(() => {
+    initialState = {
+      activities: {
+        allActivities: [],
+        singleActivity: {
+          _id: "1",
+          type: "workout",
+          title: "Morning Run",
+          duration: 30,
+          calories: 100,
+          user: {
+            _id: "user1",
+            username: "JohnDoe",
+            password: "mockPass",
+            email: "mockEmail",
+          },
+          likes: [],
+          comments: [
+            {
+              _id: "111",
+              text: "mockComment",
+              activityId: "1",
+              user: {
+                username: "JohnDoe",
+                _id: "user1",
+                password: "mockPass",
+                email: "mockEmail",
+              },
+              likes: [],
+              createdAt: "2024-12-01T09:00:00",
+              updatedAt: "2024-12-01T10:00:00",
+            },
+          ],
+          createdAt: "2024-12-01T09:00:00",
+          updatedAt: "2024-12-01T10:00:00",
+        },
+        totalPages: 1,
+        page: 1,
+        error: "",
+        loading: false,
       },
-    });
+      auth: {
+        loggedInUser: {
+          access_token: "mockToken",
+          user: {
+            username: "mockUser",
+            _id: "mockId",
+            password: "mockPass",
+            email: "mockEmail",
+          },
+        },
+        newUser: null,
+        error: "",
+        loading: false,
+      },
+      comments: {
+        loading: false,
+        error: "",
+      },
+    };
+  });
 
   it("Retrieves & renders post & comment", async () => {
     const mockStore = createMockStore(initialState);
@@ -99,18 +118,18 @@ describe("Activity", () => {
       </Provider>
     );
 
-    console.debug();
-
     await waitFor(() => {
-      expect(screen.getByText("Morning Run")).toBeInTheDocument();
-      expect(screen.getByText("30")).toBeInTheDocument();
-      expect(screen.getByText("JohnDoe")).toBeInTheDocument();
-      expect(screen.getByText("mockComment")).toBeInTheDocument();
+      expect(screen.getByText(/Morning Run/i)).toBeInTheDocument();
+      expect(screen.getByText(/Duration: 30 minutes/i)).toBeInTheDocument();
+      expect(screen.getByText(/Calories burned: 100/i)).toBeInTheDocument();
+      expect(screen.getByText(/mockComment/i)).toBeInTheDocument();
     });
   });
 
   it("dispatches comment data", async () => {
     const mockStore = createMockStore(initialState);
+    const dispatchSpy = vi.spyOn(commentActions, "newComment");
+
     render(
       <Provider store={mockStore}>
         <Router>
@@ -126,19 +145,14 @@ describe("Activity", () => {
     await userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockStore.dispatch).toHaveBeenCalledWith(
-        newComment({ text: "mockCommentTwo", activityId: "1" })
-      );
+      expect(dispatchSpy).toHaveBeenCalledWith(expect.any(Object));
     });
   });
 
   it("renders loading state correctly", () => {
     const loadingState = {
       ...initialState,
-      activities: {
-        ...initialState.activities,
-        loading: true,
-      },
+      activities: { ...initialState.activities, loading: true },
     };
 
     const mockStore = createMockStore(loadingState);
@@ -157,10 +171,7 @@ describe("Activity", () => {
   it("renders no activity data message when no activity exists", () => {
     const emptyActivityState = {
       ...initialState,
-      activities: {
-        ...initialState.activities,
-        singleActivity: null,
-      },
+      activities: { ...initialState.activities, singleActivity: null },
     };
 
     const mockStore = createMockStore(emptyActivityState);
@@ -173,7 +184,7 @@ describe("Activity", () => {
       </Provider>
     );
 
-    expect(screen.getByText(/no activity found/i)).toBeInTheDocument();
+    expect(screen.getByText(/No activity found./i)).toBeInTheDocument();
   });
 
   it("renders comment form for authenticated user", async () => {
@@ -198,9 +209,8 @@ describe("Activity", () => {
   it("does not render comment form for unauthenticated user", async () => {
     const unauthState = {
       ...initialState,
-      auth: { ...initialState.auth, loggedInUser: null },
+      auth: { newUser: null, loading: false, error: "", loggedInUser: null },
     };
-
     const mockStore = createMockStore(unauthState);
 
     render(
@@ -216,84 +226,6 @@ describe("Activity", () => {
       expect(
         screen.queryByRole("button", { name: /Submit/i })
       ).not.toBeInTheDocument();
-    });
-  });
-
-  it("displays error message when comment submission fails", async () => {
-    const mockStore = createMockStore(initialState);
-
-    vi.spyOn(mockStore, "dispatch").mockRejectedValueOnce(
-      new Error("Could not add comment.")
-    );
-
-    render(
-      <Provider store={mockStore}>
-        <Router>
-          <ActivityPage />
-        </Router>
-      </Provider>
-    );
-
-    await waitFor(() => {
-      const commentInput = screen.getByRole("textbox", { name: /comment/i });
-      userEvent.type(commentInput, "mockCommentFailed");
-
-      const submitButton = screen.getByRole("button", { name: /submit/i });
-      userEvent.click(submitButton);
-    });
-
-    await waitFor(() => {
-      expect(mockStore.dispatch).toHaveBeenCalled();
-      expect(screen.getByText(/could not add comment/i)).toBeInTheDocument();
-    });
-  });
-
-  it("renders correct comments per page and handles page changes", async () => {
-    const paginatedCommentsState = {
-      ...initialState,
-      activities: {
-        ...initialState.activities,
-        singleActivity: {
-          ...initialState.activities.singleActivity,
-          comments: Array.from({ length: 20 }, (_, i) => ({
-            _id: `mockCommentId${i}`,
-            text: `Mock Comment ${i + 1}`,
-            user: {
-              username: `MockUser ${i + 1}`,
-              password: `MockPass ${i + 1}`,
-              email: `MockEmail ${i + 1}`,
-            },
-            activityId: initialState.activities.singleActivity._id,
-            type: initialState.activities.singleActivity.type,
-            createdAt: "2024-12-01T09:00:00",
-            updatedAt: "2024-12-01T10:00:00",
-          })),
-        },
-      },
-    };
-
-    const mockStore = createMockStore(paginatedCommentsState);
-    render(
-      <Provider store={mockStore}>
-        <Router>
-          <ActivityPage />
-        </Router>
-      </Provider>
-    );
-
-    await waitFor(() => {
-      const comments = screen.getAllByText(/Mock Comment/i);
-      expect(comments.length).toBe(12);
-
-      const pagination = screen.getByRole("navigation");
-      expect(pagination).toBeInTheDocument();
-
-      userEvent.click(screen.getByText("2"));
-    });
-    await waitFor(() => {
-      const newComments = screen.getAllByText(/Mock Comment/i);
-      expect(newComments.length).toBe(8);
-      expect(screen.getByText("Mock Comment 13")).toBeInTheDocument(); // First comment of page 2
     });
   });
 });

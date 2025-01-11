@@ -1,4 +1,4 @@
-import { baseMongooseType } from "../types";
+import { baseMongooseType, baseState } from "../types";
 import { User } from "../user/user.type";
 
 export interface Comment extends baseMongooseType {
@@ -6,4 +6,9 @@ export interface Comment extends baseMongooseType {
   activityId: string;
   user: User;
   likes?: User[];
+}
+
+export interface CommentState extends baseState {
+  error: string;
+  loading: boolean;
 }

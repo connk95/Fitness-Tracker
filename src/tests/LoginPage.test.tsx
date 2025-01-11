@@ -9,21 +9,14 @@ import { waitFor } from "@testing-library/react";
 import { userLogin } from "../redux/auth/auth.actions";
 import { fireEvent } from "@testing-library/react";
 import { AuthState } from "../redux/auth/auth.type";
+import * as authActions from "../redux/auth/auth.actions";
 
 vi.mock("axios");
 
 describe("LoginPage", () => {
   const initialState = {
     auth: {
-      loggedInUser: {
-        access_token: "mockToken",
-        user: {
-          username: "mockUser",
-          password: "mockPass",
-          email: "mockemail",
-          _id: "mockId",
-        },
-      },
+      loggedInUser: null,
       newUser: null,
       error: "",
       loading: false,
@@ -43,6 +36,8 @@ describe("LoginPage", () => {
 
   it("dispatches user data", async () => {
     const mockStore = createMockStore(initialState);
+    const dispatchSpy = vi.spyOn(authActions, "createUser");
+
     render(
       <Provider store={mockStore}>
         <Router>
@@ -51,28 +46,26 @@ describe("LoginPage", () => {
       </Provider>
     );
 
-    const usernameInput = screen.getByRole("textbox", { name: "Username" });
-    const passwordInput = screen.getByLabelText(/password/i);
+    const usernameInput = await screen.getByLabelText(/^username/i);
+    const passwordInput = await screen.getByLabelText(/^password/i);
 
-    userEvent.type(usernameInput, "mockUsername");
-    userEvent.type(passwordInput, "mockPassword");
+    await userEvent.type(usernameInput, "mockUsername");
+    await userEvent.type(passwordInput, "mockPassword");
 
     await waitFor(() => {
       expect(usernameInput).toHaveValue("mockUsername");
       expect(passwordInput).toHaveValue("mockPassword");
     });
 
-    const submitButton = screen.getByRole("button", { name: "Sign In" });
-
-    vi.spyOn(mockStore, "dispatch").mockResolvedValueOnce({
-      data: {},
-      type: "",
-    });
-
+    const submitButton = await screen.getByRole("button", { name: "Sign In" });
     userEvent.click(submitButton);
 
+    // await waitFor(() => {
+    //   expect(dispatchSpy).toHaveBeenCalledWith(expect.any(Function));
+    // });
+
     await waitFor(() => {
-      expect(mockStore.dispatch).toHaveBeenCalledWith(
+      expect(dispatchSpy).toHaveBeenCalledWith(
         userLogin({ username: "mockUsername", password: "mockPassword" })
       );
     });

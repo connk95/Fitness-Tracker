@@ -50,11 +50,16 @@ export const ActivityPage = (): JSX.Element => {
     window.location.reload();
   };
 
+  // useEffect(() => {
+  //   if (id) {
+  //     dispatch(fetchSingleActivity(id));
+  //   }
+  // }, [dispatch, id]);
   useEffect(() => {
-    if (id) {
+    if (id && activity.singleActivity?._id !== id) {
       dispatch(fetchSingleActivity(id));
     }
-  }, [dispatch, id]);
+  }, [activity.singleActivity?._id, dispatch, id]);
 
   const handlePageChange = (_: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -67,7 +72,7 @@ export const ActivityPage = (): JSX.Element => {
         <Box sx={{}}>
           <CircularProgress />
         </Box>
-      ) : activity.error || !id ? (
+      ) : activity.error || !id || activity.singleActivity == null ? (
         <Box>
           <Typography>No activity found.</Typography>
         </Box>
@@ -104,7 +109,7 @@ export const ActivityPage = (): JSX.Element => {
                   fullWidth
                   InputProps={{ sx: { borderRadius: 0 } }}
                 />
-                {comment.error && (
+                {comment?.error && (
                   <Typography variant="caption" color="error">
                     {comment.error || "Could not add comment."}
                   </Typography>

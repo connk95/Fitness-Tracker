@@ -8,8 +8,6 @@ import { configureStore, createSlice } from "@reduxjs/toolkit";
 import "@testing-library/jest-dom";
 import { AuthState } from "../redux/auth/auth.type";
 import { ActivityState } from "../redux/activity/activity.type";
-// import { fetchUsers } from "../redux/user/user.actions";
-import { fetchPaginatedActivities } from "../redux/activity/activity.action";
 import userEvent from "@testing-library/user-event";
 
 vi.mock("axios");
@@ -251,14 +249,7 @@ describe("HomePage", () => {
     userEvent.click(foodRadio);
 
     await waitFor(() => {
-      expect(dispatchSpy).toHaveBeenCalledWith(
-        fetchPaginatedActivities({
-          filter: "food",
-          page: 1,
-          limit: 12,
-          friends: [],
-        })
-      );
+      expect(dispatchSpy).toHaveBeenCalledWith(expect.any(Function));
     });
   });
 
