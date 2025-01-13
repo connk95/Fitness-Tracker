@@ -6,23 +6,15 @@ import { render, screen } from "@testing-library/react";
 import { waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { SignUp } from "../pages/SignUpPage";
-import { createUser } from "../redux/auth/auth.actions";
 import { AuthState } from "../redux/auth/auth.type";
+import * as authActions from "../redux/auth/auth.actions";
 
 vi.mock("axios");
 
-describe("SignUpPage", () => {
+describe("SignupPage", () => {
   const initialState = {
     auth: {
-      loggedInUser: {
-        access_token: "mockToken",
-        user: {
-          username: "mockUser",
-          password: "mockPass",
-          email: "mockemail",
-          _id: "mockId",
-        },
-      },
+      loggedInUser: null,
       newUser: null,
       error: "",
       loading: false,
@@ -42,6 +34,7 @@ describe("SignUpPage", () => {
 
   it("dispatches user data", async () => {
     const mockStore = createMockStore(initialState);
+    const dispatchSpy = vi.spyOn(authActions, "createUser");
 
     render(
       <Provider store={mockStore}>
@@ -51,26 +44,27 @@ describe("SignUpPage", () => {
       </Provider>
     );
 
-    const usernameInput = screen.getByRole("textbox", { name: "Username" });
-    const emailInput = screen.getByLabelText(/email/i);
-    const passwordInput = screen.getByLabelText(/password/i);
+    const usernameInput = await screen.getByLabelText(/^username/i);
+    const emailInput = await screen.getByLabelText(/^email address/i);
+    const passwordInput = await screen.getByLabelText(/^password/i);
 
-    userEvent.type(usernameInput, "mockUsername");
-    userEvent.type(emailInput, "mockEmail");
-    userEvent.type(passwordInput, "mockPassword");
+    await userEvent.type(usernameInput, "mockUsername");
+    await userEvent.type(emailInput, "mockEmail");
+    await userEvent.type(passwordInput, "mockPassword");
+
+    await waitFor(() => {
+      expect(usernameInput).toHaveValue("mockUsername");
+      expect(emailInput).toHaveValue("mockEmail");
+      expect(passwordInput).toHaveValue("mockPassword");
+    });
 
     const submitButton = screen.getByRole("button", { name: "Sign Up" });
-
-    vi.spyOn(mockStore, "dispatch").mockResolvedValueOnce({
-      data: {},
-      type: "",
-    });
 
     userEvent.click(submitButton);
 
     await waitFor(() => {
-      expect(mockStore.dispatch).toHaveBeenCalledWith(
-        createUser({
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
           username: "mockUsername",
           email: "mockEmail",
           password: "mockPassword",
@@ -121,7 +115,7 @@ describe("SignUpPage", () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText(/errorState.auth.error/i)).toBeInTheDocument();
+      expect(screen.getByText(/mockError/i)).toBeInTheDocument();
     });
   });
 

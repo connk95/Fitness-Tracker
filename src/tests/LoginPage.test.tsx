@@ -6,7 +6,6 @@ import { render, screen } from "@testing-library/react";
 import { Login } from "../pages/LoginPage";
 import userEvent from "@testing-library/user-event";
 import { waitFor } from "@testing-library/react";
-import { userLogin } from "../redux/auth/auth.actions";
 import { fireEvent } from "@testing-library/react";
 import { AuthState } from "../redux/auth/auth.type";
 import * as authActions from "../redux/auth/auth.actions";
@@ -36,7 +35,7 @@ describe("LoginPage", () => {
 
   it("dispatches user data", async () => {
     const mockStore = createMockStore(initialState);
-    const dispatchSpy = vi.spyOn(authActions, "createUser");
+    const dispatchSpy = vi.spyOn(authActions, "userLogin");
 
     render(
       <Provider store={mockStore}>
@@ -60,13 +59,12 @@ describe("LoginPage", () => {
     const submitButton = await screen.getByRole("button", { name: "Sign In" });
     userEvent.click(submitButton);
 
-    // await waitFor(() => {
-    //   expect(dispatchSpy).toHaveBeenCalledWith(expect.any(Function));
-    // });
-
     await waitFor(() => {
       expect(dispatchSpy).toHaveBeenCalledWith(
-        userLogin({ username: "mockUsername", password: "mockPassword" })
+        expect.objectContaining({
+          username: "mockUsername",
+          password: "mockPassword",
+        })
       );
     });
   });
@@ -159,14 +157,13 @@ describe("LoginPage", () => {
       </Provider>
     );
 
-    const submitButton = screen.getByTestId(/signInButton/i);
-
+    const submitButton = await screen.getByRole("button", { name: "Sign In" });
     userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(
-        screen.getByText(/Invalid username or password. Please try again/i) ||
-          screen.getByText(/errorState.auth.error/i)
+        screen.getByText(/mockError/i) ||
+          screen.getByText(/Invalid username or password. Please try again/i)
       ).toBeInTheDocument();
     });
   });

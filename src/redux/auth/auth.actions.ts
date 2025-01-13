@@ -79,7 +79,6 @@ export const userLogout = createAsyncThunk(
           password,
         }
       );
-      console.log(localStorage);
       return res;
     } catch (error) {
       throw new Error("Failed to logout. Please try again");
