@@ -1,4 +1,4 @@
-# Fitness Tracker Project (Frontend)
+# Fitness Tracker Project (Frontend)(WIP)
 
 Welcome to my fitness tracker app! This project aims to create a fitness tracker social network where users can post their meals and workouts, add friends, like and leave comments to posts, and track their daily calories. The inspiration for this project came from an acquaintance who mentioned that she messages her group chat whenever she does a dowkout or eats out so that her friends can keep her on track with her diet. The frontend of this project was created using Typescript, React (Redux Toolkit), in a Vite environment. Styling was done using MUI. This frontend connects to a custom backend [here](https://github.com/connk95/Fitness-Tracker-Backend), made using Typescript and Node.js. This app is deployed using Netlify.
 
