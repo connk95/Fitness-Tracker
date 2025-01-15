@@ -22,6 +22,7 @@ Welcome to my fitness tracker app! This project aims to create a fitness tracker
 
 ## Demo
 
+*Connection to the server may take a moment as the server spins down with inactivity.
 https://gentle-rugelach-24483c.netlify.app/
 
 ## Installation
