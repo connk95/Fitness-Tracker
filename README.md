@@ -76,7 +76,7 @@ This project is licensed under the [MIT License](LICENSE).
 
 - This project was created by Connor Ketcheson.
 
-Enjoy your message board experience! If you have any questions or feedback, please don't hesitate to contact us.
+Enjoy your fitness tracker experience! If you have any questions or feedback, please don't hesitate to contact me.
 
 ---
 
