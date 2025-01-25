@@ -11,7 +11,7 @@ import * as authActions from "../redux/auth/auth.actions";
 
 vi.mock("axios");
 
-describe("SignupPage", () => {
+describe("SignUpPage", () => {
   const initialState = {
     auth: {
       loggedInUser: null,
@@ -49,24 +49,23 @@ describe("SignupPage", () => {
     const passwordInput = await screen.getByLabelText(/^password/i);
 
     await userEvent.type(usernameInput, "mockUsername");
-    await userEvent.type(emailInput, "mockEmail");
+    await userEvent.type(emailInput, "email@mock.com");
     await userEvent.type(passwordInput, "mockPassword");
 
     await waitFor(() => {
       expect(usernameInput).toHaveValue("mockUsername");
-      expect(emailInput).toHaveValue("mockEmail");
+      expect(emailInput).toHaveValue("email@mock.com");
       expect(passwordInput).toHaveValue("mockPassword");
     });
 
     const submitButton = screen.getByRole("button", { name: "Sign Up" });
-
     userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           username: "mockUsername",
-          email: "mockEmail",
+          email: "email@mock.com",
           password: "mockPassword",
         })
       );

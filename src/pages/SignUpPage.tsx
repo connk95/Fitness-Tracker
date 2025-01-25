@@ -26,7 +26,6 @@ interface SignUpFormInput {
 export const SignUp = (): JSX.Element => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  // const user = useSelector((state: RootState) => state.users);
   const auth = useSelector((state: RootState) => state.auth);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const {

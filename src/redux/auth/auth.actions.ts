@@ -16,7 +16,6 @@ export const userLogin = createAsyncThunk(
       );
       if (res.data) {
         localStorage.setItem("loggedInUser", JSON.stringify(res.data));
-        console.log("data: ", res.data);
         return res.data;
       }
     } catch (error) {
@@ -24,20 +23,6 @@ export const userLogin = createAsyncThunk(
     }
   }
 );
-
-// export const setLoggedInUser = createAsyncThunk(
-//   "auth/setLoggedInUser",
-//   async () => {
-//     const user = await localStorage.getItem("loggedInUser");
-//     if (user) {
-//       const loggedInUser = JSON.parse(user);
-//       console.log("loggedInUser: ", loggedInUser);
-//       return loggedInUser;
-//     } else {
-//       return;
-//     }
-//   }
-// );
 
 export const setLoggedInUser = createAsyncThunk(
   "auth/setLoggedInUser",

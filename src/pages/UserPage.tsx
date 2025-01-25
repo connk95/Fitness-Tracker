@@ -236,7 +236,10 @@ export const UserPage = (): JSX.Element => {
                 elevation={2}
               >
                 <CardContent>
-                  <CalorieGraph weeklyData={calorieData}></CalorieGraph>
+                  <CalorieGraph
+                    weeklyData={calorieData}
+                    aria-label="calorie-graph"
+                  ></CalorieGraph>
                 </CardContent>
               </Card>
             </Grid>

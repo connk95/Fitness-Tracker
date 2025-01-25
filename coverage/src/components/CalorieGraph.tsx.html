@@ -23,9 +23,9 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>7/12</span>
             </div>
         
             
@@ -37,16 +37,16 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">66.66% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/3</span>
+                <span class='fraction'>2/3</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">58.33% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/12</span>
+                <span class='fraction'>7/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -104,25 +104,25 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -139,11 +139,11 @@ import { ActivityType } from "../redux/types";
 &nbsp;
 export const CalorieGraph: React.FC&lt;{
   weeklyData: { [key: string]: ActivityType[] };
-}&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >({</span> weeklyData }) =&gt; {</span>
-  const caloriesPerDay = <span class="cstat-no" title="statement not covered" >Object.keys(weeklyData).map(<span class="fstat-no" title="function not covered" >(d</span>ay) =&gt; {</span>
-    const dayData = <span class="cstat-no" title="statement not covered" >weeklyData[day];</span>
+}&gt; = ({ weeklyData }) =&gt; {
+  const caloriesPerDay = Object.keys(weeklyData).map((day) =&gt; {
+    const dayData = weeklyData[day];
     // Summing up calories for each day
-    const totalCalories = <span class="cstat-no" title="statement not covered" >dayData.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, activity) =&gt; {</span>
+    const totalCalories = dayData.reduce(<span class="fstat-no" title="function not covered" >(s</span>um, activity) =&gt; {
 <span class="cstat-no" title="statement not covered" >      if (activity.type === "workout") {</span>
 <span class="cstat-no" title="statement not covered" >        return sum - (activity.calories || 0); // Subtract calories for workouts</span>
 <span class="cstat-no" title="statement not covered" >      } else if (activity.type === "food") {</span>
@@ -152,12 +152,12 @@ export const CalorieGraph: React.FC&lt;{
 <span class="cstat-no" title="statement not covered" >      return sum; // No change for other types</span>
     }, 0);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    return totalCalories;</span>
+    return totalCalories;
   });
 &nbsp;
-  const daysOfWeek = <span class="cstat-no" title="statement not covered" >Object.keys(weeklyData);</span>
+  const daysOfWeek = Object.keys(weeklyData);
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;BarChart
       series={[{ data: caloriesPerDay }]}
       height={180}
@@ -175,7 +175,7 @@ export const CalorieGraph: React.FC&lt;{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-13T03:10:54.110Z
+                at 2025-01-25T06:47:03.569Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
