@@ -238,7 +238,7 @@ export const UserPage = (): JSX.Element => {
                 <CardContent>
                   <CalorieGraph
                     weeklyData={calorieData}
-                    aria-label="calorie-graph"
+                    data-testid="calorieGraph"
                   ></CalorieGraph>
                 </CardContent>
               </Card>

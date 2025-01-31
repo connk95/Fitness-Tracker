@@ -10,6 +10,7 @@ import { AuthState } from "../redux/auth/auth.type";
 import { ActivityState } from "../redux/activity/activity.type";
 import { UserState } from "../redux/user/user.type";
 import userEvent from "@testing-library/user-event";
+import { CalorieGraph } from "../components/CalorieGraph";
 
 vi.mock("axios");
 
@@ -58,8 +59,12 @@ describe("UserPage", () => {
             },
             activityId: "mockActivity1",
             likes: [],
-            createdAt: "2024-12-01T12:00:00",
-            updatedAt: "2024-12-01T13:00:00",
+            createdAt: new Date()
+              .toISOString()
+              .replace(/^(\d{4})-(\d{2})-(\d{2})/, "$1-$3-$2"),
+            updatedAt: new Date()
+              .toISOString()
+              .replace(/^(\d{4})-(\d{2})-(\d{2})/, "$1-$3-$2"),
           },
         ],
         activities: [
@@ -76,8 +81,12 @@ describe("UserPage", () => {
             likes: [],
             calories: 300,
             duration: 30,
-            createdAt: "2024-25-01T09:00:00",
-            updatedAt: "2024-25-01T10:00:00",
+            createdAt: new Date()
+              .toISOString()
+              .replace(/^(\d{4})-(\d{2})-(\d{2})/, "$1-$3-$2"),
+            updatedAt: new Date()
+              .toISOString()
+              .replace(/^(\d{4})-(\d{2})-(\d{2})/, "$1-$3-$2"),
           },
           {
             _id: "2",
@@ -91,8 +100,12 @@ describe("UserPage", () => {
             },
             likes: [],
             calories: 400,
-            createdAt: "2024-25-01T12:00:00",
-            updatedAt: "2024-25-01T13:00:00",
+            createdAt: new Date()
+              .toISOString()
+              .replace(/^(\d{4})-(\d{2})-(\d{2})/, "$1-$3-$2"),
+            updatedAt: new Date()
+              .toISOString()
+              .replace(/^(\d{4})-(\d{2})-(\d{2})/, "$1-$3-$2"),
           },
         ],
       },
@@ -145,7 +158,7 @@ describe("UserPage", () => {
         screen.getByText(initialState.users.user.username)
       ).toBeInTheDocument();
       expect(screen.getByText("My Calories")).toBeInTheDocument();
-      //   expect(screen.getByAria("calorie-graph"));
+      // expect(screen.getByAria("calorie-graph"));
       mockComments.forEach((comment) => {
         expect(screen.getByText(comment.text)).toBeInTheDocument();
       });
@@ -153,5 +166,58 @@ describe("UserPage", () => {
         expect(screen.getByText(activity.title)).toBeInTheDocument();
       });
     });
+  });
+
+  it("filters activities by type", async () => {
+    const mockStore = createMockStore(initialState);
+    render(
+      <Provider store={mockStore}>
+        <Router>
+          <UserPage />
+        </Router>
+      </Provider>
+    );
+
+    const foodRadio = screen.getByRole("radio", { name: "Food Only" });
+    userEvent.click(foodRadio);
+
+    await waitFor(() => {
+      expect(screen.getByText("Chicken Salad")).toBeInTheDocument();
+      expect(screen.queryByText("Morning Run")).not.toBeInTheDocument();
+    });
+  });
+
+  it("filters and fetches activities with correct params on button click", async () => {
+    const mockStore = createMockStore(initialState);
+    const dispatchSpy = vi.spyOn(mockStore, "dispatch");
+
+    render(
+      <Provider store={mockStore}>
+        <Router>
+          <UserPage />
+        </Router>
+      </Provider>
+    );
+
+    const foodRadio = screen.getByRole("radio", { name: "Food Only" });
+    userEvent.click(foodRadio);
+
+    await waitFor(() => {
+      expect(dispatchSpy).toHaveBeenCalledWith(expect.any(Function));
+    });
+  });
+
+  it("renders custom calorie graph", async () => {
+    const mockStore = createMockStore(initialState);
+    // const dispatchSpy = vi.spyOn
+
+    render(
+      <Provider store={mockStore}>
+        <Router>
+          <UserPage />
+        </Router>
+      </Provider>
+    );
+    expect(await screen.findByTestId("calorieGraph")).toBeInTheDocument();
   });
 });
