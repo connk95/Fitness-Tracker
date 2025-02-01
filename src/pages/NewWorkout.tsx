@@ -14,7 +14,8 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useNavigate } from "react-router";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { newActivity } from "../redux/activity/activity.action";
-import { ActivityType } from "../redux/activity/activity.type";
+import { Workout } from "../redux/workout/workout.type";
+import { ActivityType } from "../redux/types";
 
 export const NewWorkout = (): JSX.Element => {
   const dispatch = useAppDispatch();
@@ -25,10 +26,12 @@ export const NewWorkout = (): JSX.Element => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ActivityType>();
+  } = useForm<Workout>();
 
   const onSubmit: SubmitHandler<ActivityType> = async (data) => {
     data.type = "workout";
+    data.duration = Number(data.duration);
+    data.calories = Number(data.calories);
     await dispatch(newActivity(data));
     navigate("/home");
   };
@@ -81,14 +84,15 @@ export const NewWorkout = (): JSX.Element => {
               <TextField
                 {...register("duration", {
                   maxLength: {
-                    value: 9999,
-                    message: "Duration cannot exceed 9999 minutes",
+                    value: 4,
+                    message: "Duration may not exceed 9999 minutes",
                   },
                 })}
                 id="duration"
                 label="Duration (minutes)"
                 name="duration"
                 variant="outlined"
+                type="number"
                 fullWidth
                 InputProps={{ sx: { borderRadius: 0 } }}
               />
@@ -98,7 +102,11 @@ export const NewWorkout = (): JSX.Element => {
                 </Typography>
               )}
             </Grid>
-            <Grid item xs={12}>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: "flex", flexDirection: "column" }}
+            >
               <TextField
                 {...register("calories", {
                   maxLength: {
@@ -109,6 +117,7 @@ export const NewWorkout = (): JSX.Element => {
                 id="calories"
                 label="Calories"
                 name="calories"
+                type="number"
                 fullWidth
                 InputProps={{ sx: { borderRadius: 0 } }}
               />
@@ -117,20 +126,22 @@ export const NewWorkout = (): JSX.Element => {
                   {errors.calories.message}
                 </Typography>
               )}
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
-              >
-                Submit
-              </Button>
-              <Button
-                href="/home"
-                variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
-              >
-                Back
-              </Button>
+              <Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Submit
+                </Button>
+                <Button
+                  href="/home"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Back
+                </Button>
+              </Box>
             </Grid>
           </Grid>
         </Box>

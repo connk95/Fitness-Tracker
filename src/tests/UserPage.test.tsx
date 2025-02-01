@@ -10,7 +10,6 @@ import { AuthState } from "../redux/auth/auth.type";
 import { ActivityState } from "../redux/activity/activity.type";
 import { UserState } from "../redux/user/user.type";
 import userEvent from "@testing-library/user-event";
-import { CalorieGraph } from "../components/CalorieGraph";
 
 vi.mock("axios");
 
@@ -158,7 +157,6 @@ describe("UserPage", () => {
         screen.getByText(initialState.users.user.username)
       ).toBeInTheDocument();
       expect(screen.getByText("My Calories")).toBeInTheDocument();
-      // expect(screen.getByAria("calorie-graph"));
       mockComments.forEach((comment) => {
         expect(screen.getByText(comment.text)).toBeInTheDocument();
       });
@@ -209,7 +207,6 @@ describe("UserPage", () => {
 
   it("renders custom calorie graph", async () => {
     const mockStore = createMockStore(initialState);
-    // const dispatchSpy = vi.spyOn
 
     render(
       <Provider store={mockStore}>

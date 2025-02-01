@@ -236,10 +236,7 @@ export const UserPage = (): JSX.Element => {
                 elevation={2}
               >
                 <CardContent>
-                  <CalorieGraph
-                    weeklyData={calorieData}
-                    data-testid="calorieGraph"
-                  ></CalorieGraph>
+                  <CalorieGraph weeklyData={calorieData}></CalorieGraph>
                 </CardContent>
               </Card>
             </Grid>

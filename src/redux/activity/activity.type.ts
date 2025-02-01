@@ -6,7 +6,7 @@ export interface ActivityType extends baseMongooseType {
   type: string;
   title: string;
   duration?: number;
-  calories: number;
+  calories?: number;
   user: User;
   likes?: string[];
   comments?: Comment[];

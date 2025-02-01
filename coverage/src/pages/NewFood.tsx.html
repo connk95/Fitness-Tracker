@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/15</span>
+                <span class='fraction'>14/14</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/8</span>
+                <span class='fraction'>8/8</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>4/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/13</span>
+                <span class='fraction'>12/12</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -187,7 +187,13 @@
 <a name='L122'></a><a href='#L122'>122</a>
 <a name='L123'></a><a href='#L123'>123</a>
 <a name='L124'></a><a href='#L124'>124</a>
-<a name='L125'></a><a href='#L125'>125</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L125'></a><a href='#L125'>125</a>
+<a name='L126'></a><a href='#L126'>126</a>
+<a name='L127'></a><a href='#L127'>127</a>
+<a name='L128'></a><a href='#L128'>128</a>
+<a name='L129'></a><a href='#L129'>129</a>
+<a name='L130'></a><a href='#L130'>130</a>
+<a name='L131'></a><a href='#L131'>131</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -206,26 +212,32 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">17x</span>
+<span class="cline-any cline-yes">17x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">11x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -330,26 +342,25 @@ import { Food } from "../redux/food/food.type";
 import { newActivity } from "../redux/activity/activity.action";
 import { ActivityType } from "../redux/activity/activity.type";
 &nbsp;
-export const NewFood = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >(): JSX.Element =&gt; {</span></span>
-  const dispatch = <span class="cstat-no" title="statement not covered" >useAppDispatch();</span>
-  const navigate = <span class="cstat-no" title="statement not covered" >useNavigate();</span>
-  const activities = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.activities)</span>;</span>
-  const auth = <span class="cstat-no" title="statement not covered" >useSelector(<span class="fstat-no" title="function not covered" >(s</span>tate: RootState) =&gt; <span class="cstat-no" title="statement not covered" >state.auth)</span>;</span>
+export const NewFood = (): JSX.Element =&gt; {
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const activities = useSelector((state: RootState) =&gt; state.activities);
+  const auth = useSelector((state: RootState) =&gt; state.auth);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = <span class="cstat-no" title="statement not covered" >useForm&lt;Food&gt;();</span>
+  } = useForm&lt;Food&gt;();
 &nbsp;
-  const onSubmit: SubmitHandler&lt;ActivityType&gt; = <span class="cstat-no" title="statement not covered" ><span class="fstat-no" title="function not covered" >async (d</span>ata) =&gt; {</span>
-<span class="cstat-no" title="statement not covered" >    data.type = "food";</span>
-<span class="cstat-no" title="statement not covered" >    data.calories = Number(data.calories);</span>
-<span class="cstat-no" title="statement not covered" >    console.log("data: ", data);</span>
-<span class="cstat-no" title="statement not covered" >    await dispatch(newActivity(data));</span>
-<span class="cstat-no" title="statement not covered" >    navigate("/home");</span>
+  const onSubmit: SubmitHandler&lt;ActivityType&gt; = async (data) =&gt; {
+    data.type = "food";
+    data.calories = Number(data.calories);
+    await dispatch(newActivity(data));
+    navigate("/home");
   };
 &nbsp;
-<span class="cstat-no" title="statement not covered" >  return (</span>
+  return (
     &lt;Container component="main" sx={{ mt: 12 }}&gt;
       &lt;CssBaseline /&gt;
       {activities.loading ? (
@@ -393,7 +404,11 @@ export const NewFood = <span class="cstat-no" title="statement not covered" ><sp
                 &lt;/Typography&gt;
               )}
             &lt;/Grid&gt;
-            &lt;Grid item xs={12}&gt;
+            &lt;Grid
+              item
+              xs={12}
+              sx={{ display: "flex", flexDirection: "column" }}
+            &gt;
               &lt;TextField
                 {...register("calories", {
                   maxLength: {
@@ -404,6 +419,7 @@ export const NewFood = <span class="cstat-no" title="statement not covered" ><sp
                 id="calories"
                 label="Calories"
                 name="calories"
+                type="number"
                 fullWidth
                 InputProps={{ sx: { borderRadius: 0 } }}
               /&gt;
@@ -412,20 +428,22 @@ export const NewFood = <span class="cstat-no" title="statement not covered" ><sp
                   {errors.calories.message}
                 &lt;/Typography&gt;
               )}
-              &lt;Button
-                type="submit"
-                variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
-              &gt;
-                Submit
-              &lt;/Button&gt;
-              &lt;Button
-                href="/home"
-                variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
-              &gt;
-                Back
-              &lt;/Button&gt;
+              &lt;Box&gt;
+                &lt;Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                &gt;
+                  Submit
+                &lt;/Button&gt;
+                &lt;Button
+                  href="/home"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                &gt;
+                  Back
+                &lt;/Button&gt;
+              &lt;/Box&gt;
             &lt;/Grid&gt;
           &lt;/Grid&gt;
         &lt;/Box&gt;
@@ -442,7 +460,7 @@ export const NewFood = <span class="cstat-no" title="statement not covered" ><sp
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-01-31T09:49:01.916Z
+                at 2025-02-01T06:11:49.650Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

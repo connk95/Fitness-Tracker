@@ -58,6 +58,9 @@ export const newActivity = createAsyncThunk(
   "activities/newActivity",
   async ({ type, title, duration, calories }: ActivityType, thunkApi) => {
     const state = thunkApi.getState() as GenericState;
+
+    console.log(type, title, duration, calories);
+
     const res = await axios.post(`${import.meta.env.VITE_API_URL}/activities`, {
       title,
       duration: duration ? duration : null,

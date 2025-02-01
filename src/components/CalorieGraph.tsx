@@ -30,6 +30,7 @@ export const CalorieGraph: React.FC<{
       yAxis={[{}]}
       grid={{ horizontal: true }}
       margin={{ top: 10, bottom: 30, left: 40, right: 10 }}
+      data-testid="calorieGraph"
     />
   );
 };

@@ -31,7 +31,6 @@ export const NewFood = (): JSX.Element => {
   const onSubmit: SubmitHandler<ActivityType> = async (data) => {
     data.type = "food";
     data.calories = Number(data.calories);
-    console.log("data: ", data);
     await dispatch(newActivity(data));
     navigate("/home");
   };
@@ -80,7 +79,11 @@ export const NewFood = (): JSX.Element => {
                 </Typography>
               )}
             </Grid>
-            <Grid item xs={12}>
+            <Grid
+              item
+              xs={12}
+              sx={{ display: "flex", flexDirection: "column" }}
+            >
               <TextField
                 {...register("calories", {
                   maxLength: {
@@ -91,6 +94,7 @@ export const NewFood = (): JSX.Element => {
                 id="calories"
                 label="Calories"
                 name="calories"
+                type="number"
                 fullWidth
                 InputProps={{ sx: { borderRadius: 0 } }}
               />
@@ -99,20 +103,22 @@ export const NewFood = (): JSX.Element => {
                   {errors.calories.message}
                 </Typography>
               )}
-              <Button
-                type="submit"
-                variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
-              >
-                Submit
-              </Button>
-              <Button
-                href="/home"
-                variant="contained"
-                sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
-              >
-                Back
-              </Button>
+              <Box>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Submit
+                </Button>
+                <Button
+                  href="/home"
+                  variant="contained"
+                  sx={{ width: 90, mt: 2, mb: 10, borderRadius: 0 }}
+                >
+                  Back
+                </Button>
+              </Box>
             </Grid>
           </Grid>
         </Box>
