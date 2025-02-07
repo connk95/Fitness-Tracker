@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1738390309671" clover="3.2.0">
-  <project timestamp="1738390309671" name="All files">
-    <metrics statements="552" coveredstatements="244" conditionals="251" coveredconditionals="139" methods="148" coveredmethods="66" elements="951" coveredelements="449" complexity="0" loc="552" ncloc="552" packages="11" files="32" classes="32"/>
+<coverage generated="1738924228761" clover="3.2.0">
+  <project timestamp="1738924228761" name="All files">
+    <metrics statements="552" coveredstatements="269" conditionals="251" coveredconditionals="145" methods="148" coveredmethods="76" elements="951" coveredelements="490" complexity="0" loc="552" ncloc="552" packages="11" files="32" classes="32"/>
     <package name="src">
       <metrics statements="7" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="0"/>
       <file name="App.tsx" path="/Users/connor/repos/Practice/workout/Workout/src/App.tsx">
@@ -19,7 +19,7 @@
       </file>
     </package>
     <package name="src.components">
-      <metrics statements="91" coveredstatements="34" conditionals="82" coveredconditionals="35" methods="28" coveredmethods="10"/>
+      <metrics statements="91" coveredstatements="51" conditionals="82" coveredconditionals="41" methods="28" coveredmethods="17"/>
       <file name="Activity.tsx" path="/Users/connor/repos/Practice/workout/Workout/src/components/Activity.tsx">
         <metrics statements="40" coveredstatements="21" conditionals="54" coveredconditionals="32" methods="7" coveredmethods="5"/>
         <line num="14" count="3" type="stmt"/>
@@ -110,34 +110,34 @@
         <line num="31" count="0" type="stmt"/>
       </file>
       <file name="Slideshow.tsx" path="/Users/connor/repos/Practice/workout/Workout/src/components/Slideshow.tsx">
-        <metrics statements="18" coveredstatements="0" conditionals="8" coveredconditionals="0" methods="9" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
-        <line num="9" count="0" type="stmt"/>
-        <line num="10" count="0" type="stmt"/>
-        <line num="12" count="0" type="stmt"/>
-        <line num="13" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="14" count="0" type="stmt"/>
-        <line num="18" count="0" type="stmt"/>
-        <line num="19" count="0" type="stmt"/>
-        <line num="20" count="0" type="stmt"/>
+        <metrics statements="18" coveredstatements="15" conditionals="8" coveredconditionals="6" methods="9" coveredmethods="6"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
         <line num="22" count="0" type="stmt"/>
         <line num="23" count="0" type="cond" truecount="0" falsecount="2"/>
-        <line num="28" count="0" type="stmt"/>
-        <line num="29" count="0" type="stmt"/>
-        <line num="33" count="0" type="stmt"/>
-        <line num="44" count="0" type="stmt"/>
-        <line num="102" count="0" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="33" count="1" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="102" count="3" type="stmt"/>
         <line num="117" count="0" type="stmt"/>
       </file>
       <file name="Testimonial.tsx" path="/Users/connor/repos/Practice/workout/Workout/src/components/Testimonial.tsx">
-        <metrics statements="2" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="0"/>
-        <line num="5" count="0" type="stmt"/>
-        <line num="8" count="0" type="stmt"/>
+        <metrics statements="2" coveredstatements="2" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="8" count="3" type="stmt"/>
       </file>
     </package>
     <package name="src.pages">
-      <metrics statements="190" coveredstatements="161" conditionals="132" coveredconditionals="101" methods="55" coveredmethods="45"/>
+      <metrics statements="190" coveredstatements="169" conditionals="132" coveredconditionals="101" methods="55" coveredmethods="48"/>
       <file name="ActivityPage.tsx" path="/Users/connor/repos/Practice/workout/Workout/src/pages/ActivityPage.tsx">
         <metrics statements="23" coveredstatements="20" conditionals="27" coveredconditionals="20" methods="8" coveredmethods="7"/>
         <line num="25" count="1" type="stmt"/>
@@ -277,15 +277,15 @@
         <line num="57" count="8" type="stmt"/>
       </file>
       <file name="SplashPage.tsx" path="/Users/connor/repos/Practice/workout/Workout/src/pages/SplashPage.tsx">
-        <metrics statements="9" coveredstatements="0" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="0"/>
-        <line num="23" count="0" type="stmt"/>
-        <line num="24" count="0" type="stmt"/>
-        <line num="26" count="0" type="stmt"/>
-        <line num="47" count="0" type="stmt"/>
-        <line num="68" count="0" type="stmt"/>
-        <line num="95" count="0" type="stmt"/>
-        <line num="154" count="0" type="stmt"/>
-        <line num="170" count="0" type="stmt"/>
+        <metrics statements="9" coveredstatements="8" conditionals="0" coveredconditionals="0" methods="4" coveredmethods="3"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="95" count="1" type="stmt"/>
+        <line num="154" count="3" type="stmt"/>
+        <line num="170" count="4" type="stmt"/>
         <line num="172" count="0" type="stmt"/>
       </file>
       <file name="UserPage.tsx" path="/Users/connor/repos/Practice/workout/Workout/src/pages/UserPage.tsx">
