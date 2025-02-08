@@ -170,6 +170,7 @@ export const Activity: React.FC<ActivityProps> = ({
                     color: "#9f2b0c",
                   },
                 }}
+                titleAccess="Friend"
               />
             )}
             <Box sx={{ display: "flex", flexDirection: "row" }}>

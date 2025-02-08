@@ -289,8 +289,21 @@ describe("ActivityPage", () => {
       activities: {
         ...initialState.activities,
         singleActivity: {
-          ...initialState.activities.singleActivity,
-          likes: [initialState.auth.loggedInUser?.user._id],
+          _id: "1",
+          type: "workout",
+          title: "Morning Run",
+          duration: 30,
+          calories: 100,
+          user: {
+            _id: "user1",
+            username: "JohnDoe",
+            password: "mockPass",
+            email: "mockEmail",
+          },
+          likes: ["mockId"],
+          comments: [],
+          createdAt: "2024-12-01T09:00:00",
+          updatedAt: "2024-12-01T10:00:00",
         },
       },
     };
@@ -310,11 +323,54 @@ describe("ActivityPage", () => {
     userEvent.click(likeButton);
 
     await waitFor(() => {
+      expect(dispatchSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  it("dispatches add friend action", async () => {
+    const mockStore = createMockStore(initialState);
+    const dispatchSpy = vi.spyOn(activityActions, "addFriend");
+
+    render(
+      <Provider store={mockStore}>
+        <Router>
+          <ActivityPage />
+        </Router>
+      </Provider>
+    );
+
+    const friendButton = screen.getByTitle("Friend");
+    userEvent.click(friendButton);
+
+    await waitFor(() => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({
-          activityId: initialState.activities.singleActivity?._id,
+          friend: initialState.activities.singleActivity?.user,
         })
       );
     });
+  });
+
+  it("hides friend icon when logged out", async () => {
+    const loggedOutState = {
+      ...initialState,
+      auth: {
+        loggedInUser: null,
+        newUser: null,
+        error: "",
+        loading: false,
+      },
+    };
+    const mockStore = createMockStore(loggedOutState);
+
+    render(
+      <Provider store={mockStore}>
+        <Router>
+          <ActivityPage />
+        </Router>
+      </Provider>
+    );
+
+    expect(screen.queryByTitle("Friend")).toBeNull();
   });
 });

@@ -7,14 +7,13 @@ export const CalorieGraph: React.FC<{
 }> = ({ weeklyData }) => {
   const caloriesPerDay = Object.keys(weeklyData).map((day) => {
     const dayData = weeklyData[day];
-    // Summing up calories for each day
     const totalCalories = dayData.reduce((sum, activity) => {
       if (activity.type === "workout") {
-        return sum - (activity.calories || 0); // Subtract calories for workouts
+        return sum - (activity.calories || 0);
       } else if (activity.type === "food") {
-        return sum + (activity.calories || 0); // Add calories for foods
+        return sum + (activity.calories || 0);
       }
-      return sum; // No change for other types
+      return sum;
     }, 0);
 
     return totalCalories;
