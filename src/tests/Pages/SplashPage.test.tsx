@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { SplashPage } from "../pages/SplashPage";
+import { SplashPage } from "../../pages/SplashPage";
 import { BrowserRouter as Router } from "react-router-dom";
 
 vi.mock("axios");

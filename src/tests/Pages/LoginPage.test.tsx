@@ -3,15 +3,16 @@ import { Provider } from "react-redux";
 import { describe, expect, it, vi } from "vitest";
 import { BrowserRouter as Router } from "react-router-dom";
 import { render, screen } from "@testing-library/react";
-import { waitFor } from "@testing-library/react";
+import { Login } from "../../pages/LoginPage";
 import userEvent from "@testing-library/user-event";
-import { SignUp } from "../pages/SignUpPage";
-import { AuthState } from "../redux/auth/auth.type";
-import * as authActions from "../redux/auth/auth.actions";
+import { waitFor } from "@testing-library/react";
+import { fireEvent } from "@testing-library/react";
+import { AuthState } from "../../redux/auth/auth.type";
+import * as authActions from "../../redux/auth/auth.actions";
 
 vi.mock("axios");
 
-describe("SignUpPage", () => {
+describe("LoginPage", () => {
   const initialState = {
     auth: {
       loggedInUser: null,
@@ -34,91 +35,41 @@ describe("SignUpPage", () => {
 
   it("dispatches user data", async () => {
     const mockStore = createMockStore(initialState);
-    const dispatchSpy = vi.spyOn(authActions, "createUser");
+    const dispatchSpy = vi.spyOn(authActions, "userLogin");
 
     render(
       <Provider store={mockStore}>
         <Router>
-          <SignUp />
+          <Login />
         </Router>
       </Provider>
     );
 
     const usernameInput = await screen.getByLabelText(/^username/i);
-    const emailInput = await screen.getByLabelText(/^email address/i);
     const passwordInput = await screen.getByLabelText(/^password/i);
 
     await userEvent.type(usernameInput, "mockUsername");
-    await userEvent.type(emailInput, "email@mock.com");
     await userEvent.type(passwordInput, "mockPassword");
 
     await waitFor(() => {
       expect(usernameInput).toHaveValue("mockUsername");
-      expect(emailInput).toHaveValue("email@mock.com");
       expect(passwordInput).toHaveValue("mockPassword");
     });
 
-    const submitButton = screen.getByRole("button", { name: "Sign Up" });
+    const submitButton = await screen.getByRole("button", { name: "Sign In" });
     userEvent.click(submitButton);
 
     await waitFor(() => {
       expect(dispatchSpy).toHaveBeenCalledWith(
         expect.objectContaining({
           username: "mockUsername",
-          email: "email@mock.com",
           password: "mockPassword",
         })
       );
     });
   });
 
-  it("produces error", async () => {
-    const errorState = {
-      auth: {
-        loggedInUser: {
-          access_token: "",
-          user: {
-            username: "",
-            password: "",
-            email: "",
-            _id: "",
-          },
-        },
-        newUser: {
-          username: "",
-          password: "",
-          email: "",
-        },
-        loading: false,
-        error: "mockError",
-      },
-      users: {
-        loading: false,
-      },
-    };
-
-    const errorSlice = createSlice({
-      name: "auth",
-      initialState: errorState,
-      reducers: {},
-    });
-
-    const loggedOutStore = configureStore(errorSlice);
-
-    render(
-      <Provider store={loggedOutStore}>
-        <Router>
-          <SignUp />
-        </Router>
-      </Provider>
-    );
-
-    await waitFor(() => {
-      expect(screen.getByText(/mockError/i)).toBeInTheDocument();
-    });
-  });
-
-  it("redirects after successful account creation", async () => {
+  it("redirects after successful login attempt", async () => {
     const loggedInState = {
       auth: {
         loggedInUser: {
@@ -138,7 +89,7 @@ describe("SignUpPage", () => {
         loading: false,
         error: "",
       },
-      users: {
+      posts: {
         loading: false,
       },
     };
@@ -154,17 +105,66 @@ describe("SignUpPage", () => {
     render(
       <Provider store={loggedInStore}>
         <Router>
-          <SignUp />
+          <Login />
         </Router>
       </Provider>
     );
 
-    const submitButton = screen.getByRole("button", { name: "Sign Up" });
+    const submitButton = screen.getByTestId(/signInButton/i);
 
-    userEvent.click(submitButton);
+    fireEvent.click(submitButton);
 
     await waitFor(() => {
       expect(window.location.pathname).toBe("/home");
+    });
+  });
+
+  it("produces error after uncessfull login attempt", async () => {
+    const errorState = {
+      auth: {
+        loggedInUser: {
+          access_token: "",
+          user: {
+            username: "",
+            password: "",
+            email: "",
+            _id: "",
+          },
+        },
+        newUser: {
+          username: "",
+          password: "",
+          email: "",
+        },
+        error: "mockError",
+        loading: false,
+      },
+    };
+
+    const errorStore = configureStore(
+      createSlice({
+        name: "auth",
+        initialState: errorState,
+        reducers: {},
+      })
+    );
+
+    render(
+      <Provider store={errorStore}>
+        <Router>
+          <Login />
+        </Router>
+      </Provider>
+    );
+
+    const submitButton = await screen.getByRole("button", { name: "Sign In" });
+    userEvent.click(submitButton);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/mockError/i) ||
+          screen.getByText(/Invalid username or password. Please try again/i)
+      ).toBeInTheDocument();
     });
   });
 });

@@ -5,11 +5,11 @@ import { describe, expect, it, vi } from "vitest";
 import { waitFor } from "@testing-library/react";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import "@testing-library/jest-dom";
-import { AuthState } from "../redux/auth/auth.type";
-import { ActivityState } from "../redux/activity/activity.type";
+import { AuthState } from "../../redux/auth/auth.type";
+import { ActivityState } from "../../redux/activity/activity.type";
 import userEvent from "@testing-library/user-event";
-import { NewFood } from "../pages/NewFood";
-import * as activityActions from "../redux/activity/activity.action";
+import { NewFood } from "../../pages/NewFood";
+import * as activityActions from "../../redux/activity/activity.action";
 
 vi.mock("axios");
 

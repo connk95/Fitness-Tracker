@@ -36,10 +36,10 @@ export const Activity: React.FC<ActivityProps> = ({
     event.stopPropagation();
     event.preventDefault();
 
-    if (!userId) {
-      console.error("Please log in to interact with this post.");
-      return;
-    }
+    // if (!userId) {
+    //   console.error("Please log in to interact with this post.");
+    //   return;
+    // }
 
     if (hasLiked) {
       return;
@@ -153,6 +153,7 @@ export const Activity: React.FC<ActivityProps> = ({
                   color: "#9f2b0c",
                 },
               }}
+              titleAccess="Like"
             />
             {!auth.loggedInUser?.access_token ||
             activity.user.username === auth.loggedInUser.user.username ||

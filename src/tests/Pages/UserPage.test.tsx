@@ -1,4 +1,4 @@
-import { UserPage } from "../pages/UserPage";
+import { UserPage } from "../../pages/UserPage";
 import { render, screen } from "@testing-library/react";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -6,9 +6,9 @@ import { describe, expect, it, vi } from "vitest";
 import { waitFor } from "@testing-library/react";
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import "@testing-library/jest-dom";
-import { AuthState } from "../redux/auth/auth.type";
-import { ActivityState } from "../redux/activity/activity.type";
-import { UserState } from "../redux/user/user.type";
+import { AuthState } from "../../redux/auth/auth.type";
+import { ActivityState } from "../../redux/activity/activity.type";
+import { UserState } from "../../redux/user/user.type";
 import userEvent from "@testing-library/user-event";
 
 vi.mock("axios");

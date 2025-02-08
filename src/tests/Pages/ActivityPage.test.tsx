@@ -4,11 +4,12 @@ import { describe, expect, it, vi, beforeEach } from "vitest";
 import { BrowserRouter as Router } from "react-router-dom";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { ActivityPage } from "../pages/ActivityPage";
-import { ActivityState } from "../redux/activity/activity.type";
-import { AuthState } from "../redux/auth/auth.type";
-import { CommentState } from "../redux/comment/comment.type";
-import * as commentActions from "../redux/comment/comment.actions";
+import { ActivityPage } from "../../pages/ActivityPage";
+import { ActivityState } from "../../redux/activity/activity.type";
+import { AuthState } from "../../redux/auth/auth.type";
+import { CommentState } from "../../redux/comment/comment.type";
+import * as commentActions from "../../redux/comment/comment.actions";
+import * as activityActions from "../../redux/activity/activity.action";
 
 vi.mock("axios");
 vi.mock("react-router-dom", async () => {
@@ -226,6 +227,94 @@ describe("ActivityPage", () => {
       expect(
         screen.queryByRole("button", { name: /Submit/i })
       ).not.toBeInTheDocument();
+    });
+  });
+
+  it("dispatches like action", async () => {
+    const mockStore = createMockStore(initialState);
+    const dispatchSpy = vi.spyOn(activityActions, "addLike");
+
+    render(
+      <Provider store={mockStore}>
+        <Router>
+          <ActivityPage />
+        </Router>
+      </Provider>
+    );
+
+    const likeButton = screen.getByTitle("Like");
+    userEvent.click(likeButton);
+
+    await waitFor(() => {
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          activityId: initialState.activities.singleActivity?._id,
+        })
+      );
+    });
+  });
+
+  it("does not dispatch like action when logged out", async () => {
+    const loggedOutState = {
+      ...initialState,
+      auth: {
+        loggedInUser: null,
+        newUser: null,
+        error: "",
+        loading: false,
+      },
+    };
+    const mockStore = createMockStore(loggedOutState);
+    const dispatchSpy = vi.spyOn(activityActions, "addLike");
+
+    render(
+      <Provider store={mockStore}>
+        <Router>
+          <ActivityPage />
+        </Router>
+      </Provider>
+    );
+
+    const likeButton = screen.getByTitle("Like");
+    userEvent.click(likeButton);
+
+    await waitFor(() => {
+      expect(dispatchSpy).not.toHaveBeenCalled();
+    });
+  });
+
+  it("does not dispatch like action if user has already liked", async () => {
+    const likedState = {
+      ...initialState,
+      activities: {
+        ...initialState.activities,
+        singleActivity: {
+          ...initialState.activities.singleActivity,
+          likes: [initialState.auth.loggedInUser?.user._id],
+        },
+      },
+    };
+
+    const mockStore = createMockStore(likedState);
+    const dispatchSpy = vi.spyOn(activityActions, "addLike");
+
+    render(
+      <Provider store={mockStore}>
+        <Router>
+          <ActivityPage />
+        </Router>
+      </Provider>
+    );
+
+    const likeButton = screen.getByTitle("Like");
+    userEvent.click(likeButton);
+
+    await waitFor(() => {
+      expect(dispatchSpy).toHaveBeenCalledWith(
+        expect.objectContaining({
+          activityId: initialState.activities.singleActivity?._id,
+        })
+      );
     });
   });
 });
