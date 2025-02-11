@@ -39,7 +39,6 @@ export const ActivityPage = (): JSX.Element => {
 
   const onSubmit: SubmitHandler<Comment> = async (data) => {
     if (!id) {
-      console.error("No activity ID found");
       return;
     }
     const commentData = {
@@ -50,11 +49,6 @@ export const ActivityPage = (): JSX.Element => {
     window.location.reload();
   };
 
-  // useEffect(() => {
-  //   if (id) {
-  //     dispatch(fetchSingleActivity(id));
-  //   }
-  // }, [dispatch, id]);
   useEffect(() => {
     if (id && activity.singleActivity?._id !== id) {
       dispatch(fetchSingleActivity(id));
@@ -75,6 +69,13 @@ export const ActivityPage = (): JSX.Element => {
       ) : activity.error || !id || activity.singleActivity == null ? (
         <Box>
           <Typography>No activity found.</Typography>
+          <Button
+            href="/home"
+            variant="contained"
+            sx={{ width: 90, mt: 2, mb: 2, borderRadius: 0 }}
+          >
+            Back
+          </Button>
         </Box>
       ) : activity.singleActivity?.title ? (
         <Box
