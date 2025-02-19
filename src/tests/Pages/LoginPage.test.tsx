@@ -9,6 +9,7 @@ import { waitFor } from "@testing-library/react";
 import { fireEvent } from "@testing-library/react";
 import { AuthState } from "../../redux/auth/auth.type";
 import * as authActions from "../../redux/auth/auth.actions";
+import axios from "axios";
 
 vi.mock("axios");
 
@@ -33,9 +34,13 @@ describe("LoginPage", () => {
       },
     });
 
-  it("dispatches user data", async () => {
+  it("dispatches user data & saves to local storage", async () => {
     const mockStore = createMockStore(initialState);
     const dispatchSpy = vi.spyOn(authActions, "userLogin");
+    const setItemSpy = vi.spyOn(localStorage, "setItem");
+
+    const mockUser = { id: 1, username: "mockUsername", token: "mockToken" };
+    vi.spyOn(axios, "post").mockResolvedValue({ data: mockUser });
 
     render(
       <Provider store={mockStore}>
@@ -67,6 +72,12 @@ describe("LoginPage", () => {
         })
       );
     });
+
+    await waitFor(() => {
+      expect(localStorage.getItem("loggedInUser"));
+    });
+
+    setItemSpy.mockRestore();
   });
 
   it("redirects after successful login attempt", async () => {

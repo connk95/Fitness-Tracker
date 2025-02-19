@@ -47,6 +47,7 @@ export const HomePage = (): JSX.Element => {
     auth.loggedInUser?.user?.friends,
     dispatch,
     filter,
+    page,
   ]);
 
   useEffect(() => {

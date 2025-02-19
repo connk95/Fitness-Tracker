@@ -1,6 +1,5 @@
 import {
   addLike,
-  fetchActivities,
   fetchPaginatedActivities,
   fetchSingleActivity,
   newActivity,
@@ -22,27 +21,27 @@ const activitySlice = createSlice({
   initialState,
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(
-      fetchActivities.fulfilled,
-      (state, action: PayloadAction<ActivityType[]>) => {
-        state.allActivities = action.payload;
-        state.singleActivity = <ActivityType>{};
-        state.error = "";
-        state.loading = false;
-      }
-    );
-    builder.addCase(fetchActivities.pending, (state) => {
-      state.allActivities = [];
-      state.singleActivity = <ActivityType>{};
-      state.error = "";
-      state.loading = true;
-    });
-    builder.addCase(fetchActivities.rejected, (state, action) => {
-      state.allActivities = [];
-      state.singleActivity = <ActivityType>{};
-      state.error = action.error.message || "Could not load activities";
-      state.loading = false;
-    });
+    // builder.addCase(
+    //   fetchActivities.fulfilled,
+    //   (state, action: PayloadAction<ActivityType[]>) => {
+    //     state.allActivities = action.payload;
+    //     state.singleActivity = <ActivityType>{};
+    //     state.error = "";
+    //     state.loading = false;
+    //   }
+    // );
+    // builder.addCase(fetchActivities.pending, (state) => {
+    //   state.allActivities = [];
+    //   state.singleActivity = <ActivityType>{};
+    //   state.error = "";
+    //   state.loading = true;
+    // });
+    // builder.addCase(fetchActivities.rejected, (state, action) => {
+    //   state.allActivities = [];
+    //   state.singleActivity = <ActivityType>{};
+    //   state.error = action.error.message || "Could not load activities";
+    //   state.loading = false;
+    // });
     builder.addCase(
       fetchSingleActivity.fulfilled,
       (state, action: PayloadAction<ActivityType>) => {

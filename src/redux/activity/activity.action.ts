@@ -21,13 +21,13 @@ export const fetchSingleActivity = createAsyncThunk(
   }
 );
 
-export const fetchActivities = createAsyncThunk(
-  "activities/fetchAllActivities",
-  async () => {
-    const res = await axios.get(`${import.meta.env.VITE_API_URL}/activities`);
-    return res.data;
-  }
-);
+// export const fetchActivities = createAsyncThunk(
+//   "activities/fetchAllActivities",
+//   async () => {
+//     const res = await axios.get(`${import.meta.env.VITE_API_URL}/activities`);
+//     return res.data;
+//   }
+// );
 
 export const fetchPaginatedActivities = createAsyncThunk(
   "activities/fetchPaginatedActivities",
