@@ -217,4 +217,19 @@ describe("UserPage", () => {
     );
     expect(await screen.findByTestId("calorieGraph")).toBeInTheDocument();
   });
+
+  // it("cannot filter by friends", async () => {
+  //   const mockStore = createMockStore(initialState);
+  //   render(
+  //     <Provider store={mockStore}>
+  //       <Router>
+  //         <UserPage />
+  //       </Router>
+  //     </Provider>
+  //   );
+
+  //   expect(
+  //     screen.getByRole("radio", { name: "Friend Activity" })
+  //   ).toBeUndefined();
+  // });
 });
