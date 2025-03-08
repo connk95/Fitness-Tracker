@@ -9,8 +9,8 @@ import { User } from "../user/user.type";
 import { AuthState, NewUser, LoggedInUser } from "./auth.type";
 
 const initialState: AuthState = {
-  loggedInUser: <LoggedInUser>{},
-  newUser: <NewUser>{},
+  loggedInUser: <LoggedInUser>{} || null,
+  newUser: <NewUser>{} || null,
   error: "",
   loading: false,
 };
